@@ -1,0 +1,6 @@
+@prefix hlv: <http://hlv.org/> .
+@prefix schema: <https://schema.org/> .
+
+hlv:dices_350 a schema:Dataset .
+
+
