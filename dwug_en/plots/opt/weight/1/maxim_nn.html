@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">maxim_nn (1)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1852", "id": "fic_1852_9832.txt-4659-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSome people undertake certain business only because they must;\u003cbr\u003eand though that is not generally the case, yet in this country the\u003cbr\u003esafest \u003cb\u003emaxim\u003c/b\u003e is men and not things. \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1852_9832.txt-4659-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 203.7120227463645, "y": -158.84175479152563}, {"color": "#377eb8", "date": "1828", "id": "mag_1828_553913.txt-218-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe Strike, but hear, \u0027 not only reads as well in English as in\u003cbr\u003eGreek, but seems no more out of place in a modern than a classical\u003cbr\u003erepublic; besides according with a christian \u003cb\u003emaxim\u003c/b\u003e which may be\u003cbr\u003eknown to some readers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1828\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1828_553913.txt-218-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 111.98852833090076, "y": -32.374048369471794}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9168.txt-210-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCertainly, two cups if you like; I should have proposed it\u003cbr\u003emyself only I knew old Hannah would have dinner in readiness for us,\u003cbr\u003eand \u0027 t is a \u003cb\u003emaxim\u003c/b\u003e of mine, that fasting provokes an appetite.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9168.txt-210-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 112.77082941493197, "y": 147.82599123891754}, {"color": "#377eb8", "date": "1835", "id": "mag_1835_554346.txt-327-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHis disregard for the \u003cb\u003emaxims\u003c/b\u003e of prudence often entangled\u003cbr\u003ehim in pecuniary difficulties, and threw a shadow over the uprightness\u003cbr\u003eof his character, which never dims the lustre of dull minds, protected\u003cbr\u003eby\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1835_554346.txt-327-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 68.07059900131127, "y": -88.96578984611764}, {"color": "#377eb8", "date": "1836", "id": "fic_1836_7350.txt-1634-36", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI am not only sure that, in resigning, your nephew will do what\u003cbr\u003ebest becomes him as a gentleman, but that he will make a fortunate\u003cbr\u003eescape from the service of one whose \u003cb\u003emaxim\u003c/b\u003e it is to reward none\u003cbr\u003ebut the mercenary. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1836_7350.txt-1634-36\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 343.2160965006911, "y": 106.55380115385935}, {"color": "#377eb8", "date": "1836", "id": "fic_1836_7052.txt-1630-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003emaxims\u003c/b\u003e of the Koran, the Vedah and the Shastah are\u003cbr\u003emingled in the intercourse of every-day life, among their followers,\u003cbr\u003eas well as quoted from the desk or the pulpit; and the same or greater\u003cbr\u003eeffect is produced by the Hebrew and Greek scriptures.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1836_7052.txt-1630-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 306.64513891556624, "y": -97.3729748696174}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_1281.txt-5028-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn fine, he follows the \u003cb\u003emaxims\u003c/b\u003e of our politicians,\u003cbr\u003erecapitulating a dozen or more things (wiping the sweat from his brow\u003cbr\u003ethe while) that have no earthly connection with the subject. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_1281.txt-5028-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 54.98657656352838, "y": 197.77398899120604}, {"color": "#377eb8", "date": "1844", "id": "fic_1844_3928.txt-816-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf Plato\u0027s \u003cb\u003emaxim\u003c/b\u003e, \u0027 that oratory must be estimated by\u003cbr\u003eits effects, \u0027 is at all correct, then is M. Dantes the greatest\u003cbr\u003eorator in France, for the effect of his oratory is miraculous.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1844_3928.txt-816-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 81.13979664711637, "y": -113.75429655971634}, {"color": "#377eb8", "date": "1843", "id": "mag_1843_555101.txt-376-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, to show the direction in which it leads, and to comment on a\u003cbr\u003efew of the pregnant and instructive \u003cb\u003emaxims\u003c/b\u003e, which are found in\u003cbr\u003eits details.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1843_555101.txt-376-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 99.67034716029397, "y": -193.49136174243057}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_772692.txt-399-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe principles of the Gospel have always been at variance with\u003cbr\u003ethe \u003cb\u003emaxims\u003c/b\u003e and customs of the world.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_772692.txt-399-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 68.63999021066012, "y": 170.28239959189975}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_3677.txt-178-34", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen he is swallowed by a great fish, with his canoe, he\u003cbr\u003eescapes by the exertion of these powers, but always, as much as\u003cbr\u003epossible, in accordance with Indian \u003cb\u003emaxims\u003c/b\u003e and means.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_3677.txt-178-34\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 164.3592557535086, "y": -115.64053363777431}, {"color": "#377eb8", "date": "1851", "id": "nf_1851_758845.txt-2313-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt does seem that, according to the oriental \u003cb\u003emaxim\u003c/b\u003e, 21 a\u003cbr\u003epresent is the readiest door to an Indian\u0027s heart.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1851_758845.txt-2313-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 163.86270800983223, "y": 204.4630794885074}, {"color": "#377eb8", "date": "1858", "id": "fic_1858_1282.txt-245-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMy mother also exercised a wise discretion in the selection of\u003cbr\u003esuch books as she thought would afford me \" \u003cb\u003emaxims\u003c/b\u003e of guidance,\u003cbr\u003e\" as she called it, through the world.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1858_1282.txt-245-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 42.62341739665054, "y": 75.85139302419182}, {"color": "#377eb8", "date": "1859", "id": "mag_1859_556713.txt-167-77", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf ever any skilful writer among us shall think it worth his\u003cbr\u003ewhile to revive and rehearse a full presentment of the matters then\u003cbr\u003ediscussed in the newspapers under sundry classical and patriotic noms\u003cbr\u003ede plume, he will doubtless find in them, or elaborate from them,\u003cbr\u003eillustrations of some of the profoundest truths of the largest human\u003cbr\u003escience, while he traces through them the inchoate principles of the\u003cbr\u003ebest assured economical and political \u003cb\u003emaxims\u003c/b\u003e of our day.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1859_556713.txt-167-77\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 20.872646080252974, "y": 62.504858468182505}, {"color": "#377eb8", "date": "1852", "id": "nf_1852_748165.txt-3024-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eV. And hence, we may judge of the truth of that oft-repeated,\u003cbr\u003ebut worse than puerile \u003cb\u003emaxim\u003c/b\u003e,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1852_748165.txt-3024-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -51.52145029266726, "y": -110.51159460856027}, {"color": "#377eb8", "date": "1835", "id": "fic_1835_7014.txt-782-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor us, we do approve the Roman \u003cb\u003emaxim\u003c/b\u003e, To save\u003cbr\u003eone\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1835_7014.txt-782-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 76.59294827806666, "y": -5.7999801175529875}, {"color": "#377eb8", "date": "1833", "id": "mag_1833_564563.txt-169-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEDucATIoN, as we should naturally expect, has been a subject of\u003cbr\u003ediscussion from the earliest periods; from those rigorous times, when\u003cbr\u003ethe severe and much perverted \u003cb\u003emaxim\u003c/b\u003e, Spare the rod and spoil\u003cbr\u003ethe child, \u0027 was the law of instructers, to the more lax period of\u003cbr\u003emodern days, in which the opposite doctrine has been\u003cbr\u003einculcated.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1833_564563.txt-169-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 259.6732614817223, "y": -81.59342417014328}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_2470.txt-5680-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003emaxim\u003c/b\u003e of Horace: \" Quo semel est imbuta recens\u003cbr\u003eservabit odorem Testa diu, \" is of universal application, nor has it\u003cbr\u003eever greater force than when reference is had to ideas, connected with\u003cbr\u003ethe terrors of an unseen world, and where the mind that entertains\u003cbr\u003ethem is destitute of the advantages of education.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_2470.txt-5680-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 167.09322250103617, "y": -255.2328562242026}, {"color": "#377eb8", "date": "1860", "id": "mag_1860_556848.txt-673-141", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNot, we fear, of Lord Palmerston; for we remember that, in\u003cbr\u003e1856, he publicly proclaimed that, \" in dealing with Eastern nations,\u003cbr\u003ewe are not bound by the same laws of right and wrong as in treating\u003cbr\u003ewith Christian nations \"; * - but of others, less unscrupulous,\u003cbr\u003eperhaps even of some of his colleagues; for we see that as recently as\u003cbr\u003eOctober last, about the time the news of Mr. Bruce\u0027s repulse reached\u003cbr\u003eEngland, Lord John IRussell, in a speech at Aberdeen, said \" that, in\u003cbr\u003ehis opinion, foreign affairs should always be conducted with due\u003cbr\u003eregard to the rights and independence of foreign nations, and that the\u003cbr\u003erule of doing as you would be done by is not only a \u003cb\u003emaxim\u003c/b\u003e of\u003cbr\u003eChristian morality,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1860_556848.txt-673-141\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 105.92839928639981, "y": 88.48815670133396}, {"color": "#377eb8", "date": "1843", "id": "mag_1843_565314.txt-184-51", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe readiness with which the Episcopalian gains the ear of some\u003cbr\u003epeople, and makes such excellent churchmen of the gay and thoughtless,\u003cbr\u003eis easily and truly explained, when the argument is known to be, not a\u003cbr\u003emusty and learned discourse of the Fathers, but the pithy\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e, that \" Episcopacy is the only religion fit\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1843_565314.txt-184-51\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 371.74999560560275, "y": -43.28861012230362}, {"color": "#377eb8", "date": "1823", "id": "mag_1823_553475.txt-129-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe have established, as a \u003cb\u003emaxim\u003c/b\u003e, that the sole end of\u003cbr\u003epunishment is to prevent the commission of crime; the only means of\u003cbr\u003eeffecting this, in the present case, must be by the force of\u003cbr\u003eexample.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1823\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1823_553475.txt-129-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 155.90730101039327, "y": -148.2587174537388}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_8044.txt-776-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eV. The spoils of Thought require Such courage as will brave\u003cbr\u003eWorn saws of ancient sire, Dull \u003cb\u003emaxims\u003c/b\u003e of the slave; And he who\u003cbr\u003ehopes to forage In realms of Fancy still, Must arm himself with\u003cbr\u003ecourage To wander where he will.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_8044.txt-776-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -22.625224064810986, "y": 165.23221998905186}, {"color": "#377eb8", "date": "1815", "id": "fic_1815_8679.txt-336-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThy mind, superior to all sordid objects, towers ore the\u003cbr\u003egroveling \u003cb\u003emaxims\u003c/b\u003e of the world, and aims a flight beyond its\u003cbr\u003elittle views; here let me ratify again, that faith which was pledged\u003cbr\u003eby honor to my bosom\u0027s queen.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1815\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1815_8679.txt-336-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 129.05324437417582, "y": -146.96791098564873}, {"color": "#377eb8", "date": "1822", "id": "fic_1822_7243.txt-1775-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eContradiction led me to scorn and defy all the \u003cb\u003emaxims\u003c/b\u003e of\u003cbr\u003ereligion.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1822\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1822_7243.txt-1775-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 31.20014981440565, "y": -94.3989331498494}, {"color": "#377eb8", "date": "1854", "id": "nf_1854_750818.txt-1415-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eadministered according to certain \u003cb\u003emaxims\u003c/b\u003e which they held\u003cbr\u003esacred; and of those maxims they held none more sacred than this, that\u003cbr\u003eevery increase of the power of France ought to be viewed with extreme\u003cbr\u003ejealousy.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1854_750818.txt-1415-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -50.96290150642848, "y": 123.16968778833801}, {"color": "#377eb8", "date": "1816", "id": "nf_1816_747562.txt-469-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe began by observing that it was fixed as one of their\u003cbr\u003eindisputable \u003cb\u003emaxims\u003c/b\u003e, that things merely ornamental were not\u003cbr\u003enecessary to the well-being of\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1816\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1816_747562.txt-469-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 149.72248036540253, "y": 31.358205536548}, {"color": "#377eb8", "date": "1825", "id": "mag_1825_553649.txt-536-39", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlthough, as we before intimated, our author\u0027s style is the\u003cbr\u003every opposite to the sententious, yet the vastness of his philosophy,\u003cbr\u003eand acuteness of his mind, have caused him to scatter several weighty\u003cbr\u003e\u003cb\u003emaxims\u003c/b\u003e throughout these Lectures.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1825\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1825_553649.txt-536-39\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 172.56341408304732, "y": -76.74363447117732}, {"color": "#377eb8", "date": "1848", "id": "mag_1848_524833.txt-206-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFrom books, also, Polonius has gleaned \u003cb\u003emaxims\u003c/b\u003e, but not\u003cbr\u003egained development; can repeat, but not reproduce, their contents;\u003cbr\u003eequips, not feeds his mind out of them; uses them, in short, not as\u003cbr\u003espectacles to read nature with, but only as blinds or goggles to\u003cbr\u003eprotect his own eyes with.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1848_524833.txt-206-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 159.20309663108802, "y": 151.23632319612423}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_2807.txt-342-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe had, moreover, violated one of his own \u003cb\u003emaxims\u003c/b\u003e, in\u003cbr\u003etalking incessantly while imbibing his liquor; so she took advantage\u003cbr\u003eof the next pause in his conversation to leave the table.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_2807.txt-342-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 31.078253598216456, "y": 44.231865560123836}, {"color": "#377eb8", "date": "1836", "id": "fic_1836_7111.txt-2338-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo the contempt by the one, and the adoption by the other, of\u003cbr\u003ethis \u003cb\u003emaxim\u003c/b\u003e, in relation to a young heart as yet neutral in its\u003cbr\u003epartialities, is to be, perhaps, attributed the success of Henri, and\u003cbr\u003ethe failure of his brother. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1836_7111.txt-2338-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -100.6211435339735, "y": 38.32129424405117}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_755436.txt-64-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is a \u003cb\u003emaxim\u003c/b\u003e no less venerable for its antiquity than\u003cbr\u003eits truth -- a maxim admitted and illustrated by all writers on\u003cbr\u003epolitical economy -- and one that has been corroborated by experience\u003cbr\u003ein every corner of the earth, that miserable is the servitude and\u003cbr\u003ehorrible the condition of that people whose laws are either uncertain\u003cbr\u003eor unknown.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_755436.txt-64-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 87.955180138553, "y": -75.98325626299112}, {"color": "#377eb8", "date": "1824", "id": "fic_1824_7285.txt-1102-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003emaxim\u003c/b\u003e; then enforced, both by the parent and\u003cbr\u003epedagogue, that it was shameful to deface and destroy them, heightened\u003cbr\u003ethe estimation of their contents; as, in monarchical governments, the\u003cbr\u003esacredness of the person of the King gives weight to his\u003cbr\u003eprerogative.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1824\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1824_7285.txt-1102-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 239.2598882016943, "y": 134.65551774923998}, {"color": "#377eb8", "date": "1823", "id": "fic_1823_7213.txt-1345-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLet philosophers prate, and discuss as they will, The\u003cbr\u003e\u003cb\u003emaxims\u003c/b\u003e of knowledge, the sources ofbliss; The true fount of\u003cbr\u003eknowledge and pleasure is still To be found in a free-flowing bottle\u003cbr\u003elike this.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1823\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1823_7213.txt-1345-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 4.106559871695811, "y": -69.84530562422466}, {"color": "#377eb8", "date": "1820", "id": "mag_1820_553223.txt-23-46", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhilst our most solemn declarations, those constitutions which\u003cbr\u003eform the basis of our civil and social institutions, have set forth in\u003cbr\u003elanguage sufficiently strong, explicit, and comprehensive, the purest\u003cbr\u003eprin * ciples of natural and civil liberty, and the soundest\u003cbr\u003e\u003cb\u003emaxims\u003c/b\u003e of universal right and justice, the institutions\u003cbr\u003ethemselves seem destined, in practice, by a sort of uncontrollable\u003cbr\u003efatality to allow a state of slavery, by which a large portion of\u003cbr\u003ehuman beings are utterly deprived of all their rights.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1820\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1820_553223.txt-23-46\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 34.41397421224582, "y": -202.35236795955723}, {"color": "#377eb8", "date": "1839", "id": "mag_1839_586383.txt-284-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003etheir decisions and regulations they would be guided by any\u003cbr\u003eother \u003cb\u003emaxims\u003c/b\u003e than those which arc // maintained by their\u003cbr\u003econstituents-that is, the maxims of the Moiy Alliance, which was\u003cbr\u003eformed expressly for the purpose of establishing peace and the\u003cbr\u003eprinciples of Christianity in Europe.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1839_586383.txt-284-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -83.58232320594901, "y": 62.6447208515942}, {"color": "#377eb8", "date": "1827", "id": "fic_1827_7269.txt-2252-64", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Why, then, if I must answer truly -- perhaps, I have, \"\u003cbr\u003ereplied Hope, looking, in spite of herself, as archly as the\u003cbr\u003emischievous little god, when he sees one of his own arrows trembling\u003cbr\u003ein the heart; \" set a thief to catch a thief, \u0027 dear Esther, is an old\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e; and though I have never felt this nervous malady, yet,\u003cbr\u003eyou know, I am skilled in the books that describe the symptoms, thanks\u003cbr\u003eto aunt Grafton\u0027s plentiful stock of romances and plays. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1827_7269.txt-2252-64\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 38.37066801080122, "y": -110.07834045497081}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_753804.txt-144-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd the \u003cb\u003emaxim\u003c/b\u003e, that the government of a country is what\u003cbr\u003ethe social forces in existence compel it to be, is true only in the\u003cbr\u003esense in which it favors, instead of discouraging, the attempt to\u003cbr\u003eexercise, among all forms of government practicable in the existing\u003cbr\u003econdition of society, a rational choice.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_753804.txt-144-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -2.8776735114956575, "y": -51.40652773047558}, {"color": "#377eb8", "date": "1837", "id": "mag_1837_554558.txt-238-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn this country, where people, when they announce their\u003cbr\u003epolitical maxims, are apt to consider what those \u003cb\u003emaxims\u003c/b\u003e mean,\u003cbr\u003ewe suppose it to be the prevailing opinion, and therefore (Miss\u003cbr\u003eMartineau being the judge) the right one, that no human administration\u003cbr\u003ecan be depended on to do \" always that which is right. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1837_554558.txt-238-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -140.8495784861839, "y": -15.822776312789555}, {"color": "#377eb8", "date": "1827", "id": "mag_1827_553785.txt-125-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd, as Mr Justice Blackstone says, the \u003cb\u003emaxims\u003c/b\u003e and\u003cbr\u003ecustoms so collected are of higher antiquity than memory or history\u003cbr\u003ecan reach, nothing being more difficult than // to ascertain the\u003cbr\u003eprecise beginning, and first spring, of an ancient and long\u003cbr\u003eestablished custom. \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1827_553785.txt-125-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 57.27729348870283, "y": -114.8410030644073}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9072.txt-25-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlways worship the rising sun, \" was the worldlywise\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e of an old nurse, who exercised a vast influence upon my\u003cbr\u003echildhood; and recalling this favorite proverb of my early oracle, I\u003cbr\u003eset myself diligently to the study and comprehension of that mystical\u003cbr\u003esecret which makes the Orient a charmed land.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9072.txt-25-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 211.29359037729736, "y": 45.38859315560703}, {"color": "#377eb8", "date": "1838", "id": "fic_1838_7359.txt-3306-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere is wisdom, princess, in the \u003cb\u003emaxim\u003c/b\u003e of thy prophet,\u003cbr\u003eand its spirit is found in many of the sayings of truer prophets who\u003cbr\u003ewent before him, and whose words are familiar to thy royal mother,\u003cbr\u003ethough I fear they are not to thee; a misfortune wholly to be traced\u003cbr\u003eto that misadventure of thine, Piso, in being thrown into the company\u003cbr\u003eof the Christian Probus on board the Mediterranean trader.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1838\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1838_7359.txt-3306-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 102.40307633680283, "y": -39.92071312688463}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-3719-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA dry soil for the cherry is the universal \u003cb\u003emaxim\u003c/b\u003e, arid\u003cbr\u003ealthough it is so hardy a tree that it will thrive in a great variety\u003cbr\u003eof soils, yet a good, sandy, or gravelly loam is its favourite\u003cbr\u003eplace.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-3719-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 42.43328845787627, "y": 3.1435500284074562}, {"color": "#377eb8", "date": "1825", "id": "mag_1825_553652.txt-78-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt was a \u003cb\u003emaxim\u003c/b\u003e of English jurisprudence, that though\u003cbr\u003eacts of parliament did not extend beyond the empire, nor operate upon\u003cbr\u003eits dependencies proprio vigore, yet they applied to, and bound them,\u003cbr\u003ewhen they were expressly comprehended in the purview of the\u003cbr\u003eact.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1825\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1825_553652.txt-78-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 102.97416779782574, "y": -90.004990960518}, {"color": "#377eb8", "date": "1817", "id": "nf_1817_747651.txt-1503-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIts operation contradicts that fundamental \u003cb\u003emaxim\u003c/b\u003e of\u003cbr\u003erepublican government, which requires that the sense of the majority\u003cbr\u003eshould prevail.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1817\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1817_747651.txt-1503-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 91.008081605572, "y": -21.471416358614842}, {"color": "#377eb8", "date": "1831", "id": "mag_1831_554103.txt-195-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt seemed like a new world revealed on purpose for him to\u003cbr\u003econquer; and if the \u003cb\u003emaxim\u003c/b\u003e of the law with respect to right to\u003cbr\u003eproperty be true, he has made the whole realm of Scotland his\u003cbr\u003eown.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1831\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1831_554103.txt-195-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 111.97549464666734, "y": -205.94318117374115}, {"color": "#377eb8", "date": "1856", "id": "nf_1856_747626.txt-1689-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe constitutional \u003cb\u003emaxim\u003c/b\u003e, that \" the king can do no\u003cbr\u003ewrong, \" in his official capacity, is founded upon an assumption that\u003cbr\u003ehe acts under the advice of his ministers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1856_747626.txt-1689-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 116.12238625925274, "y": -5.505699992615462}, {"color": "#377eb8", "date": "1828", "id": "mag_1828_553935.txt-15-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut his ignorance or carelessness of the art of writing, is\u003cbr\u003eamply compensated by his knowledge of nature and of policy; the wisdom\u003cbr\u003eof his \u003cb\u003emaxims\u003c/b\u003e,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1828\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1828_553935.txt-15-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 243.44459290312608, "y": 10.629812451580062}, {"color": "#377eb8", "date": "1837", "id": "mag_1837_554480.txt-499-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt will be all in vain, at present, to commend to his attention\u003cbr\u003ethe universal concurrence in the truth of the homely \u003cb\u003emaxim\u003c/b\u003e,\u003cbr\u003ethat \" it is an ill bird that defiles its own nest. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1837_554480.txt-499-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 176.2638167942057, "y": -172.22825230996855}, {"color": "#377eb8", "date": "1822", "id": "mag_1822_553406.txt-9-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTear away, brother Martin, never mind, so you do but tear away,\u003cbr\u003e\u0027 is the \u003cb\u003emaxim\u003c/b\u003e on which they often proceed; and the consequence\u003cbr\u003eis, that when the excitement is diminished and they begin to review\u003cbr\u003etheir labor, they find that they tore the old coat in pieces before\u003cbr\u003ethey had made another-that they have still much to do before they can\u003cbr\u003eappear in a decent dress.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1822\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1822_553406.txt-9-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 189.77317592531713, "y": -216.60527194898506}, {"color": "#377eb8", "date": "1847", "id": "nf_1847_748116.txt-3039-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe has told me that he was induced to do /z/ this by a\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e of an ancient king: \" Prepare thy work without, and make\u003cbr\u003eit fit for thyself in the field, and afterwards build thy house.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1847_748116.txt-3039-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 310.5175729426073, "y": -34.43729013527919}, {"color": "#377eb8", "date": "1852", "id": "mag_1852_555751.txt-62-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHence the \u003cb\u003emaxims\u003c/b\u003e of practical wisdom vary widely in\u003cbr\u003eterms from the principles of abstract science, though identical with\u003cbr\u003ethem in the last analysis.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1852_555751.txt-62-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 281.7589190903198, "y": 39.7756409871521}, {"color": "#377eb8", "date": "1829", "id": "nf_1829_748004.txt-1962-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003emay counteract her unchristian policy by another \u003cb\u003emaxim\u003c/b\u003e\u003cbr\u003eequally simple and decisive - \u0027 \u0027 Do not evil, that good may come.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1829_748004.txt-1962-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 145.28124514617437, "y": -163.42608984900417}, {"color": "#377eb8", "date": "1855", "id": "mag_1855_555998.txt-22-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEternal vigilance * \u0027 is the price which we must still pay for\u003cbr\u003esuch privileges; and in a constitutional republic not less than under\u003cbr\u003ea monarchy the great \u003cb\u003emaxims\u003c/b\u003e and safeguards of free and equal\u003cbr\u003egovernment are to be cherished, applied, and enforced with a jealousy\u003cbr\u003eas sensitive as that with which female purity or a man\u0027s personal\u003cbr\u003eintegrity and honor should be guarded and preserved.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1855_555998.txt-22-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 43.609142386241544, "y": -66.07258819254817}, {"color": "#377eb8", "date": "1829", "id": "nf_1829_748004.txt-1355-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/q/ however much it might have been once naturally loved and\u003cbr\u003eadmired, and however consistent it may still remain with the customs\u003cbr\u003eand the \u003cb\u003emaxims\u003c/b\u003e of the world.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1829_748004.txt-1355-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 276.3557039279223, "y": -199.1743427364304}, {"color": "#377eb8", "date": "1839", "id": "fic_1839_7088.txt-718-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf we believe we can do a thing, we can do it; that\u0027s my\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e, my lord.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1839_7088.txt-718-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -20.41316888149879, "y": -58.5464026262476}, {"color": "#377eb8", "date": "1859", "id": "nf_1859_747415.txt-1257-60", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e* Unless, therefore, he now attaches more weight to slight\u003cbr\u003ephysical differences in the discrimination of species than to\u003cbr\u003eintellectual and moral characteristics, in direct contravention of the\u003cbr\u003eprinciples so eloquently expounded in the passages just cited, and\u003cbr\u003eequally in conflict, as it appears to us, with the spirit and true\u003cbr\u003emeaning of the \u003cb\u003emaxim\u003c/b\u003e announced in the chapter of his \"\u003cbr\u003ePrinciples of Zoology, \" headed \" Intelligence and Instinct,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1859_747415.txt-1257-60\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 99.87298340922017, "y": -142.39373260562238}, {"color": "#377eb8", "date": "1841", "id": "nf_1841_747644.txt-1130-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe writings of Quisne, Turgot, and the friends of those\u003cbr\u003eauthors, are of a serious kind; but they labored under the same\u003cbr\u003edisadvantage with Montesquieu; their writings abound with moral\u003cbr\u003e\u003cb\u003emaxims\u003c/b\u003e of government, but are rather directed to economize and\u003cbr\u003ereform the administration of\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1841\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1841_747644.txt-1130-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 111.6452944937174, "y": 120.67515548862588}, {"color": "#377eb8", "date": "1832", "id": "fic_1832_7176.txt-1664-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt was filled with discussions upon reversionary interests,\u003cbr\u003eresulting uses, and all the jargon of the books, plentifully\u003cbr\u003eembellished with a prodigious array of learning, contained in pithy\u003cbr\u003eLatin \u003cb\u003emaxims\u003c/b\u003e, in which the lawyers are wont to invest meagre\u003cbr\u003eand common thoughts with the veil of science.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1832\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1832_7176.txt-1664-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -0.8112292594799224, "y": -205.00566639694048}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_753804.txt-799-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003emaxim\u003c/b\u003e is grounded not only on the most essential\u003cbr\u003eprinciples of good government, but on those of the successful conduct\u003cbr\u003eof business of any description.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_753804.txt-799-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 189.66914385686647, "y": 46.75557839790631}, {"color": "#377eb8", "date": "1828", "id": "fic_1828_7034.txt-76-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is true the \u003cb\u003emaxims\u003c/b\u003e of the Jesuits had given something\u003cbr\u003eof sternness and cunning to a character naturally mild and frank; but\u003cbr\u003ehe verily thought he was doing God\u0027s service, and he did it with a\u003cbr\u003econcentration\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1828\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1828_7034.txt-76-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 260.23550853272104, "y": 106.32237876123321}, {"color": "#377eb8", "date": "1848", "id": "nf_1848_747893.txt-3127-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis was the \u003cb\u003emaxim\u003c/b\u003e of Virgil, and all theory and\u003cbr\u003eexperience prove its value.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1848_747893.txt-3127-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -32.51274927786444, "y": -28.394567777091236}, {"color": "#377eb8", "date": "1847", "id": "nf_1847_748116.txt-940-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOne of my maxims about every thing is, Never despair: another\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e is, Never stand still; that is, never, in youth or age,\u003cbr\u003eallow yourself to think you have reached the ne plus ultra.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1847_748116.txt-940-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 179.48973032294606, "y": -118.89367681875532}, {"color": "#377eb8", "date": "1838", "id": "mag_1838_586189.txt-339-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey themselves pretend to xplain it by quoting that stale\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e about honesty being the best policy; but for my part I\u003cbr\u003enever saw honesty achieve such wonders,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1838\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1838_586189.txt-339-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 48.61078604218866, "y": 46.87519372352049}, {"color": "#377eb8", "date": "1859", "id": "nf_1859_747415.txt-2224-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut now comes the application of a \u003cb\u003emaxim\u003c/b\u003e:\u003cbr\u003ePonderanda\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1859_747415.txt-2224-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 79.56812783989022, "y": 26.36688902022336}, {"color": "#377eb8", "date": "1855", "id": "mag_1855_566529.txt-63-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey seem to act upon the principle that \" knowledge is power,\u003cbr\u003e** but not in the sense of the great author of this \u003cb\u003emaxim\u003c/b\u003e, who\u003cbr\u003ealso tells us that \" knowledge is the concoction of reading into\u003cbr\u003ejudgment. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1855_566529.txt-63-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 134.8490398166937, "y": -280.4188554626923}, {"color": "#377eb8", "date": "1832", "id": "nf_1832_747819.txt-1454-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHaving in vain entreated her mother to exert her influence,\u003cbr\u003ebefore her father\u0027s return, Mademoiselle de la Motte resolved to act\u003cbr\u003eupon the Jesuitical \u003cb\u003emaxim\u003c/b\u003e, that wrong actions may be done for a\u003cbr\u003egood purpose; she wrote a letter in her mother\u0027s hand-writing,\u003cbr\u003ebeseeching the nuns to receive her, and stated that illness prevented\u003cbr\u003eher from accompanying her daughter.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1832\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1832_747819.txt-1454-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 226.7453456595756, "y": -114.93204401430943}, {"color": "#377eb8", "date": "1834", "id": "mag_1834_564662.txt-160-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAll men felt ready to act upon the \u003cb\u003emaxims\u003c/b\u003e and motto of a\u003cbr\u003epatriotic society, which assumed for its title side toi, le Cici\u003cbr\u003et\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1834\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1834_564662.txt-160-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 133.40126841740746, "y": 70.6739144816952}, {"color": "#377eb8", "date": "1828", "id": "mag_1828_553902.txt-254-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNowhere is to be found such a series of beautiful ideas,\u003cbr\u003eadmirable moral \u003cb\u003emaxims\u003c/b\u003e, which pass before us like the\u003cbr\u003ebattalions of a celestial army, and which produce in our soul the same\u003cbr\u003eemotion which one experiences in contemplating the infinite expanse of\u003cbr\u003ethe skies, resplendent in a summer\u0027s night, with all the brilliance of\u003cbr\u003ethe stars.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1828\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1828_553902.txt-254-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 192.16618185739506, "y": -170.6094964791691}, {"color": "#377eb8", "date": "1842", "id": "fic_1842_7158.txt-1050-41", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eRemember now, my son, \u0027 continued the old gentleman, and then\u003cbr\u003ehe read me a lecture containing the essence of all that Solomon ever\u003cbr\u003esaid to Rehoboam, with the addition of a digest of the more modern\u003cbr\u003e\u003cb\u003emaxims\u003c/b\u003e of parental wisdom, down to the date of the\u003cbr\u003ediscourse.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1842\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1842_7158.txt-1050-41\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 170.45858376768578, "y": 100.06442300486265}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_772749.txt-870-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThese are the \u003cb\u003emaxims\u003c/b\u003e of peace and charity, which it is\u003cbr\u003ein the power of the females of our country to advocate, both by\u003cbr\u003eexample and by entreaties.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_772749.txt-870-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 204.86239966668742, "y": -8.881760333815993}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9168.txt-360-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHis oft repeated \u003cb\u003emaxim\u003c/b\u003e that if the first were not a boy\u003cbr\u003ethe second ought to be, had prevailed at last, and Dombey had a\u003cbr\u003eson.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9168.txt-360-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -79.47713965621271, "y": 119.19369961710912}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9168.txt-1845-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut, \" gasped the doctor, \" the one in the back parlor is bran\u003cbr\u003enew -- has scarcely been used at all, and it is a \u003cb\u003emaxim\u003c/b\u003e of mine\u003cbr\u003e\" -- \" Your maxim is good, undoubtedly, \" interrupted the lady, \" but\u003cbr\u003ethe chambers all need recarpeting, and this will exactly fit Maude\u0027s\u003cbr\u003eroom, which I intend fixing beautifully before she returns. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9168.txt-1845-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 68.73758310862326, "y": 94.23771535480986}, {"color": "#377eb8", "date": "1844", "id": "mag_1844_565352.txt-293-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere is no proposition that can be announced, the belief of\u003cbr\u003eWhich can not be traced back to one or the other of these\u003cbr\u003e\u003cb\u003emaxims\u003c/b\u003e as the basis on which it rests.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1844_565352.txt-293-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 121.16857803132356, "y": -71.98905620026912}, {"color": "#377eb8", "date": "1824", "id": "nf_1824_747685.txt-3087-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe citizen who serves as a soldier, has for his object the\u003cbr\u003edefence of his family and his property; and hence the \u003cb\u003emaxim\u003c/b\u003e in\u003cbr\u003estates, where the army is composed of citizens, that he who has the\u003cbr\u003emost to lose, will make the best soldier.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1824\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1824_747685.txt-3087-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 153.88965985241046, "y": -216.98422502179275}, {"color": "#377eb8", "date": "1830", "id": "mag_1830_554012.txt-55-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe very \u003cb\u003emaxim\u003c/b\u003e upon which the British writers found\u003cbr\u003etheir reasoning against the protecting system is, that every man\u003cbr\u003eunderstands his own interest best, and will take better care of\u003cbr\u003ehimself, than any\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1830_554012.txt-55-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 69.5079649394795, "y": 105.95416680902616}, {"color": "#377eb8", "date": "1832", "id": "nf_1832_747409.txt-255-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e43 which, in a state of nature, we were under no such\u003cbr\u003eobligation to do, and which, from the general \u003cb\u003emaxim\u003c/b\u003e of the\u003cbr\u003enatural equality of all mankind as to their rights, no man or body of\u003cbr\u003emen could have any right to compel us to do, without some previous\u003cbr\u003econsent or other act of our own.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1832\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1832_747409.txt-255-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 105.96020234021906, "y": 57.319950229433324}, {"color": "#377eb8", "date": "1826", "id": "mag_1826_553699.txt-30-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, and coinmotion from within; to secure peace and prosperity at\u003cbr\u003ehome, and importance and respect abroad; to settle on definite grounds\u003cbr\u003ethose political \u003cb\u003emaxims\u003c/b\u003e, which for ages unnumbered will regulate\u003cbr\u003ethe intercourse of nations, whose infancy will soon grow into a\u003cbr\u003epowerful manhood; to concert all the plans, in short, which wisdom can\u003cbr\u003edevise, and union execute, for increasing the strength and prosperity\u003cbr\u003eof every branch of the confederacy; these are some of the points to be\u003cbr\u003econsidered at the Congress of Panam * m.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1826\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1826_553699.txt-30-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 177.8338743540292, "y": -91.73721099847134}, {"color": "#377eb8", "date": "1815", "id": "fic_1815_8679.txt-207-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThy \u003cb\u003emaxims\u003c/b\u003e, Fabius, and thy cautious conduct, thy\u003cbr\u003eprudence, coolness and forbearing temper, hadst thou commanded in a\u003cbr\u003ewar like this, would well entitle thee, to praise more loud, than yet,\u003cbr\u003ethe world has lauded to thy fame.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1815\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1815_8679.txt-207-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -93.8333188954218, "y": 178.2530493427529}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_749098.txt-1424-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTheir \u003cb\u003emaxim\u003c/b\u003e was that of habitual tyranny -- \" might is\u003cbr\u003eright \".\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_749098.txt-1424-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 199.23094827418126, "y": 206.05981911281006}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-793-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is, however, a \u003cb\u003emaxim\u003c/b\u003e equally well settled, both among\u003cbr\u003etheorists and the best practical men, that health, immediate\u003cbr\u003evigour,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-793-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 279.06115683638063, "y": -63.67579123367086}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_753804.txt-772-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf, therefore, the legal provisions of the British\u003cbr\u003eConstitution, together with the unwritten \u003cb\u003emaxims\u003c/b\u003e by which the\u003cbr\u003econduct of the different political authorities is in fact regulated,\u003cbr\u003edid not give to the popular element in the Constitution that\u003cbr\u003esubstantial supremacy over every department of the government which\u003cbr\u003ecorresponds to its real power in the country, the Constitution would\u003cbr\u003enot possess the stability which characterizes it; either the laws or\u003cbr\u003ethe unwritten maxims would soon have to be changed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_753804.txt-772-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -87.33508698576871, "y": -13.870668994931751}, {"color": "#377eb8", "date": "1843", "id": "nf_1843_747650.txt-1240-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe several states are not even mentioned by name in any part,\u003cbr\u003eas if it was intended to impress the \u003cb\u003emaxim\u003c/b\u003e on America, that our\u003cbr\u003efreedom and independence arose from our union, and that without it we\u003cbr\u003ecould never be free or independent.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1843_747650.txt-1240-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 202.58200242757482, "y": 21.321544662053466}, {"color": "#377eb8", "date": "1835", "id": "fic_1835_7133.txt-1935-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003einquired a young Bostonian, forgetful of his orthodox habits --\u003cbr\u003elast Sabbath evening, twirling while he spoke a ticket in his fingers\u003cbr\u003e-- \" you know the \u003cb\u003emaxim\u003c/b\u003e -- when one is in Rome \" -- \" I have\u003cbr\u003enot been here quite long enough yet to apply the rule, \" said I; \" is\u003cbr\u003enot the theatre open on other evenings of the week? \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1835_7133.txt-1935-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 125.91213070857523, "y": -132.3438765617558}, {"color": "#377eb8", "date": "1853", "id": "mag_1853_590163.txt-235-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAmerica; or that, acting on the \u003cb\u003emaxim\u003c/b\u003e, that revolutions\u003cbr\u003edo not go backward, he had the sagacity to foresee, earlier than\u003cbr\u003eothers, the successful termination of those struggles; if thus\u003cbr\u003efeeling, and thus perceiving, it fell to him to lead the wil1in * or\u003cbr\u003eunwilling councils of his country, in her manifestation * of kindness\u003cbr\u003eto the new governments, and in her seasonable recognition of their\u003cbr\u003eindependence; if it be this, which the honorable member imputes to\u003cbr\u003ehim; if it be this course of public conduct, that he has identified\u003cbr\u003ehis name with the cause of South American liberty, he ought to be\u003cbr\u003eesteemed one of the most fortunate men of the age.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_590163.txt-235-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 0.6508283458670926, "y": 85.9403389114405}, {"color": "#377eb8", "date": "1835", "id": "mag_1835_554330.txt-442-67", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn addition to sensation, perception, and practical judgment\u003cbr\u003e(instinctive or acquirable) concerning the notices furnished by the\u003cbr\u003eorgans of perception, all which, in kind at least, the dog possesses\u003cbr\u003ein common with his master; in addition to these God gave us REASON,\u003cbr\u003eand with reason he gave us reflective SELF-cONSCIOUSNESS; gave us\u003cbr\u003ePRINCIPLES, distinguished from the \u003cb\u003emaxims\u003c/b\u003e and generalizations\u003cbr\u003eof outward experience, by their absolute and essential universality\u003cbr\u003eand necessity; and above all\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1835_554330.txt-442-67\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 83.72753970552006, "y": -171.16631281609858}, {"color": "#377eb8", "date": "1857", "id": "fic_1857_9075.txt-2130-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe had recently been trained in another school, and had\u003cbr\u003eunconsciously imbibed other \u003cb\u003emaxims\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1857_9075.txt-2130-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 446.7216499164069, "y": 76.64828254595827}, {"color": "#377eb8", "date": "1847", "id": "nf_1847_748116.txt-2272-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere is more value than all believe, in the simple\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e, Let family enjoyments be common to all.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1847_748116.txt-2272-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 153.99057247834938, "y": 7.501446326067122}, {"color": "#377eb8", "date": "1850", "id": "mag_1850_565905.txt-123-49", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is much to be regretted that one, so little predisposed by\u003cbr\u003etaste or constitutional temperament to the grossness and reckless\u003cbr\u003emalignity of vulgar skepticism, should yet be led by mere caprice, to\u003cbr\u003eaffirm at times the truth of many of its most monstrous and pernicious\u003cbr\u003e\u003cb\u003emaxims\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1850_565905.txt-123-49\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 115.91230013099727, "y": 17.400745752634297}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_749098.txt-2508-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBetter live upon foes than upon friends, was his \u003cb\u003emaxim\u003c/b\u003e;\u003cbr\u003eand this practice of living amongst foes was the great school by which\u003cbr\u003ehis people were taught vigilance.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_749098.txt-2508-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 9.755925550472313, "y": 42.87169522659115}, {"color": "#377eb8", "date": "1849", "id": "mag_1849_525201.txt-349-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd instead of laying so much stress on opinion, as if this\u003cbr\u003ewere the only matter of unity, how much better would it be to remember\u003cbr\u003ethe \u003cb\u003emaxim\u003c/b\u003e acted upon of old, by different parties in the\u003cbr\u003eChurch, that \" Catholics, as Catholics, agree always in matters of\u003cbr\u003efaith, and good Catholics never break charity, but the best Catholics,\u003cbr\u003eas men, may vary in their opinions\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1849_525201.txt-349-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 69.50419403360767, "y": -69.5221509377528}, {"color": "#377eb8", "date": "1846", "id": "mag_1846_555400.txt-553-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe understood the truth of the \u003cb\u003emaxim\u003c/b\u003e, that a man, in\u003cbr\u003eorder to make himself respectable, must try to be employed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1846\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1846_555400.txt-553-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 111.32105689550305, "y": -132.40942257906377}, {"color": "#377eb8", "date": "1839", "id": "fic_1839_7088.txt-629-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAn introduction before an intimate acquaintance, is my\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e, my lord. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1839_7088.txt-629-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 27.11059445825428, "y": -42.152071099958015}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9168.txt-1867-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe doctor was quite too much confounded to think of a single\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e, for his wife\u0027s effrontery took him wholly by\u003cbr\u003esurprise.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9168.txt-1867-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -49.73509096959106, "y": -58.519969445539004}, {"color": "#377eb8", "date": "1840", "id": "mag_1840_586555.txt-2-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt would be worth while, too, for that most estimable class of\u003cbr\u003emen whose \u003cb\u003emaxim\u003c/b\u003e is to walk in the old footsteps -- to let well\u003cbr\u003eenough alone - who see fearful revolutions in all change\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1840\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1840_586555.txt-2-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -2.9065436912827693, "y": 186.92222484730416}, {"color": "#377eb8", "date": "1829", "id": "mag_1829_553970.txt-221-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHeoften * repeated the following \u003cb\u003emaxims\u003c/b\u003e; \" With.. out\u003cbr\u003ethe freedom of the seas there is no happiness th.v the world.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1829_553970.txt-221-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 233.9431172386174, "y": -8.730201264077108}, {"color": "#377eb8", "date": "1815", "id": "nf_1815_747659.txt-872-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHad our Lord added to these words the \u003cb\u003emaxim\u003c/b\u003e of the\u003cbr\u003eworld, \" If any man assaults you with deathly weapons, you may repel\u003cbr\u003ehim with deathly weapons, \" it would have directly contradicted the\u003cbr\u003espirit of this command and made his sayings like a house divided\u003cbr\u003eagainst itself.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1815\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1815_747659.txt-872-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 145.00877017947153, "y": 265.34952761521635}, {"color": "k", "date": "1827", "id": "fic_1827_9759.txt-295-13", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo rob himself, and spend the spoil upon another is thy sage\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e, it seems, for which, thou deservest to be dubbed a she\u003cbr\u003eSolomon, but let\u0027s see if thou art as cunning in defending as in\u003cbr\u003ecoining maxims.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1827_9759.txt-295-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -21.867886365423526, "y": 186.67426769001452}, {"color": "k", "date": "1850", "id": "nf_1850_747423.txt-38-15", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is not in the mt of man to frame a more profligate and fatal\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e of legislation.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747423.txt-38-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 265.9012228481302, "y": 137.6409323751595}, {"color": "k", "date": "1837", "id": "nf_1837_772749.txt-855-6", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere are no occasions when this \u003cb\u003emaxim\u003c/b\u003e is more needed,\u003cbr\u003ethan when we wish to modify the opinions, or alter the practices of\u003cbr\u003eour fellow-men.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_772749.txt-855-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 3.2399596269089135, "y": 9.07271736849335}, {"color": "k", "date": "1852", "id": "mag_1852_566154.txt-16-15", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eRESPECT yourself, if you wish to be respected by others, \" is a\u003cbr\u003e\u003cb\u003emaxim\u003c/b\u003e well understood in its application to individuals, and it\u003cbr\u003eis no less true when applied to communities.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1852_566154.txt-16-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 7.225077513282924, "y": -162.90597490912782}]);
+        edges = new vis.DataSet([{"color": "black", "from": "fic_1852_9832.txt-4659-25", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1852_9832.txt-4659-25", "label": 4, "to": "mag_1833_564563.txt-169-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553913.txt-218-38", "label": 4, "to": "nf_1841_747644.txt-1130-35", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553913.txt-218-38", "label": 4, "to": "nf_1829_748004.txt-1962-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553913.txt-218-38", "label": 4, "to": "mag_1846_555400.txt-553-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553913.txt-218-38", "label": 4, "to": "mag_1860_556848.txt-673-141", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553913.txt-218-38", "label": 4, "to": "mag_1825_553652.txt-78-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553913.txt-218-38", "label": 4, "to": "mag_1835_554346.txt-327-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9168.txt-210-32", "label": 4, "to": "nf_1851_758845.txt-2313-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_554346.txt-327-4", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_554346.txt-327-4", "label": 4, "to": "fic_1860_2807.txt-342-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_554346.txt-327-4", "label": 4, "to": "mag_1843_555101.txt-376-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_554346.txt-327-4", "label": 4, "to": "mag_1855_555998.txt-22-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_554346.txt-327-4", "label": 4, "to": "mag_1835_554330.txt-442-67", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7350.txt-1634-36", "label": 3.5, "to": "nf_1837_772749.txt-870-3", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1836_7350.txt-1634-36", "label": 4, "to": "fic_1828_7034.txt-76-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7052.txt-1630-1", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7052.txt-1630-1", "label": 4, "to": "mag_1843_565314.txt-184-51", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_1281.txt-5028-6", "label": 3.5, "to": "fic_1860_2807.txt-342-10", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1856_1281.txt-5028-6", "label": 4, "to": "mag_1860_556848.txt-673-141", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_3928.txt-816-3", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_3928.txt-816-3", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_3928.txt-816-3", "label": 4, "to": "fic_1823_7213.txt-1345-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_3928.txt-816-3", "label": 4, "to": "nf_1847_748116.txt-940-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_3928.txt-816-3", "label": 4, "to": "nf_1858_753804.txt-144-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1843_555101.txt-376-21", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1843_555101.txt-376-21", "label": 4, "to": "fic_1856_3677.txt-178-34", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1844_772692.txt-399-12", "label": 4, "to": "fic_1858_1282.txt-245-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1844_772692.txt-399-12", "label": 4, "to": "mag_1838_586189.txt-339-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_3677.txt-178-34", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_3677.txt-178-34", "label": 4, "to": "mag_1850_565905.txt-123-49", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_3677.txt-178-34", "label": 3, "to": "mag_1837_554480.txt-499-24", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1856_3677.txt-178-34", "label": 4, "to": "mag_1833_564563.txt-169-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1851_758845.txt-2313-9", "label": 3, "to": "fic_1860_2807.txt-342-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 3.5, "to": "fic_1860_9072.txt-25-10", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "mag_1860_556848.txt-673-141", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "fic_1839_7088.txt-718-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "fic_1860_8044.txt-776-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "nf_1817_747651.txt-1503-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "mag_1839_586383.txt-284-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "fic_1835_7014.txt-782-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "mag_1850_565905.txt-123-49", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "fic_1836_7111.txt-2338-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "nf_1816_747562.txt-469-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-245-20", "label": 4, "to": "nf_1841_747644.txt-1130-35", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1859_556713.txt-167-77", "label": 4, "to": "mag_1853_590163.txt-235-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1859_556713.txt-167-77", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1835_7014.txt-782-8", "label": 4, "to": "fic_1823_7213.txt-1345-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1835_7014.txt-782-8", "label": 4, "to": "nf_1856_747626.txt-1689-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1835_7014.txt-782-8", "label": 4, "to": "mag_1844_565352.txt-293-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1833_564563.txt-169-30", "label": 4, "to": "nf_1837_772749.txt-870-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1833_564563.txt-169-30", "label": 4, "to": "mag_1828_553935.txt-15-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_2470.txt-5680-1", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_2470.txt-5680-1", "label": 4, "to": "mag_1837_554480.txt-499-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1860_556848.txt-673-141", "label": 4, "to": "mag_1850_565905.txt-123-49", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1860_556848.txt-673-141", "label": 4, "to": "nf_1858_753804.txt-799-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1823_553475.txt-129-6", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1823_553475.txt-129-6", "label": 4, "to": "mag_1825_553652.txt-78-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_8044.txt-776-18", "label": 4, "to": "fic_1815_8679.txt-207-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_8044.txt-776-18", "label": 4, "to": "fic_1860_9168.txt-1845-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1815_8679.txt-336-13", "label": 4, "to": "mag_1822_553406.txt-9-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1822_7243.txt-1775-9", "label": 4, "to": "mag_1835_554330.txt-442-67", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1822_7243.txt-1775-9", "label": 4, "to": "mag_1855_555998.txt-22-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1854_750818.txt-1415-4", "label": 4, "to": "fic_1860_2807.txt-342-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1816_747562.txt-469-13", "label": 4, "to": "mag_1825_553649.txt-536-39", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1825_553649.txt-536-39", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1825_553649.txt-536-39", "label": 4, "to": "mag_1825_553652.txt-78-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_2807.txt-342-10", "label": 4, "to": "nf_1858_753804.txt-772-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_2807.txt-342-10", "label": 3.5, "to": "fic_1815_8679.txt-207-1", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1860_2807.txt-342-10", "label": 4, "to": "mag_1827_553785.txt-125-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_2807.txt-342-10", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_2807.txt-342-10", "label": 4, "to": "mag_1834_564662.txt-160-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_2807.txt-342-10", "label": 4, "to": "nf_1841_747644.txt-1130-35", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_755436.txt-64-3", "label": 4, "to": "fic_1860_9168.txt-1867-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_755436.txt-64-3", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1824_7285.txt-1102-1", "label": 4, "to": "fic_1842_7158.txt-1050-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1823_7213.txt-1345-11", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1823_7213.txt-1345-11", "label": 3, "to": "mag_1839_586383.txt-284-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1820_553223.txt-23-46", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1820_553223.txt-23-46", "label": 4, "to": "mag_1835_554330.txt-442-67", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1827_9759.txt-295-13", "label": 4, "to": "mag_1838_586189.txt-339-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1827_7269.txt-2252-64", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1827_7269.txt-2252-64", "label": 4, "to": "nf_1837_772749.txt-855-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_753804.txt-144-2", "label": 4, "to": "mag_1838_586189.txt-339-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_753804.txt-144-2", "label": 4, "to": "mag_1852_566154.txt-16-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1837_554558.txt-238-20", "label": 3, "to": "nf_1841_747644.txt-1130-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1837_554558.txt-238-20", "label": 4, "to": "fic_1860_9168.txt-1867-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1827_553785.txt-125-9", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1827_553785.txt-125-9", "label": 4, "to": "mag_1831_554103.txt-195-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9072.txt-25-10", "label": 4, "to": "nf_1843_747650.txt-1240-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9072.txt-25-10", "label": 4, "to": "nf_1847_748116.txt-2272-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1838_7359.txt-3306-8", "label": 4, "to": "nf_1837_772749.txt-870-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1838_7359.txt-3306-8", "label": 4, "to": "mag_1844_565352.txt-293-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-3719-9", "label": 4, "to": "mag_1834_564662.txt-160-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-3719-9", "label": 4, "to": "nf_1848_747893.txt-3127-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-3719-9", "label": 3, "to": "nf_1845_747928.txt-793-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-3719-9", "label": 4, "to": "nf_1844_749098.txt-2508-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1825_553652.txt-78-3", "label": 3, "to": "nf_1837_772749.txt-870-3", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1825_553652.txt-78-3", "label": 4, "to": "nf_1859_747415.txt-2224-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1825_553652.txt-78-3", "label": 4, "to": "fic_1839_7088.txt-629-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1825_553652.txt-78-3", "label": 4, "to": "mag_1835_554330.txt-442-67", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1817_747651.txt-1503-5", "label": 4, "to": "mag_1844_565352.txt-293-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1817_747651.txt-1503-5", "label": 4, "to": "nf_1856_747626.txt-1689-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1817_747651.txt-1503-5", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1831_554103.txt-195-17", "label": 4, "to": "nf_1847_748116.txt-940-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1831_554103.txt-195-17", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_747626.txt-1689-2", "label": 4, "to": "mag_1844_565352.txt-293-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_747626.txt-1689-2", "label": 4, "to": "nf_1844_749098.txt-2508-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_747626.txt-1689-2", "label": 4, "to": "nf_1858_753804.txt-799-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_747626.txt-1689-2", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553935.txt-15-27", "label": 4, "to": "mag_1834_564662.txt-160-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1837_554480.txt-499-24", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1837_554480.txt-499-24", "label": 4, "to": "mag_1844_565352.txt-293-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747423.txt-38-15", "label": 4, "to": "mag_1834_564662.txt-160-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1822_553406.txt-9-19", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-3039-14", "label": 4, "to": "nf_1837_772749.txt-870-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-3039-14", "label": 4, "to": "nf_1845_747928.txt-793-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_772749.txt-855-6", "label": 4, "to": "nf_1841_747644.txt-1130-35", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_772749.txt-855-6", "label": 4, "to": "mag_1838_586189.txt-339-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1829_748004.txt-1962-7", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1855_555998.txt-22-29", "label": 3.5, "to": "fic_1835_7133.txt-1935-29", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1829_748004.txt-1355-25", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1839_7088.txt-718-17", "label": 4, "to": "nf_1858_753804.txt-772-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1839_7088.txt-718-17", "label": 4, "to": "nf_1859_747415.txt-1257-60", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_747415.txt-1257-60", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_747415.txt-1257-60", "label": 4, "to": "nf_1832_747819.txt-1454-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_747415.txt-1257-60", "label": 4, "to": "nf_1824_747685.txt-3087-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_747415.txt-1257-60", "label": 4, "to": "mag_1844_565352.txt-293-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1841_747644.txt-1130-35", "label": 4, "to": "nf_1832_747409.txt-255-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1841_747644.txt-1130-35", "label": 4, "to": "nf_1815_747659.txt-872-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1841_747644.txt-1130-35", "label": 3.5, "to": "mag_1829_553970.txt-221-5", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1841_747644.txt-1130-35", "label": 4, "to": "fic_1828_7034.txt-76-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1841_747644.txt-1130-35", "label": 3.5, "to": "nf_1837_772749.txt-870-3", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1832_7176.txt-1664-33", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-3127-3", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-3127-3", "label": 4, "to": "nf_1844_749098.txt-2508-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-940-13", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-940-13", "label": 4, "to": "nf_1832_747819.txt-1454-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1838_586189.txt-339-10", "label": 4, "to": "fic_1860_9168.txt-360-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1838_586189.txt-339-10", "label": 4, "to": "mag_1840_586555.txt-2-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1838_586189.txt-339-10", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1838_586189.txt-339-10", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1838_586189.txt-339-10", "label": 4, "to": "mag_1830_554012.txt-55-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1838_586189.txt-339-10", "label": 4, "to": "fic_1839_7088.txt-629-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_747415.txt-2224-7", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_747415.txt-2224-7", "label": 4, "to": "fic_1842_7158.txt-1050-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1855_566529.txt-63-25", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1834_564662.txt-160-8", "label": 4, "to": "nf_1843_747650.txt-1240-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1834_564662.txt-160-8", "label": 4, "to": "fic_1842_7158.txt-1050-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1834_564662.txt-160-8", "label": 4, "to": "nf_1844_749098.txt-2508-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1834_564662.txt-160-8", "label": 4, "to": "nf_1844_749098.txt-1424-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1834_564662.txt-160-8", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553902.txt-254-14", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1828_553902.txt-254-14", "label": 4, "to": "mag_1835_554330.txt-442-67", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1842_7158.txt-1050-41", "label": 4, "to": "nf_1832_747409.txt-255-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_772749.txt-870-3", "label": 4, "to": "nf_1845_747928.txt-793-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_772749.txt-870-3", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9168.txt-360-3", "label": 4, "to": "fic_1815_8679.txt-207-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9168.txt-1845-29", "label": 3.5, "to": "mag_1849_525201.txt-349-29", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1860_9168.txt-1845-29", "label": 4, "to": "nf_1843_747650.txt-1240-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1824_747685.txt-3087-24", "label": 4, "to": "mag_1826_553699.txt-30-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1830_554012.txt-55-2", "label": 4, "to": "nf_1832_747409.txt-255-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1832_747409.txt-255-24", "label": 4, "to": "mag_1850_565905.txt-123-49", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1826_553699.txt-30-27", "label": 4, "to": "fic_1835_7133.txt-1935-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_753804.txt-772-16", "label": 4, "to": "fic_1860_9168.txt-1867-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1843_747650.txt-1240-21", "label": 4, "to": "mag_1829_553970.txt-221-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1835_7133.txt-1935-29", "label": 4, "to": "mag_1835_554330.txt-442-67", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1835_7133.txt-1935-29", "label": 4, "to": "mag_1846_555400.txt-553-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1835_7133.txt-1935-29", "label": 4, "to": "mag_1852_566154.txt-16-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-2272-11", "label": 4, "to": "mag_1849_525201.txt-349-29", "weight": 4.0, "width": 4}, {"color": "lightgray", "from": "fic_1842_7158.txt-1050-41", "label": NaN, "to": "mag_1835_554330.txt-442-67", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

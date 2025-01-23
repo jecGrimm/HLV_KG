@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">graft_nn (1)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-634-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA maiden plant (a tree but one year from the \u003cb\u003egraft\u003c/b\u003e,)\u003cbr\u003ebeing planted \" is to be headed down to four buds or eyes\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-634-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 44.376982422720104, "y": -84.42371070746924}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_747892.txt-595-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen the operation is performed close to the ground, or even\u003cbr\u003eunder the surface; after the \u003cb\u003egraft\u003c/b\u003e is properly tied draw up\u003cbr\u003eearth all round, leaving one or two buds above; this method is both\u003cbr\u003econvenient, and in many instances preferable, and more to be depended\u003cbr\u003eupon.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_747892.txt-595-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 142.70940565837714, "y": 173.82816931484575}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1739-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFine mould or peat, from the box in which the roots were\u003cbr\u003epacked, is sprinkled over the bottom, the \u003cb\u003egrafts\u003c/b\u003e are placed in,\u003cbr\u003eslanting, in successive layers, and all the spaces filled with mould\u003cbr\u003eor peat.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1739-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 154.35204885486178, "y": -33.6732998624387}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-3421-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor the same reason, root-grafting the pear is not adopted,\u003cbr\u003eespecially as slightly unfavorable causes are apt to produce far\u003cbr\u003egreater failures of such \u003cb\u003egrafts\u003c/b\u003e than with the apple.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-3421-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 251.97188107717204, "y": 112.26428370876913}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-374-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn the following spring, the grafted trees may be looked over,\u003cbr\u003eand any young suckers growing from the stock or tree that may be\u003cbr\u003eliable to injure and retard the growth of the \u003cb\u003egraft\u003c/b\u003e, may be\u003cbr\u003etaken off.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-374-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -32.316527269730734, "y": -67.53911042149686}, {"color": "#377eb8", "date": "1848", "id": "nf_1848_747893.txt-2589-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eGrafts\u003c/b\u003e often bear some fine clusters the first season of\u003cbr\u003egrowth, and pretty considerably the second. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1848_747893.txt-2589-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": 397.11089150950653, "y": 20.802552788752223}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-1297-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Mr. STOMS asks: \u0027 Why \u003cb\u003egraft\u003c/b\u003e on the quince stock at\u003cbr\u003eall? \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-1297-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -8.89569039886292, "y": -121.61420053311846}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-2264-51", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eGrown on this, the size is vastly increased, the flavor and\u003cbr\u003etexture improved, and the low structure prevents these great fruits\u003cbr\u003efrom being blown off, while the bud unites with the quince-stock with\u003cbr\u003eso great firmness, that few trees of this variety ever fracture at the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e, and all seem to grow with as much vigor as on the pear\u003cbr\u003estock.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-2264-51\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -103.25958647887127, "y": -120.26314222492742}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-383-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe great length of that portion of the \u003cb\u003egraft\u003c/b\u003e in contact\u003cbr\u003ewith the bark and fresh wood, greatly facilitates their union; while\u003cbr\u003ethe cut face of the stock is speedily covered with a new growth by\u003cbr\u003ethat part of the graft which rests upon it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-383-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 334.562107095222, "y": -85.28276046872926}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-398-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhere it becomes desirable to preserve rare sorts, which have\u003cbr\u003ebeen grafted late in spring, a loose wrapper of white paper round the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e will protect it from the drying and scorching rays of the\u003cbr\u003esun; or shrivelling and failure will often be prevented by covering\u003cbr\u003ethe whole graft with a wax plaster; or by encasing it in moss kept\u003cbr\u003edamp by occasional applications of water.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-398-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 221.06856011366096, "y": 163.4984934647723}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-273-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is not usual with many, either to tie, or clay the\u003cbr\u003e\u003cb\u003egrafts\u003c/b\u003e in this case, as the wound is placed below the surface;\u003cbr\u003ebut when this plan is adopted, the grafts must be set * In grafting\u003cbr\u003elarge quantities of young trees when stocks are scarce, it is not an\u003cbr\u003eunusual practice in some nurseries to tongue or whip-graft upon small\u003cbr\u003epieces of roots of the proper sort of tree, planting the same in the\u003cbr\u003eearth as soon as grafted.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-273-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 71.73803137589594, "y": 25.076578742767765}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-644-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe extension of the wood of the stock, by successive\u003cbr\u003edepositions from the leaves of the \u003cb\u003egraft\u003c/b\u003e, and through the\u003cbr\u003ecellular system of the bark, so as to preserve the strict specific\u003cbr\u003eidentity of the wood of the former, is familiar to every practical\u003cbr\u003ecultivator.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-644-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -68.47641614380316, "y": -252.26995649140116}, {"color": "#377eb8", "date": "1850", "id": "fic_1850_7953.txt-1799-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe pricking thorns, -- the arrows fierce, Our spirit and our\u003cbr\u003eflesh to pierce, -- The \u003cb\u003egrafts\u003c/b\u003e, that spoil our vineyard\u0027s\u003cbr\u003efruit, Are from that bitter, evil root.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1850_7953.txt-1799-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -28.356295066458447, "y": -210.68598176684395}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-207-71", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf, \" says De Candolle, \" the descending sap has only an\u003cbr\u003eincomplete analogy with the wants of the stock, the latter does not\u003cbr\u003ethrive, though the organic union may have taken place; and if the\u003cbr\u003eanalogy between the alburnum of stock and scion is wanting, the\u003cbr\u003eorganic union does not operate; the scion can not absorb the sap of\u003cbr\u003ethe stock and the \u003cb\u003egraft\u003c/b\u003e fails. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-207-71\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 326.82579208395754, "y": -152.39539221148914}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-295-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003egraft\u003c/b\u003e, thus placed, receives a /z/ large supply of\u003cbr\u003ethe sustaining fluid from the stock, and the union is rapid; while the\u003cbr\u003ewound on the stock is speedily covered by a new layer of bark from\u003cbr\u003ethat part of the scion which svanda astride it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-295-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 204.8815800040162, "y": -71.22463010693139}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-436-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe influence of the \u003cb\u003egraft\u003c/b\u003e on the stock seems scarcely\u003cbr\u003eto extend beyond the power of communicating disease.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-436-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 370.1979558315557, "y": 92.84619827316774}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-370-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen the \u003cb\u003egraft\u003c/b\u003e is united and begins to make a growth,\u003cbr\u003ethe bandage\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-370-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -6.150950909552953, "y": 128.30564458557916}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-1529-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe gourmand may be used, for ingrafting upon the trunk, at G,\u003cbr\u003ebut when not used as a \u003cb\u003egraft\u003c/b\u003e, it should be cut at F, in order\u003cbr\u003eto conceal the trunk with foliage.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-1529-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 79.00219189747312, "y": -107.5164136263556}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-542-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSupposing the tree to be two or three years old from the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e or bud, a head must be formed at the intended height by\u003cbr\u003eheading it down in the spring to two or three buds or eyes in each\u003cbr\u003eshoot that is near the crown when the young shoots begin to grow; they\u003cbr\u003emay be /z/ taken off to three or four in number of the strongest and\u003cbr\u003ehealthiest, as they are intended to form the tree.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-542-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 35.15863793961073, "y": -145.5682324727261}, {"color": "#377eb8", "date": "1848", "id": "nf_1848_747893.txt-2582-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut if the \u003cb\u003egraft\u003c/b\u003e be on stocks not dug up, or stands\u003cbr\u003ewhere it is to remain, it must be done in the fall, or early part of\u003cbr\u003ewinter, to insure success.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1848_747893.txt-2582-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 194.30987962991532, "y": -11.708134286664864}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-284-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHaving made the cleft, open it by driving down the centre a\u003cbr\u003enarrow wedge of iron far enough to open the sides sufficient to\u003cbr\u003ereceive the \u003cb\u003egrafts\u003c/b\u003e, which are prepared by cutting them in\u003cbr\u003elengths about six and eight inches long cutting the bottom ends\u003cbr\u003edownwards, on each side, in the form of a wedge, and so that it fits\u003cbr\u003eneatly in the cleft, into which it is to be gently pressed downwards,\u003cbr\u003ebeing careful that the barks of the graft and the stock precisely\u003cbr\u003emeet.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-284-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 178.46413516003142, "y": 18.130638529792428}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-802-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMost gardeners abroad, when they select trees with more than\u003cbr\u003eusual care, take what are called maiden plants those one year old from\u003cbr\u003ethe \u003cb\u003egraft\u003c/b\u003e, and there can be no doubt that, taking into account\u003cbr\u003ehealth, duration, and the ease with which such a tree can be made to\u003cbr\u003egrow into any form, this is truly the preferable size for removal into\u003cbr\u003ea fruit garden.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-802-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 217.37609290118183, "y": 4.257281326447885}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-304-51", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePlace the part of the shoot to the stock, then with a sharp\u003cbr\u003eknife pare off part of the branch and stock so as to make a neat\u003cbr\u003esplice in precisely the same manner as the whip-graft; the part united\u003cbr\u003eis then to be bandaged and covered as the \u003cb\u003egraft\u003c/b\u003e, and in every\u003cbr\u003eway managed in the same manner.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-304-51\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 5.823381972312855, "y": -97.55334586356102}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-409-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut, whilst grafting never effects any alteration in Jie\u003cbr\u003eidentity of the variety or species of fruit, still it is not to be\u003cbr\u003edenied that the stock does exert certain influences over the habits of\u003cbr\u003ethe \u003cb\u003egraft\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-409-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -85.12891469895285, "y": -194.62844366873196}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-414-52", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe effect of this difference of structure is very apparent,\u003cbr\u003ewhen the Peach is grafted on the Plum, in the greater size of the\u003cbr\u003etrunk above, as compared with that below the graft; a fact which seems\u003cbr\u003eto arise from the obstruction which the descending sap of the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e finds in its course through the bark of the stock.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-414-52\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 127.74008988795165, "y": -119.93623015236533}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-354-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e19 shows a stock cut off for cleft-grafting with the upright\u003cbr\u003ecleft separated by an iron or steel wedge, ready for the \u003cb\u003egraft\u003c/b\u003e;\u003cbr\u003efig.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-354-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -3.919406239724965, "y": 61.27598077333366}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_747892.txt-598-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003egrafts\u003c/b\u003e will have taken when they begin to grow\u003cbr\u003efreely; the bandages may then be unloosed and tied over again, to\u003cbr\u003eallow for the swelling of the wood.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_747892.txt-598-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -51.29213935322865, "y": -187.01971875852036}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-404-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ \u003cb\u003eGrafts\u003c/b\u003e which have become dry, may be restored if the\u003cbr\u003emoisture is applied so gradually that its absorption may re quire\u003cbr\u003eseveral weeks.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-404-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 153.8456677945476, "y": -84.390281586032}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-324-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe stock thus supplies the sap, as the soil does in the case\u003cbr\u003eof a cutting; and the \u003cb\u003egraft\u003c/b\u003e, instead of making roots of its\u003cbr\u003eown, extends its forming wood downwards, at the inner surface of the\u003cbr\u003ebark, into the stock itself.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-324-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 315.4955598434333, "y": -33.35715575628453}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-420-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn adapting the \u003cb\u003egraft\u003c/b\u003e to the soil the stock has a marked\u003cbr\u003einfluence.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-420-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 143.60188147617964, "y": 61.749725288782955}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-801-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor gardens, all experienced cultivators agree that a smaller\u003cbr\u003esize is preferable; we prefer plants two years old from the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-801-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 175.1767494811576, "y": 108.56714226917886}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1742-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eDuring the whole of the work, each heap of \u003cb\u003egrafts\u003c/b\u003e must\u003cbr\u003ebe kept with a label, and every box sufficiently marked, to prevent\u003cbr\u003eall possibility of mistake.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1742-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 86.81446965275082, "y": 5.134492366367699}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1824-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd, as the \u003cb\u003egrafts\u003c/b\u003e gradually extend by growth, the\u003cbr\u003eremainder of the top may, by successive excisions, be entirely\u003cbr\u003eremoved.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1824-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 43.90179305897335, "y": -236.65343747257717}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-1402-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ This fact has tended to confirm horticulturists in the\u003cbr\u003ebelief in the necesity of an adaptation of the \u003cb\u003egraft\u003c/b\u003e to the\u003cbr\u003estock.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-1402-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 161.76996693670173, "y": -241.77231072811134}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-391-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAfter a \u003cb\u003egraft\u003c/b\u003e is inserted, and as soon as the tree\u003cbr\u003ecommences growth, the buds on the stock must be rubbed off, in order\u003cbr\u003eto throw the rising sap into the scion.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-391-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -37.32034424893077, "y": -237.31719712272866}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-628-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThat a further change is at the same time effected by\u003cbr\u003eincreasing or lessening the supply of sap from the stock to the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e; and that a similar change may result from a fertile or\u003cbr\u003esterile soil.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-628-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 106.36452700967553, "y": 74.59148403930779}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-413-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe want of entire similarity of structure between the stock\u003cbr\u003eand \u003cb\u003egraft\u003c/b\u003e, confines the growth of the latter, and changes it,\u003cbr\u003ein the case of the Pear, from a lofty tree to a shrub of eight or ten\u003cbr\u003efeet in height.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-413-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": 65.31786331738098, "y": -185.64763803691537}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1741-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe mould should reach within an inch or two of the tops of the\u003cbr\u003e\u003cb\u003egrafts\u003c/b\u003e, and should be compactly filled among them.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1741-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 141.8919089384271, "y": -273.83624813713817}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-203-97", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ In the case, however, of very small trees or stocks, which\u003cbr\u003eare grafted below the surface of the ground, as is frequently the\u003cbr\u003epractice with the Apple in American nurseries, the stocks are grafted\u003cbr\u003ein the house in winter, or early spring, put away carefully in a damp\u003cbr\u003ecellar, and planted out in the spring; but this method is only\u003cbr\u003esuccessful when the root is small, and when the top of the stock is\u003cbr\u003etaken off, and the whole root is devoted to supplying the \u003cb\u003egraft\u003c/b\u003e\u003cbr\u003ewith nourishment.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-203-97\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 306.2175148148281, "y": -176.30543606302606}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1832-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI like this method better than any I have ever tried for\u003cbr\u003egrafting large trees, as it gives the \u003cb\u003egrafts\u003c/b\u003e a good opportunity\u003cbr\u003eto get well started.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1832-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 119.32624623027124, "y": 188.29820581546878}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1336-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnother perpendicular stroke slits the stock for the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e, leaving a perfectly smooth face cut for its\u003cbr\u003ereception.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1336-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 82.1647523577795, "y": -352.5197765654559}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-3432-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt sometimes happens that \u003cb\u003egrafts\u003c/b\u003e of a few varieties\u003cbr\u003einserted at standard height, grow and bear for a series of\u003cbr\u003eyears.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-3432-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": -33.5213753777206, "y": -386.42866690944743}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-431-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn addition to the foregoing, a diseased stock should always be\u003cbr\u003eavoided, as it will communicate disease slowly to the \u003cb\u003egraft\u003c/b\u003e,\u003cbr\u003eunless the latter is a variety of sufficient vigour to renew the\u003cbr\u003ehealth of the stock, which is but seldom the case.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-431-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 206.7573989323905, "y": 137.4118528664042}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-643-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e* The influence exerted by the \u003cb\u003egraft\u003c/b\u003e on the stock,\u003cbr\u003ealthough not strictly within the limits of thi chapter, offers an\u003cbr\u003einteresting subject for inquiry.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-643-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 96.77232007096171, "y": -91.56391563137952}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1842-31", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e; I consider this tree now worth $100; the cost of grafting it\u003cbr\u003ewas about $5; and the latter was all repaid two years ago the first\u003cbr\u003eseason the \u003cb\u003egrafts\u003c/b\u003e bore fruit. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1842-31\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -6.534313098848485, "y": 21.42508055516684}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-447-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis is a part of nursery business generally too much\u003cbr\u003eneglected; for in many instances inoculated and grafted trees are\u003cbr\u003eneglected by allowing young wood to grow from the stock under and over\u003cbr\u003ethe graft or bud, and the consequence is that the buds or\u003cbr\u003e\u003cb\u003egrafts\u003c/b\u003e are impoverished by being deprived of the sap which\u003cbr\u003eshould flow into them from the stock.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-447-47\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -10.143337262129009, "y": -387.6837129359255}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-394-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003esap thus drawn up, passes only into and is elaborated by those\u003cbr\u003eleaves, and is again immediately returned to the stock below, without\u003cbr\u003eever reaching the \u003cb\u003egraft\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-394-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 158.07644470152425, "y": -163.72104033214984}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1833-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCutting off and grafting the top first, gives the \u003cb\u003egrafts\u003c/b\u003e\u003cbr\u003ethere the best possible chance, while the necessary reduction of the\u003cbr\u003etop throws the sap into the remaining side branches, which fits them\u003cbr\u003ewell for\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1833-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 365.8060562550837, "y": -15.10759631694561}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-213-50", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe ancients boasted of Vines and Apples grafted on Poplars and\u003cbr\u003eElms; but repeated experiments, by the most skilful cultivators of\u003cbr\u003emodern times, have clearly proved that although we may, once in a\u003cbr\u003ethousand trials * succeed in effecting these ill assorted unions, yet\u003cbr\u003ethe \u003cb\u003egraft\u003c/b\u003e invariably dies after a few months growth.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-213-50\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 166.98066024604051, "y": 172.53453809232363}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-278-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere are many other kinds of composition made for the purpose\u003cbr\u003eof covering \u003cb\u003egrafts\u003c/b\u003e, of which beeswax /q/ is the principal; in\u003cbr\u003esome instances it is the onlything used, as on small orange trees and\u003cbr\u003ethose plants that are cleft-grafted, and united in a moist\u003cbr\u003eheat.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-278-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 125.8977284608322, "y": -157.09249899039685}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1327-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe wedge b opens the stock to receive the \u003cb\u003egraft\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1327-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 213.0996108490575, "y": -146.9231620749824}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-679-52", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ These facts show that a bud, com- Fi s- 18 -* posed, as it\u003cbr\u003eis, only of bark, and of alburnum or half-formed wood, presenting a\u003cbr\u003egreat surface of fresh material, will form a more rapid and complete\u003cbr\u003eunion with the stock than an ordinary \u003cb\u003egraft\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-679-52\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 141.6338888156041, "y": -26.77516795810564}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-613-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSimilarity in growth and color of wood, and in style and color\u003cbr\u003eof leaf, between stock and \u003cb\u003egraft\u003c/b\u003e, is important /z/ in attaining\u003cbr\u003eperfection, but impracticable on a large scale.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-613-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": 185.43357588811264, "y": 73.52833802466488}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-375-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e25. grafting, as large corresponding surfaces are made to fit,\u003cbr\u003eand the \u003cb\u003egraft\u003c/b\u003e receives freely the ascending sap.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-375-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 215.35454384627832, "y": -223.62067094382206}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-285-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe cleft part is now to be covered in such a manner that\u003cbr\u003eneither sun nor air can have access to the parts of the \u003cb\u003egraft\u003c/b\u003e\u003cbr\u003eand stock to prevent their speedily uniting.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-285-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -40.61459562771905, "y": 11.14008175129679}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-385-42", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eRoot-grafting is performed by taking up the stocks by the\u003cbr\u003eroots, and inserting the grafts immediately into the part below ground\u003cbr\u003eafter the tops are cut off, after which they are again planted out,\u003cbr\u003ewith the tip of the \u003cb\u003egraft\u003c/b\u003e only above ground.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-385-42\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 13.636196779042377, "y": -395.92173055081173}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-257-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAbout the middle of July, after a rainy day, you may remove the\u003cbr\u003eball of clay, and, if the \u003cb\u003egraft\u003c/b\u003e is /z/ securely united, also\u003cbr\u003ethe bandage; and the angle left at the top of the stock, a, should\u003cbr\u003enow\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-257-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 313.4749261855628, "y": -64.68195984865581}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-437-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA \u003cb\u003egraft\u003c/b\u003e taken from a tree enfeebled by disease, will\u003cbr\u003erecover with difficulty, even if grafted on healthy stocks for a dozen\u003cbr\u003etimes in repeated succession.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-437-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 197.34655027364795, "y": -38.97066113989047}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-305-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe second, which is spread while warm on strips of coarse\u003cbr\u003ecotton, or strong paper, and wrapped directly about the \u003cb\u003egraft\u003c/b\u003e,\u003cbr\u003eanswering at once to tie and to protect it, is composed of equal parts\u003cbr\u003eof bees-wax, turpentine, and resin.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-305-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 287.3857051231684, "y": 10.517565814238266}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-284-87", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHaving made the cleft, open it by driving down the centre a\u003cbr\u003enarrow wedge of iron far enough to open the sides sufficient to\u003cbr\u003ereceive the grafts, which are prepared by cutting them in lengths\u003cbr\u003eabout six and eight inches long cutting the bottom ends downwards, on\u003cbr\u003eeach side, in the form of a wedge, and so that it fits neatly in the\u003cbr\u003ecleft, into which it is to be gently pressed downwards, being careful\u003cbr\u003ethat the barks of the \u003cb\u003egraft\u003c/b\u003e and the stock precisely\u003cbr\u003emeet.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-284-87\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 369.90497368548887, "y": -232.30711291701945}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-621-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIndeed, it is a mooted question whether \u003cb\u003egrafts\u003c/b\u003e should be\u003cbr\u003etaken at all from such a source; but I see no reason for going to this\u003cbr\u003eextreme.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-621-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 262.640885056123, "y": -84.86378139574309}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1835-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBy this mode, it will be seen that when the \u003cb\u003egrafts\u003c/b\u003e are\u003cbr\u003eput in on the side branches, they are not shaded by the heavy shoots\u003cbr\u003eabove them, and they have an unusual supply of nourishment to carrry\u003cbr\u003ethem forward.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1835-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 255.27287406915494, "y": -278.79122691685257}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-329-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd, fourthly, that the wounded parts made by the operation, be\u003cbr\u003eeffectually excluded from the external air, chiefly to retain a due\u003cbr\u003equantity of moisture in the graft, but also to exclude the wet, until,\u003cbr\u003eby the growth of the \u003cb\u003egraft\u003c/b\u003e, the union is effected.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-329-47\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 377.01765832687187, "y": -71.92237340633848}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-1774-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA \u003cb\u003egraft\u003c/b\u003e or bud of the finer varieties, of the greatest\u003cbr\u003eluxuriance of foliage, may not exhibit a single symptom of this\u003cbr\u003edisease, while the leaves of the stock will be entirely\u003cbr\u003eblackened.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-1774-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 367.97447505929887, "y": 139.1832923868606}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-371-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eoff to prevent it from cutting the \u003cb\u003egraft\u003c/b\u003e, which in many\u003cbr\u003ecases, is the cause of its being blown from the trees in stormy\u003cbr\u003eseasons, as the bark and wood is often in this case cut nearly half\u003cbr\u003easunder by the bandage.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-371-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 19.241805820084853, "y": -37.65134433117034}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-878-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut this can only be true with very small trees or seedlings,\u003cbr\u003ewhich quickly reproduce a multitude of small roots, after the top is\u003cbr\u003eremoved for the insertion of a \u003cb\u003egraft\u003c/b\u003e; or where the fibres of\u003cbr\u003elarger trees have been killed by exposure after removal, and which are\u003cbr\u003efollowed by a necessary lopping of the branches.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-878-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 136.57361206034662, "y": 46.0474464553767}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-346-101", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe wax may be directly applied when just warm enough to run,\u003cbr\u003eby means of a brush; or il may be spread thickly with a brush over\u003cbr\u003esheets of muslin, 01 thin, tough paper, (\" post-office paper \" is\u003cbr\u003ebest,) which are afterwards, during a cold day, cut up into plasters\u003cbr\u003eof convenient size for applying; or, the wax, after cold, may be\u003cbr\u003eworked up, with wet hands, and drawn out into thin strips 01 ribbons\u003cbr\u003eof wax, and wrapped closely around the inserted \u003cb\u003egraft\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-346-101\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 228.66587676831165, "y": -291.6303959758557}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1339-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e54,) are useful for cutting \u003cb\u003egrafts\u003c/b\u003e on tall trees; in\u003cbr\u003eremoving the eggs of caterpillars, (see chapter on the apple;) and in\u003cbr\u003etaking off fine fruit\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1339-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": 43.39705635149995, "y": 5.01359587634833}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-291-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003egraft\u003c/b\u003e is prepared by cutting it in a sloping manner\u003cbr\u003ein a reverse position, so that when placed on the cut of the stock it\u003cbr\u003eforms a neat splice.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-291-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 208.06899482999793, "y": 37.55637119376971}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-218-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFig 3 This lateral motion explains the reason why a\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e set in the longitudinal cleft of a stock, receives the\u003cbr\u003esap from the split surfaces of the cleft, and succeeds as well as when\u003cbr\u003ecross-sections of both are brought into contact.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-218-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -18.252828755644366, "y": -17.3559165163544}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-398-28", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI have never seen evidence sufficient to convince me that the\u003cbr\u003econtinual cultivation of a crab pear would ever alter its\u003cbr\u003echaracteristics in the individual tree or its \u003cb\u003egrafts\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-398-28\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 283.93597318260146, "y": 144.59099127757688}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-495-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut the operation is never successful unless the \u003cb\u003egraft\u003c/b\u003e\u003cbr\u003eand stock are nearly allied, and the greater the affinity the more\u003cbr\u003ecertain the success. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-495-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 105.88171272253015, "y": -198.19082959953803}, {"color": "#377eb8", "date": "1841", "id": "nf_1841_747926.txt-2607-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen the old trees already mentioned (which have doubtless been\u003cbr\u003eraised from seed) begin to blossom, plants reared from them by\u003cbr\u003ecuttings or \u003cb\u003egrafts\u003c/b\u003e, will, of course, produce blossoms and fruit\u003cbr\u003emuch more speedily than when reared from\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1841\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1841_747926.txt-2607-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": 311.4184681251356, "y": -378.26622675362165}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-628-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe graft should be in a less advanced condition than the\u003cbr\u003estock, as during the process of adhesion, evaporation from the bark\u003cbr\u003egoes on rapidly when the sap in the \u003cb\u003egraft\u003c/b\u003e is active, and death\u003cbr\u003eensues, because the supply can not be maintained.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-628-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 99.37155792801127, "y": -24.041360060445744}, {"color": "#377eb8", "date": "1847", "id": "nf_1847_748116.txt-109-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eChildren should be early taught that when they set out a fine\u003cbr\u003etree, or insert a \u003cb\u003egraft\u003c/b\u003e, they are doing a favour to posterity,\u003cbr\u003eand beginning that which shall continue to make others happy when they\u003cbr\u003eare in their graves.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1847_748116.txt-109-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 118.54093100591646, "y": -238.01055320213308}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-410-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe most important of these are dwarfing, inducing\u003cbr\u003efruitfulness, and adapting the \u003cb\u003egraft\u003c/b\u003e to the soil or\u003cbr\u003eclimate.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-410-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 14.279894260066596, "y": 35.3526872336417}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-440-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHence the importance, to nurserymen especially of securing\u003cbr\u003ehealthy \u003cb\u003egrafts\u003c/b\u003e, and working only upon healthy stocks.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-440-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 60.8212497900493, "y": -212.99385259018922}, {"color": "#377eb8", "date": "1855", "id": "mag_1855_505250.txt-144-62", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003edisposition, and is somewhat forgetful of qwq cealed a great\u003cbr\u003edeal of truth: \" The setter is a product of art, as much as the Queen\u003cbr\u003eClaude Ilium or double rose; he is a dumb dog, grafted on the running\u003cbr\u003edog, and which returns to the wild stock, like the double rose, when\u003cbr\u003ethe \u003cb\u003egraft\u003c/b\u003e fails to take effect. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1855_505250.txt-144-62\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 163.10730886973843, "y": -131.2623012591505}, {"color": "#377eb8", "date": "1851", "id": "mag_1851_566097.txt-140-28", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWherever there is an old pear tree, bearing those miserable\u003cbr\u003erepresentations of that fruit, that we see in most of our country\u003cbr\u003etowns, a few \u003cb\u003egrafts\u003c/b\u003e of fine varieties put into its top, will in\u003cbr\u003etwo or three years bear such specimens as can not be excelled for\u003cbr\u003ebeauty and flavor.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1851_566097.txt-140-28\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 114.83048165417345, "y": -69.41781337332016}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-616-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eGrafts\u003c/b\u003e taken - from the upright shoots near the top of\u003cbr\u003ethe tree are apt to make a vigorous and upright growth, but are more\u003cbr\u003etardy in bearing.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-616-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 242.37410312266636, "y": 4.106594872464105}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_747892.txt-4-77", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey are also frequently cultivated for stocks, whereon to bud\u003cbr\u003eother roses of more rare character, which purpose they will answer\u003cbr\u003every well; though a plant thus formed renders its durability\u003cbr\u003euncertain, being very liable to sucker, or throw out shoots from the\u003cbr\u003eground, thereby taking away nourishment from the part of the plant\u003cbr\u003ewhich /z/ most requires it; of course, all suckers or shoots below the\u003cbr\u003ebud or \u003cb\u003egraft\u003c/b\u003e must be displaced.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_747892.txt-4-77\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": 76.48753188280854, "y": 103.87278888099517}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_747892.txt-1087-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMany of them have another feature of obstinacy, and this is,\u003cbr\u003ethat in rooting by layers, they nearly all, take two years to form\u003cbr\u003erootlets; we have, in consequence, either to \u003cb\u003egraft\u003c/b\u003e or bud them\u003cbr\u003eon other roses at any desired height\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_747892.txt-1087-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 112.15928533218157, "y": 309.5398794229299}, {"color": "#377eb8", "date": "1840", "id": "fic_1840_7164.txt-1244-28", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethen, as entering the room from one door, while the girl peeped\u003cbr\u003eshyly in from the other, \" Come hither -- hither, my flowering\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e of a thorny crab; come hither, my peeping fawn, and learn\u003cbr\u003enews of the kind old forester who has always played the godfather to\u003cbr\u003eyou.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1840\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1840_7164.txt-1244-28\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -2.446716909743193, "y": -216.19285851648965}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-365-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e23, a; the \u003cb\u003egraft\u003c/b\u003e is split in the middle, and each side\u003cbr\u003ethinned away with the knife, as in fig.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-365-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -17.331988707671435, "y": -167.7196858896317}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-1220-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe first year\u0027s growth from the \u003cb\u003egraft\u003c/b\u003e or bud, is headed\u003cbr\u003edown to within about six good buds of its base; these buds, as a\u003cbr\u003econsequence, grow vigorously.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-1220-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 48.82641941103741, "y": -123.98761090019829}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-381-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe thinner division of the \u003cb\u003egraft\u003c/b\u003e is fitted to the\u003cbr\u003eopposite sloping side of the stock.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-381-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -51.74586101867956, "y": -36.02600973995602}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-206-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewarmth of the season, begin to elaborate and send down woody\u003cbr\u003ematter, which, passing through the newly granulated substance of the\u003cbr\u003eparts in contact, unites the \u003cb\u003egraft\u003c/b\u003e firmly with the stock.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-206-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 282.2487174766175, "y": -79.91123708266782}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-294-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen the graft is set, it is to be bound with bass-string,\u003cbr\u003ebeginning at the bottom and winding it upwards in a gradual manner,\u003cbr\u003eWhen the \u003cb\u003egraft\u003c/b\u003e is bandaged, it is to be covered with clay or\u003cbr\u003eother composition in the same manner as directed for the cleft-\u003cbr\u003egraft.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-294-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 265.62948799024286, "y": 15.399991170197826}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-328-57", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThirdly, that the line of division between the inner bark and\u003cbr\u003ethe wood, should coincide or exactly correspond in each; for if the\u003cbr\u003einner bark of the one sets wholly on the wood of the other, the upward\u003cbr\u003ecurrent through the wood and back through the bark, is broken, and the\u003cbr\u003e\u003cb\u003egraft\u003c/b\u003e can not flourish nor grow.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-328-57\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 10.27548521353365, "y": 116.20259540251551}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-506-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut the \u003cb\u003egraft\u003c/b\u003e, being below the surface of the soil,\u003cbr\u003erooted in it, independently of the fig stock. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-506-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 137.48503022669664, "y": 135.86706922210908}, {"color": "#377eb8", "date": "1848", "id": "nf_1848_747893.txt-2587-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003emore trouble and attention is required in the grafting process,\u003cbr\u003eto pull off sprouts from the old stock, as they spring forth to rob\u003cbr\u003ethe \u003cb\u003egraft\u003c/b\u003e, than in the process itself; and this is far more the\u003cbr\u003ecase in grafting to stocks standing in their original place, than in\u003cbr\u003ethose procured from the woods.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1848_747893.txt-2587-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 103.40845149510491, "y": 163.14802015594108}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-398-51", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhere it becomes desirable to preserve rare sorts, which have\u003cbr\u003ebeen grafted late in spring, a loose wrapper of white paper round the\u003cbr\u003egraft will protect it from the drying and scorching rays of the sun;\u003cbr\u003eor shrivelling and failure will often be prevented by covering the\u003cbr\u003ewhole \u003cb\u003egraft\u003c/b\u003e with a wax plaster; or by encasing it in moss kept\u003cbr\u003edamp by occasional applications of water.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-398-51\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 251.46606777680174, "y": 36.7676091475475}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-325-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHence there are two chief requisites for success: the first,\u003cbr\u003ethat the \u003cb\u003egraft\u003c/b\u003e be so set in the stock, that the sap may flow\u003cbr\u003eupward without interruption; and the second, that the forming wood /z/\u003cbr\u003emay flow downward uninterruptedly through the inner bark.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-325-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 25.00559413440785, "y": -268.5375314515287}, {"color": "#377eb8", "date": "1858", "id": "nf_1858_747890.txt-606-43", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt would be more nearly correct to say, that the, duration of a\u003cbr\u003evariety is limited more or less by that of its original, and that any\u003cbr\u003einherent disease in it will be continued, in all its buds and\u003cbr\u003e\u003cb\u003egrafts\u003c/b\u003e, although the superior vitality of the stock may\u003cbr\u003emitigate its virulence, or protract its dormant period.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1858_747890.txt-606-43\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": 127.09622025099921, "y": -55.89444233589897}, {"color": "#4daf4a", "date": "1850", "id": "nf_1850_747863.txt-347-43", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn all cases success is more certain, when the wax is closely\u003cbr\u003epressed so as to fit closely to every part, and leave no interstices;\u003cbr\u003eand it is indispensible that every por tion of the wound on the stock\u003cbr\u003eand \u003cb\u003egraft\u003c/b\u003e be totally excluded from the external air.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-347-43\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 250.95678535385773, "y": -24.282359316987115}, {"color": "#4daf4a", "date": "1850", "id": "nf_1850_747863.txt-368-39", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe most perfect way to fit the graft, is to make a long\u003cbr\u003esloping cut from the outer edge or bark, by drawing the blade from\u003cbr\u003eheel to point, till it reaches the centre of the \u003cb\u003egraft\u003c/b\u003e; and\u003cbr\u003ethen another similar cut completes the acue cavity for fitting the\u003cbr\u003ewedge of the stock.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-368-39\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 394.2769489235849, "y": -139.8717356290255}, {"color": "k", "date": "1827", "id": "fic_1827_7168.txt-307-138", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ebecomes apparent, people have to fear nothing more wicked than\u003cbr\u003etheir own evil minds, the place hath been less regarded, as the other\u003cbr\u003eportions of the island are more closely settled; but in the days of\u003cbr\u003ethe pirate Kid, the sole representative of the famous town of Harlaem\u003cbr\u003ein the new world, consisted of one broad long roofed cottage, which\u003cbr\u003eindeed, in the consequence of its owner, might have vied with its\u003cbr\u003erival in den bosch, \u0027 -- for suiting to its lofty pretensions, though\u003cbr\u003ethe building was of one story, and the eaves almost kissed the ground,\u003cbr\u003eyet the gable ends soared steeply up like a pyramid, and were both\u003cbr\u003eornamented by points or stairs, in the true style of the Keysar\u003cbr\u003e\u003cb\u003eGraft\u003c/b\u003e, the Harring Vliet, and the Bompies; from the centre of\u003cbr\u003ethe mansion arose a sort of structure that appeared like a pigeon\u003cbr\u003ehouse, containing one huge long door, used for the reception of goods,\u003cbr\u003eand although at the top of the edifice, was the place\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1827_7168.txt-307-138\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -142.91841160492058, "y": 2000.0}, {"color": "k", "date": "1859", "id": "fic_1859_270.txt-1192-6", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMilton was a Saint-Germain with a \u003cb\u003egraft\u003c/b\u003e of the roseate\u003cbr\u003eEarly-Catherine.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1859_270.txt-1192-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 845.6116775436168, "y": -673.4380827532652}, {"color": "#a65628", "date": "1839", "id": "nf_1839_747931.txt-293-35", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eip the stock downwards; these two tongues are united into the\u003cbr\u003estock and the graft by pressing the latter downwards into the former;\u003cbr\u003ewhen the union is effected the outer bark of the \u003cb\u003egraft\u003c/b\u003e and\u003cbr\u003estock will precisely meet, and the splice in every way exactly fits;\u003cbr\u003ethis indeed is the grand art in performing the operation.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-293-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 399.90918579943394, "y": 54.3710489066729}, {"color": "#ff7f00", "date": "1839", "id": "mag_1839_554748.txt-283-17", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhenever it has not, when there has been an indulgence in fine\u003cbr\u003ewriting merely, the \u003cb\u003egraft\u003c/b\u003e, however ornamental, betrays\u003cbr\u003eitself.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1839_554748.txt-283-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -657.6608007688694, "y": 76.25829589083368}]);
+        edges = new vis.DataSet([{"color": "black", "from": "nf_1845_747928.txt-634-11", "label": 4, "to": "nf_1839_747931.txt-304-51", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-634-11", "label": 4, "to": "nf_1850_747863.txt-365-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-634-11", "label": 4, "to": "nf_1858_747890.txt-628-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-634-11", "label": 4, "to": "nf_1858_747890.txt-679-52", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1844_747892.txt-595-18", "label": 4, "to": "nf_1850_747863.txt-878-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1845_747928.txt-802-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1850_747863.txt-404-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 3, "to": "fic_1840_7164.txt-1244-28", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 3, "to": "nf_1850_747863.txt-329-47", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1858_747890.txt-1297-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1845_747928.txt-801-22", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1845_747928.txt-295-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1850_747863.txt-643-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1850_747863.txt-1327-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1850_747863.txt-354-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1850_747863.txt-398-51", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1739-22", "label": 4, "to": "nf_1850_747863.txt-1742-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-3421-26", "label": 4, "to": "nf_1845_747928.txt-801-22", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-374-35", "label": 4, "to": "nf_1850_747863.txt-1220-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-374-35", "label": 4, "to": "nf_1839_747931.txt-371-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-374-35", "label": 4, "to": "nf_1839_747931.txt-285-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-374-35", "label": 4, "to": "nf_1839_747931.txt-304-51", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2589-0", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2589-0", "label": 4, "to": "nf_1850_747863.txt-1833-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-347-43", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-1297-7", "label": 4, "to": "nf_1850_747863.txt-391-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-2264-51", "label": 4, "to": "nf_1845_747928.txt-409-38", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-2264-51", "label": 4, "to": "nf_1850_747863.txt-381-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-2264-51", "label": 4, "to": "nf_1850_747863.txt-365-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-383-8", "label": 4, "to": "nf_1845_747928.txt-207-71", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-383-8", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-383-8", "label": 4, "to": "nf_1845_747928.txt-206-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-398-25", "label": 4, "to": "nf_1839_747931.txt-291-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1839_747931.txt-370-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1850_747863.txt-381-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1839_747931.txt-285-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1850_747863.txt-328-57", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 3.5, "to": "nf_1850_747863.txt-1220-7", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1850_747863.txt-1832-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1839_747931.txt-291-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-273-14", "label": 4, "to": "nf_1839_747931.txt-304-51", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-644-17", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-644-17", "label": 4, "to": "fic_1850_7953.txt-1799-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1850_7953.txt-1799-19", "label": 4, "to": "nf_1850_747863.txt-1220-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-207-71", "label": 4, "to": "nf_1850_747863.txt-1327-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-436-4", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-436-4", "label": 4, "to": "nf_1858_747890.txt-1774-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-1529-21", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-1529-21", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-542-12", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "nf_1845_747928.txt-802-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "nf_1839_747931.txt-284-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "mag_1855_505250.txt-144-62", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "nf_1850_747863.txt-878-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "nf_1845_747928.txt-257-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "nf_1839_747931.txt-291-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2582-3", "label": 4, "to": "nf_1845_747928.txt-420-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-284-27", "label": 4, "to": "nf_1850_747863.txt-404-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-284-27", "label": 4, "to": "nf_1858_747890.txt-613-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-802-26", "label": 4, "to": "nf_1845_747928.txt-437-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-304-51", "label": 4, "to": "nf_1850_747863.txt-1842-31", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-304-51", "label": 4, "to": "nf_1845_747928.txt-409-38", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-304-51", "label": 4, "to": "nf_1858_747890.txt-628-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-414-52", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-414-52", "label": 4, "to": "nf_1858_747890.txt-679-52", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-414-52", "label": 4, "to": "nf_1850_747863.txt-394-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-354-23", "label": 4, "to": "nf_1850_747863.txt-328-57", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-354-23", "label": 4, "to": "nf_1850_747863.txt-1339-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1844_747892.txt-598-1", "label": 4, "to": "nf_1850_747863.txt-1220-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-324-20", "label": 4, "to": "nf_1839_747931.txt-291-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-324-20", "label": 4, "to": "nf_1845_747928.txt-257-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-420-3", "label": 4, "to": "nf_1858_747890.txt-628-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-420-3", "label": 4, "to": "nf_1850_747863.txt-506-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-420-3", "label": 3, "to": "nf_1845_747928.txt-437-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-801-22", "label": 4, "to": "nf_1850_747863.txt-1832-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1742-10", "label": 4, "to": "nf_1850_747863.txt-878-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1742-10", "label": 4, "to": "nf_1839_747931.txt-371-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1824-4", "label": 4, "to": "nf_1850_747863.txt-365-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1824-4", "label": 4, "to": "nf_1850_747863.txt-391-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1824-4", "label": 4, "to": "nf_1850_747863.txt-495-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-1402-19", "label": 4, "to": "mag_1855_505250.txt-144-62", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-1402-19", "label": 4, "to": "nf_1850_747863.txt-1741-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-1402-19", "label": 4, "to": "nf_1850_747863.txt-495-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-391-2", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-628-23", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-413-11", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-413-11", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1741-14", "label": 4, "to": "nf_1850_747863.txt-1336-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-203-97", "label": 4, "to": "nf_1850_747863.txt-1327-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1832-20", "label": 4, "to": "nf_1844_747892.txt-1087-38", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1832-20", "label": 4, "to": "nf_1844_747892.txt-4-77", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1832-20", "label": 4, "to": "nf_1839_747931.txt-291-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1336-8", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-3432-4", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-431-22", "label": 4, "to": "nf_1850_747863.txt-878-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-643-6", "label": 3, "to": "nf_1845_747928.txt-437-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-643-6", "label": 4, "to": "nf_1850_747863.txt-1327-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-643-6", "label": 4, "to": "nf_1850_747863.txt-495-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1842-31", "label": 4, "to": "nf_1844_747892.txt-4-77", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-447-47", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-394-29", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-394-29", "label": 4, "to": "mag_1855_505250.txt-144-62", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-394-29", "label": 4, "to": "nf_1839_747931.txt-278-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-394-29", "label": 4, "to": "nf_1850_747863.txt-375-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1833-10", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1833-10", "label": 4, "to": "nf_1845_747928.txt-206-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-213-50", "label": 4, "to": "nf_1850_747863.txt-878-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-278-13", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1327-9", "label": 4, "to": "nf_1850_747863.txt-375-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-679-52", "label": 4, "to": "nf_1839_747931.txt-291-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-613-19", "label": 4, "to": "nf_1850_747863.txt-878-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-385-42", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-305-23", "label": 4, "to": "nf_1839_747931.txt-291-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-305-23", "label": 3, "to": "mag_1855_505250.txt-144-62", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-621-8", "label": 3, "to": "mag_1851_566097.txt-140-28", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-621-8", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-329-47", "label": 3, "to": "nf_1858_747890.txt-606-43", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-1774-1", "label": 3.5, "to": "nf_1839_747931.txt-291-1", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-371-7", "label": 4, "to": "nf_1850_747863.txt-878-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-878-32", "label": 4, "to": "nf_1848_747893.txt-2587-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-878-32", "label": 4, "to": "nf_1850_747863.txt-506-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-878-32", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-878-32", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-878-32", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-878-32", "label": 4, "to": "nf_1858_747890.txt-628-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1339-7", "label": 4, "to": "mag_1851_566097.txt-140-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1339-7", "label": 4, "to": "nf_1858_747890.txt-628-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-291-1", "label": 4, "to": "nf_1858_747890.txt-398-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-291-1", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-291-1", "label": 4, "to": "nf_1858_747890.txt-616-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-218-10", "label": 4, "to": "nf_1850_747863.txt-1220-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-218-10", "label": 4, "to": "nf_1850_747863.txt-381-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-293-35", "label": 4, "to": "nf_1839_747931.txt-294-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-495-8", "label": 3.5, "to": "nf_1858_747890.txt-606-43", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-628-32", "label": 4, "to": "nf_1845_747928.txt-410-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-628-32", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1858_747890.txt-628-32", "label": 3.5, "to": "nf_1839_747931.txt-294-29", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1845_747928.txt-440-10", "label": 4, "to": "nf_1850_747863.txt-1220-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1851_566097.txt-140-28", "label": 3.5, "to": "nf_1858_747890.txt-606-43", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1851_566097.txt-140-28", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1840_7164.txt-1244-28", "label": 4, "to": "nf_1850_747863.txt-325-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1840_7164.txt-1244-28", "label": 4, "to": "nf_1850_747863.txt-365-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-365-5", "label": 4, "to": "nf_1850_747863.txt-1220-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1220-7", "label": 3.5, "to": "nf_1845_747928.txt-206-30", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1850_747863.txt-1220-7", "label": 4, "to": "nf_1858_747890.txt-606-43", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747931.txt-294-29", "label": 4, "to": "nf_1850_747863.txt-398-51", "weight": 4.0, "width": 4}, {"color": "lightgray", "from": "nf_1850_747863.txt-347-43", "label": 1, "to": "mag_1839_554748.txt-283-17", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1845_747928.txt-273-14", "label": 1, "to": "nf_1850_747863.txt-1327-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1839_747931.txt-304-51", "label": 2, "to": "nf_1850_747863.txt-325-14", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1850_747863.txt-643-6", "label": 1, "to": "nf_1858_747890.txt-628-32", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1845_747928.txt-305-23", "label": 2, "to": "fic_1840_7164.txt-1244-28", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1839_747931.txt-284-87", "label": 2, "to": "fic_1859_270.txt-1192-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1855_505250.txt-144-62", "label": 2, "to": "nf_1850_747863.txt-381-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1851_566097.txt-140-28", "label": 1, "to": "mag_1839_554748.txt-283-17", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1839_747931.txt-294-29", "label": 2, "to": "nf_1858_747890.txt-606-43", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1858_747890.txt-1297-7", "label": NaN, "to": "nf_1858_747890.txt-621-8", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1850_747863.txt-644-17", "label": NaN, "to": "nf_1845_747928.txt-440-10", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1839_747931.txt-542-12", "label": NaN, "to": "nf_1858_747890.txt-613-19", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1848_747893.txt-2582-3", "label": NaN, "to": "mag_1839_554748.txt-283-17", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1850_747863.txt-354-23", "label": NaN, "to": "nf_1845_747928.txt-203-97", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1850_747863.txt-368-39", "label": NaN, "to": "nf_1850_747863.txt-1327-9", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1850_747863.txt-1842-31", "label": NaN, "to": "nf_1850_747863.txt-1833-10", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1850_747863.txt-394-29", "label": NaN, "to": "mag_1839_554748.txt-283-17", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1858_747890.txt-679-52", "label": NaN, "to": "nf_1858_747890.txt-613-19", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1850_747863.txt-385-42", "label": NaN, "to": "fic_1859_270.txt-1192-6", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1839_747931.txt-284-87", "label": NaN, "to": "mag_1851_566097.txt-140-28", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1839_747931.txt-291-1", "label": NaN, "to": "fic_1827_7168.txt-307-138", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1827_7168.txt-307-138", "label": NaN, "to": "mag_1851_566097.txt-140-28", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1859_270.txt-1192-6", "label": NaN, "to": "nf_1850_747863.txt-325-14", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

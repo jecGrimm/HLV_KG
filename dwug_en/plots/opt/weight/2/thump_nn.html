@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">thump_nn (2)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1980", "id": "fic_1980_10663.txt-162-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHad observed, as he drew near, that her walk turned the\u003cbr\u003eprogress of other women to a \u003cb\u003ethump\u003c/b\u003e or shuffle.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1980\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1980_10663.txt-162-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 837.534748106594, "y": 549.2651259528835}, {"color": "#377eb8", "date": "1975", "id": "fic_1975_780160.txt-3970-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMy head hit the bricks with a jarring crunch and a pain which\u003cbr\u003eobscured everything but a solid \u003cb\u003ethump\u003c/b\u003e to the kidney that one of\u003cbr\u003emy friends dealt me.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1975\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1975_780160.txt-3970-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -651.1298846146046, "y": 723.8814971478706}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_54789.txt-245-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIts steady \u003cb\u003ethumping\u003c/b\u003e told me there was nothing I would be\u003cbr\u003eunable to do.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_54789.txt-245-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": 669.805301583063, "y": -29.6294572055756}, {"color": "#377eb8", "date": "2003", "id": "fic_2003_48329.txt-402-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere was another one of those liquidy \u003cb\u003ethumps\u003c/b\u003e and then\u003cbr\u003ethe sound of the hammer and then the whole thing happened again and\u003cbr\u003eagain.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2003\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2003_48329.txt-402-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 1076.6534039259843, "y": 207.55413676931923}, {"color": "#377eb8", "date": "2009", "id": "fic_2009_36638.txt-1978-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere was a \u003cb\u003ethumping\u003c/b\u003e, however; Fiona felt this rather\u003cbr\u003ethan heard it, pulsing in the pit of her stomach.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2009\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2009_36638.txt-1978-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_jj@\u003c/p\u003e", "x": -783.9651940656577, "y": 78.27074562976532}, {"color": "#377eb8", "date": "1980", "id": "fic_1980_23948.txt-23-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe factory sounds had already begun, the whine and\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e of the\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1980\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1980_23948.txt-23-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 728.3358007499489, "y": -564.9420091507454}, {"color": "#377eb8", "date": "2001", "id": "fic_2001_27749.txt-280-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe silence was broken only by the gentle \u003cb\u003ethumping\u003c/b\u003e of\u003cbr\u003eDuffy\u0027s tail against my loafer. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2001_27749.txt-280-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": 560.8182087511171, "y": -517.9967878274944}, {"color": "#377eb8", "date": "1986", "id": "fic_1986_10741.txt-6708-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe bus inched toward the barricade; as it rounded the corner,\u003cbr\u003ethe dull \u003cb\u003ethump\u003c/b\u003e of two land mines blew out its tires.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1986\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1986_10741.txt-6708-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -393.95824919370585, "y": -848.1543237500988}, {"color": "#377eb8", "date": "1998", "id": "fic_1998_30880.txt-46-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePerhaps the outraged sniffs and sharp intake of breath from\u003cbr\u003ebehind prompted her to slap the chestnut steed\u0027s massive flank with a\u003cbr\u003eresounding \u003cb\u003ethump\u003c/b\u003e, affording her stunned councillors the distant\u003cbr\u003ebut grateful possibility that the Queen\u0027s remark was\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1998_30880.txt-46-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -108.63058496397886, "y": 65.23530617170279}, {"color": "#377eb8", "date": "1982", "id": "fic_1982_23965.txt-368-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLater than I expected, after seven, when my knees were about to\u003cbr\u003egive out, I heard the \u003cb\u003ethump\u003c/b\u003e of feet in the churchyard --\u003cbr\u003esomeone had come over the wail.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1982\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1982_23965.txt-368-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 681.3397059422532, "y": 501.2004234174972}, {"color": "#377eb8", "date": "1960", "id": "mag_1960_491715.txt-182-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eComplaints diminished -- but so did sales, and the manufacturer\u003cbr\u003eeventually called in a noise consultant who actually eliminated the\u003cbr\u003e\u003cb\u003ethumping\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1960\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1960_491715.txt-182-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_jj@\u003c/p\u003e", "x": 539.4456118532413, "y": 625.8189536290365}, {"color": "#377eb8", "date": "1968", "id": "fic_1968_16170.txt-2157-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLike a ski jump, Bullitt\u0027s Mustang takes off and flies through\u003cbr\u003ethe air, landing with a sickening \u003cb\u003ethump\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1968\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1968_16170.txt-2157-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -213.23623169478148, "y": -664.2379752746106}, {"color": "#377eb8", "date": "1985", "id": "fic_1985_782029.txt-1967-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe went over it without trouble and landed again with a soft\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e on the other side.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1985\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1985_782029.txt-1967-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -102.48912681640306, "y": -471.1573912496697}, {"color": "#377eb8", "date": "1964", "id": "fic_1964_781988.txt-1703-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd you know how | cm things go, I couldn\u0027t tell if it was\u003cbr\u003emostly her or me, hut soon I iI my face against her breasts and my\u003cbr\u003e\u003cb\u003ethumps\u003c/b\u003e\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1964\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1964_781988.txt-1703-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -1326.8329572211412, "y": -512.9396972310693}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_42218.txt-90-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut at last Number 99 crashed into a marble column\u003cbr\u003eaccidentally-a muffin crumb had gotten in his eye-and he sat down with\u003cbr\u003ea \u003cb\u003ethump\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_42218.txt-90-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 295.770905996802, "y": 630.4431845525878}, {"color": "#377eb8", "date": "1995", "id": "fic_1995_53076.txt-108-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe wind seemed stronger now that darkness had fallen, and\u003cbr\u003eMoira was conscious of \u003cb\u003ethumps\u003c/b\u003e and scratching sounds, as\u003cbr\u003ebranches and twigs were blown against the walls of the cabin.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1995_53076.txt-108-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -221.3222592338551, "y": 140.4193892605932}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_25006.txt-1237-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThat brought some \u003cb\u003ethumping\u003c/b\u003e from the opposite side of the\u003cbr\u003ewall.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_25006.txt-1237-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_vvg_jj@\u003c/p\u003e", "x": 586.7350551203554, "y": 670.6836195348025}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_54541.txt-512-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEvery day I watch Celestine carry her yellow basket down the\u003cbr\u003estairs, and I imagine the stairs rising toward me with each descending\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e, and I feel my heart breaking under each thump of her big\u003cbr\u003efeet.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_54541.txt-512-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 545.6291786113509, "y": 270.0625769355592}, {"color": "#377eb8", "date": "1992", "id": "fic_1992_53680.txt-95-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere was a sudden \u003cb\u003ethump\u003c/b\u003e and I leapt to my feet, ready\u003cbr\u003eto run.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1992_53680.txt-95-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -214.02839262509272, "y": 523.232029264618}, {"color": "#377eb8", "date": "1962", "id": "fic_1962_781984.txt-1364-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethere was a \u003cb\u003ethump\u003c/b\u003e from Vasily Tashikov, answering laugh\u003cbr\u003eter from others, and with a sudden grin Terry amended his statement \"\u003cbr\u003ewhom some of us admire, will entertain me at a dinner in the White\u003cbr\u003eHouse.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1962\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1962_781984.txt-1364-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 205.49903478020317, "y": 333.7873354633414}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040078.txt-1341-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFrom the hall she heard a series of \u003cb\u003ethumps\u003c/b\u003e -- the twins\u003cbr\u003e\u0027 suitcase, no doubt, being hauled up the stairs.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040078.txt-1341-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -324.4225207563043, "y": -606.3638361495761}, {"color": "#377eb8", "date": "1988", "id": "fic_1988_10768.txt-7866-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe heard the thump, \u003cb\u003ethump\u003c/b\u003e of cannon firing. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1988\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1988_10768.txt-7866-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 493.0029392379899, "y": 479.2961729779151}, {"color": "#377eb8", "date": "1970", "id": "fic_1970_16380.txt-1689-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCORPORAL, twisted round in seat, looks back and then to\u003cbr\u003eRANDOLPH who has not moved, hearing the clump and drag and then the\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e as MICHAEL grasps the tailboard; his heavy\u003cbr\u003ebreathing.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1970\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1970_16380.txt-1689-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 28.25403170292643, "y": -893.1272377430558}, {"color": "#377eb8", "date": "1964", "id": "fic_1964_10443.txt-7509-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eanother drink and stretched out on the front seat, and it was\u003cbr\u003eas quiet as if we weren\u0027t there, just the \u003cb\u003ethump\u003c/b\u003e of an arm or\u003cbr\u003eleg hitting the steering wheel now and then, hardly enough\u003cbr\u003etop187disturb the night.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1964\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1964_10443.txt-7509-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 693.8818838384412, "y": 553.806377619393}, {"color": "#377eb8", "date": "1998", "id": "mag_1998_401580.txt-134-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA few seconds later, a small, muffled \u003cb\u003ethump\u003c/b\u003e caused all\u003cbr\u003ethree team members to grin.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1998_401580.txt-134-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 738.726676865414, "y": -121.3419879368612}, {"color": "#377eb8", "date": "1999", "id": "fic_1999_29339.txt-118-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe had to have heard the sound of the slaps, the \u003cb\u003ethump\u003c/b\u003e\u003cbr\u003eof the punches, the birdcall of my sobs as I taped myself up, swabbed\u003cbr\u003emyself off, put my pieces\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1999_29339.txt-118-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -203.6623816316294, "y": -810.6537192934933}, {"color": "#377eb8", "date": "1972", "id": "fic_1972_10550.txt-1234-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003ethumping\u003c/b\u003e was still going on, and when I first stuck\u003cbr\u003emy head out of the room, she motionedme to be quiet as though, in some\u003cbr\u003eodd carry-over from my dream, she too was trying to decode a message\u003cbr\u003eand didn\u0027t want to miss a beat.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1972\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1972_10550.txt-1234-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": -217.9984860911705, "y": 742.1525783076067}, {"color": "#377eb8", "date": "1999", "id": "fic_1999_13743.txt-347-31", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eGWENDOLYN turns to reenter her apartment.I\u0027ll go back to the\u003cbr\u003ebank manager as a real person in the real world The manacles suddenly\u003cbr\u003edrop to the ground with a giant \u003cb\u003ethump\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1999_13743.txt-347-31\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 808.9349635667464, "y": -185.84092125115842}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_54541.txt-512-34", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEvery day I watch Celestine carry her yellow basket down the\u003cbr\u003estairs, and I imagine the stairs rising toward me with each descending\u003cbr\u003ethump, and I feel my heart breaking under each \u003cb\u003ethump\u003c/b\u003e of her big\u003cbr\u003efeet.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_54541.txt-512-34\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 251.11475222252483, "y": -499.06900954254803}, {"color": "#377eb8", "date": "1970", "id": "fic_1970_16380.txt-5042-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e(and goes) He shuts the domestic door with a final\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1970\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1970_16380.txt-5042-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 467.59338345749757, "y": 172.3728069237988}, {"color": "#377eb8", "date": "1971", "id": "nf_1971_774393.txt-171-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEvery so often this muted \u003cb\u003ethump\u003c/b\u003e was accompanied by a\u003cbr\u003elight shining out of a little window.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1971\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1971_774393.txt-171-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 384.89022730844835, "y": -193.93043988934602}, {"color": "#377eb8", "date": "1979", "id": "fic_1979_10650.txt-9974-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor some time, they had been hearing heavy \u003cb\u003ethumps\u003c/b\u003e\u003cbr\u003eagainst the house wall: extra sandbags, the men said, being piled up\u003cbr\u003earound it in the event of an attack.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1979\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1979_10650.txt-9974-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 718.0125165871459, "y": -352.72393824782375}, {"color": "#377eb8", "date": "1974", "id": "fic_1974_10580.txt-881-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI heard a \u003cb\u003ethump\u003c/b\u003e and rumbling in the plumbing, and in a\u003cbr\u003emoment or two a door into the back of the shop opened, and Sharon came\u003cbr\u003eout.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1974\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1974_10580.txt-881-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 256.53017923201816, "y": 452.56485805520504}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_42316.txt-135-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMaggie felt her heart give a little \u003cb\u003ethump\u003c/b\u003e, in the hope\u003cbr\u003ethat it would be Robbie. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_42316.txt-135-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 89.0260264993773, "y": -244.90069411962872}, {"color": "#377eb8", "date": "1994", "id": "news_1994_606788.txt-495-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMy heart \u003cb\u003ethumps\u003c/b\u003e, my fears evaporate and I approach\u003cbr\u003eparadise.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1994_606788.txt-495-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": -725.3278254671532, "y": 242.15540605690504}, {"color": "#377eb8", "date": "1995", "id": "fic_1995_53083.txt-265-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAsha listened to the soft \u003cb\u003ethump\u003c/b\u003e of footsteps as Electra\u003cbr\u003ewalked barefoot down the hallway of the sprawling house.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1995_53083.txt-265-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -756.4430341885293, "y": -397.23658525824425}, {"color": "#377eb8", "date": "1986", "id": "fic_1986_780060.txt-916-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewhir whir \u003cb\u003ethump\u003c/b\u003e whir \" What -- what happened? \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1986\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1986_780060.txt-916-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": 79.23650199740105, "y": 693.9977115483258}, {"color": "#377eb8", "date": "1960", "id": "fic_1960_4217.txt-551-36", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAn ashtray, one of those things with a shot-loaded cloth bag\u003cbr\u003eunder it, flew off a desk, smacked him in the back of the head, and\u003cbr\u003edropped to the floor with a \u003cb\u003ethump\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1960\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1960_4217.txt-551-36\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 301.2513220084513, "y": -179.63451973962185}, {"color": "#377eb8", "date": "1965", "id": "fic_1965_780079.txt-2467-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut still it fought to live, dull heavy \u003cb\u003ethumps\u003c/b\u003e in the\u003cbr\u003ewhite flying powder; a blood fleck seared his lip -- the wolf was\u003cbr\u003esnapping at the place where the stake pierced it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1965\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1965_780079.txt-2467-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 37.30648790374616, "y": -1056.8475782801313}, {"color": "#377eb8", "date": "1976", "id": "mag_1976_317132.txt-12-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA gas tank exploded with a dull \u003cb\u003ethump\u003c/b\u003e; an automatic\u003cbr\u003erifle opened fire in the distance.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1976\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1976_317132.txt-12-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 813.0872944640117, "y": 668.8675571202008}, {"color": "#377eb8", "date": "1999", "id": "mag_1999_407980.txt-5-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn all the desert there was hardly a sound but the steady\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e, thump, thump as Star Flower beat down the yarn with her\u003cbr\u003eheavy batten stick, and the cling clang of her father\u0027s hammer as he\u003cbr\u003epounded a bit of silver at his small forge.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1999_407980.txt-5-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 294.1401692202279, "y": 2.561438692457868}, {"color": "#377eb8", "date": "1986", "id": "mag_1986_332055.txt-3-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs Americans, transfixed at their television sets, listened to\u003cbr\u003ethe muffled rattle and \u003cb\u003ethump\u003c/b\u003e of the assault filtering over the\u003cbr\u003ephone lines of network correspondents holed up in a Tripoli hotel, the\u003cbr\u003eU.S. attackers delivered their lethal cargo of laser-directed\u003cbr\u003ebombs.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1986\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1986_332055.txt-3-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -742.5061283463303, "y": 901.1567053159486}, {"color": "#377eb8", "date": "1997", "id": "mag_1997_389607.txt-65-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMotorbiking across his property to tend to a sick calf, Mottram\u003cbr\u003esuddenly felt a \" horrendous \u003cb\u003ethump\u003c/b\u003e \" on his back.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1997_389607.txt-65-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -533.6024764550933, "y": -614.2232919014476}, {"color": "#377eb8", "date": "1967", "id": "fic_1967_10489.txt-6302-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eclamor of shouts and laughter that faded so that I could hear\u003cbr\u003eunder it the tom-tom \u003cb\u003ethumping\u003c/b\u003e of amplified guitars, Beatles or\u003cbr\u003esuch.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1967\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1967_10489.txt-6302-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": 107.88322237550327, "y": 434.13009050269494}, {"color": "#377eb8", "date": "2003", "id": "fic_2003_47904.txt-517-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003esaid Bug, landing with a loud \u003cb\u003ethump\u003c/b\u003e on the plywood\u003cbr\u003efloor. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2003\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2003_47904.txt-517-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -112.58500965638326, "y": -20.74983223717636}, {"color": "#377eb8", "date": "1999", "id": "fic_1999_29005.txt-114-39", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI left the notebook beside the Castles on the seat between us\u003cbr\u003eand slapped the compartment door shut again, then delivered six\u003cbr\u003eredundant slaps to the same spot to ventilate my brain\u0027s pressure by\u003cbr\u003ereproducing the hollow \u003cb\u003ethump\u003c/b\u003e I\u0027d liked.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1999_29005.txt-114-39\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -447.5666480648951, "y": 267.37788865790594}, {"color": "#377eb8", "date": "1975", "id": "fic_1975_780111.txt-4781-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt | needed shouts and \u003cb\u003ethumps\u003c/b\u003e and tears and\u003cbr\u003elaughter.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1975\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1975_780111.txt-4781-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": -1022.11311438041, "y": 288.3598191818386}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_25009.txt-5265-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey could hear him hitting limbs as he fell, a series of raps\u003cbr\u003eand \u003cb\u003ethumps\u003c/b\u003e accompanied by grunts and sharp cries of\u003cbr\u003epain.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_25009.txt-5265-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -706.0824002192942, "y": -129.48827038345988}, {"color": "#377eb8", "date": "1976", "id": "fic_1976_782016.txt-4088-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey heard a muffled \u003cb\u003ethump\u003c/b\u003e outside the kitchen\u003cbr\u003edoor.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1976\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1976_782016.txt-4088-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 159.28161658910676, "y": 7.01838706775185}, {"color": "#377eb8", "date": "1999", "id": "fic_1999_55357.txt-231-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThat made my heart \u003cb\u003ethump\u003c/b\u003e; it seemed preparatory to\u003cbr\u003eaction, and I wanted action.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1999_55357.txt-231-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -230.99463808630287, "y": 1086.2794803798604}, {"color": "#377eb8", "date": "1962", "id": "fic_1962_23783.txt-278-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eof apartment living, united with our neighbors only by the echo\u003cbr\u003eof our plumbing, our TV\u0027s and high-fi\u0027s, our inscrutable\u003cbr\u003e\u003cb\u003ethumps\u003c/b\u003e, the freedom of not knowing if the woman upstairs had\u003cbr\u003edropped something or dropped dead.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1962\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1962_23783.txt-278-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -344.297974116624, "y": -219.4923695297996}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040056.txt-5489-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnother \u003cb\u003ethump\u003c/b\u003e, softer this time, and a groan. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040056.txt-5489-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 887.1191719289766, "y": -114.80253082504962}, {"color": "#377eb8", "date": "1983", "id": "fic_1983_16197.txt-2014-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs Stockman tries to explain, Woodie gives him a hard\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e in the balls.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1983_16197.txt-2014-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 449.0562996957559, "y": 712.9519720283749}, {"color": "#377eb8", "date": "2002", "id": "fic_2002_32720.txt-189-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThat night they\u0027ll attend a voodoo ceremony-women dancing\u003cbr\u003ewildly to the \u003cb\u003ethump\u003c/b\u003e thump of beating drums; men decapitating\u003cbr\u003echickens, painting their bodies with the blood.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2002_32720.txt-189-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 577.0822727265032, "y": 505.98143878798106}, {"color": "#377eb8", "date": "1987", "id": "mag_1987_480750.txt-86-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe ears of corn \u003cb\u003ethump\u003c/b\u003e against the snouts as they\u0027re\u003cbr\u003etorn loose, one and sometimes two to\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1987_480750.txt-86-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -787.2850910929654, "y": -261.904918953489}, {"color": "#377eb8", "date": "1989", "id": "fic_1989_5359.txt-546-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnother moment and he heard rustlings, \u003cb\u003ethumps\u003c/b\u003e, and\u003cbr\u003esplashes as the rope landed at the bottom of the crevice.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1989_5359.txt-546-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": -407.52341086048955, "y": -1178.4403099104238}, {"color": "#377eb8", "date": "2000", "id": "mag_2000_408971.txt-2-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eDoctors knew that the \u003cb\u003ethumps\u003c/b\u003e and thuds inside the body\u003cbr\u003ecould tell them a great deal.They looked for ways to hear these sounds\u003cbr\u003ebetter.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2000\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2000_408971.txt-2-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -559.2713045176173, "y": -29.384810511467453}, {"color": "#377eb8", "date": "2002", "id": "fic_2002_47140.txt-255-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSusan took the water bottle in her lap to stop the irritating\u003cbr\u003e\u003cb\u003ethumping\u003c/b\u003e, then looked out the windshield, away from Albert.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2002_47140.txt-255-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_jj@\u003c/p\u003e", "x": -437.23475956973454, "y": -54.735563854840684}, {"color": "#377eb8", "date": "1960", "id": "fic_1960_5214.txt-481-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSounds carried through the hull; the howl of great winds and\u003cbr\u003ethe \u003cb\u003ethumps\u003c/b\u003e of explosions.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1960\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1960_5214.txt-481-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 944.6843483894276, "y": 470.61353119036}, {"color": "#377eb8", "date": "2006", "id": "mag_2006_398341.txt-86-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt night the riverbanks echo with the urgent \u003cb\u003ethump\u003c/b\u003e of\u003cbr\u003eunseen drums and raucous singing. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2006_398341.txt-86-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 503.7909995796974, "y": -700.8250004910144}, {"color": "#377eb8", "date": "2008", "id": "fic_2008_36180.txt-212-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe pulled himself left, drew off, set up for another\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e, this one better aimed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2008\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2008_36180.txt-212-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -441.6575015872999, "y": 627.9952959032684}, {"color": "#377eb8", "date": "2003", "id": "fic_2003_48243.txt-828-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe sound of breaking glass was followed before too long by a\u003cbr\u003emuffled \u003cb\u003ethump\u003c/b\u003e from street level.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2003\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2003_48243.txt-828-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 28.621094659380134, "y": 323.41803752082825}, {"color": "#377eb8", "date": "2004", "id": "fic_2004_31444.txt-38-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd after the shrill shriek of the brakes and the shattering\u003cbr\u003eglass, now the only sound was the disgusting, rhythmic \u003cb\u003ethump\u003c/b\u003e of\u003cbr\u003ethe air pushing itself out of the Volvo and to the river\u0027s surface in\u003cbr\u003ecartoonishly large eruptions.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2004_31444.txt-38-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -345.83813149338147, "y": 812.1038939871763}, {"color": "#377eb8", "date": "1981", "id": "fic_1981_10679.txt-4749-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe pushed himself away from the surface which reflected that\u003cbr\u003edreadful \u003cb\u003ethumping\u003c/b\u003e and went down the stairs, moving cautiously,\u003cbr\u003enot drawing an easy breath until he reached ground level and the Fish\u003cbr\u003eSpeaker guard there. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1981_10679.txt-4749-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_jj@\u003c/p\u003e", "x": 284.88311081247053, "y": -735.9678057300908}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_25001.txt-1341-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003ethumping\u003c/b\u003e of his tail and low whine meant he was\u003cbr\u003ebeset by my leaving.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_25001.txt-1341-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": -58.867413680460146, "y": -327.8289185068411}, {"color": "#377eb8", "date": "1981", "id": "fic_1981_10679.txt-5299-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe heavy \u003cb\u003ethumping\u003c/b\u003e of his boots echoed along the\u003cbr\u003ewalls.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1981_10679.txt-5299-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": -309.6377184845544, "y": -482.1464809859226}, {"color": "#377eb8", "date": "2006", "id": "news_2006_636165.txt-23-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen all you can hear above the dining din is a \u003cb\u003ethump\u003c/b\u003e,\u003cbr\u003ethump, thump, wouldn\u0027t it be a good idea to lose the music\u003cbr\u003ealtogether?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2006_636165.txt-23-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1025.21679572744, "y": -417.30930550400217}, {"color": "#377eb8", "date": "1978", "id": "fic_1978_10636.txt-13922-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is a prostitution worse than any poor French whore\u0027s\u003cbr\u003esubmission to the pumping and \u003cb\u003ethumping\u003c/b\u003e of a hairy Hun.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1978\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1978_10636.txt-13922-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_vvg\u003c/p\u003e", "x": -923.7508871901542, "y": 261.80028057317577}, {"color": "#377eb8", "date": "1996", "id": "fic_1996_54197.txt-426-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eRick felt the \u003cb\u003ethump\u003c/b\u003e right on schedule, and now that the\u003cbr\u003etower and its boost protection cover were gone he could see out the\u003cbr\u003eside windows as well.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1996\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1996_54197.txt-426-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 855.0236811885623, "y": -533.3149606184595}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_16030.txt-1482-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHUNTER \u0027S SHIP - NIGHT (DUSK) Hawkins \u0027 BODY impacts the floor\u003cbr\u003ewith a \u003cb\u003eTHUMP\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_16030.txt-1482-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -387.5182953999847, "y": -10.779659231862768}, {"color": "#377eb8", "date": "1976", "id": "fic_1976_23911.txt-596-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA particularly loud \u003cb\u003ethump\u003c/b\u003e shuddered the ceiling, and he\u003cbr\u003ejumped back yelling, \" Shove it, you swine!\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1976\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1976_23911.txt-596-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -399.1245045298136, "y": -240.7628261776952}, {"color": "#377eb8", "date": "2000", "id": "fic_2000_52600.txt-267-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI fall into a soft bed of rotting leaves and I feel my life\u003cbr\u003etaking a deep breath and I \u0027m inside it and all I can hear is the\u003cbr\u003ecrinkling and crackling of dead leaves and the \u003cb\u003ethump\u003c/b\u003e of my life\u003cbr\u003egoing on and on and on.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2000\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2000_52600.txt-267-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -860.6269199062236, "y": -515.7734732587415}, {"color": "#377eb8", "date": "1967", "id": "fic_1967_10488.txt-552-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, light; it falls to the floor with a \u003cb\u003ethump\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1967\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1967_10488.txt-552-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -422.0838111425908, "y": -698.9852853181818}, {"color": "#377eb8", "date": "1999", "id": "mag_1999_407884.txt-339-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe clanging of its cooling pump was like the metallic\u003cbr\u003e\u003cb\u003ethumping\u003c/b\u003e of a cat\u0027s tail as it hurled itself into its kill.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1999_407884.txt-339-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": -529.7243853452791, "y": 725.1963846940743}, {"color": "#377eb8", "date": "1975", "id": "fic_1975_10598.txt-5614-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI didn\u0027t hear no \u003cb\u003ethumping\u003c/b\u003e but my own blood, no fiddle\u003cbr\u003emusic and no feet stomping to it, no earthquakes near nor far, not so\u003cbr\u003emuch as a weasel introducing hisself to\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1975\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1975_10598.txt-5614-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_jj@\u003c/p\u003e", "x": 916.061957725316, "y": 117.97127228336016}, {"color": "#377eb8", "date": "2005", "id": "fic_2005_28065.txt-46-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBehind me snow falls with a muted \u003cb\u003ethump\u003c/b\u003e onto the crust.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2005\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2005_28065.txt-46-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -33.00267456606771, "y": -2.9355509102012585}, {"color": "#377eb8", "date": "2002", "id": "fic_2002_32720.txt-189-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThat night they\u0027ll attend a voodoo ceremony-women dancing\u003cbr\u003ewildly to the thump \u003cb\u003ethump\u003c/b\u003e of beating drums; men decapitating\u003cbr\u003echickens, painting their bodies with the blood.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2002_32720.txt-189-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 42.60876741697068, "y": -140.1951402601803}, {"color": "#377eb8", "date": "1961", "id": "fic_1961_4832.txt-52-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003ethump\u003c/b\u003e hadn\u0027t been playful, and her sharp gasp of\u003cbr\u003epain indicated no enjoyment whatever.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1961\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1961_4832.txt-52-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -299.58525843253307, "y": 329.5752788571299}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_42340.txt-385-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA long moment ticked by, the tympanic \u003cb\u003ethump\u003c/b\u003e of the\u003cbr\u003esquirrels throwing themselves against the mesh of their cages\u003cbr\u003epunctuating Grace\u0027s sobs, Vincent\u0027s protestations of innocence, and\u003cbr\u003eMrs. Tranh\u0027s angry outbursts, and then Violet leveled a look on Jet\u003cbr\u003eand said, \" We\u0027ll need to see your insurance and we\u0027re going to have\u003cbr\u003eto call the police. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_42340.txt-385-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -807.0268139292081, "y": -775.3806655635989}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_43069.txt-760-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ehas crushed her; he hears the \u003cb\u003ethump\u003c/b\u003e of the log landing\u003cbr\u003eon her, hears her cry-What was that?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_43069.txt-760-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 471.25090066812703, "y": 955.2148671037414}, {"color": "#377eb8", "date": "1981", "id": "fic_1981_780031.txt-1211-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003ethumping\u003c/b\u003e had started again; someone was banging on\u003cbr\u003ethe wall.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1981_780031.txt-1211-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": -26.262903575227195, "y": -405.70277327411935}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040082.txt-3185-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe indulged himself in it, as well as in the thickened\u003cbr\u003e\u003cb\u003ethumping\u003c/b\u003e of the pulse in his temples.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040082.txt-3185-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": -154.19016578088167, "y": -357.2246410266206}, {"color": "#377eb8", "date": "1998", "id": "fic_1998_30065.txt-57-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThrough the layered shadows of our house, he roams all but\u003cbr\u003einvisibly, his presence betrayed only by the \u003cb\u003ethump\u003c/b\u003e of his big\u003cbr\u003epaws on the area\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1998_30065.txt-57-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 217.79443764516893, "y": -337.33874088766413}, {"color": "#377eb8", "date": "2005", "id": "fic_2005_33276.txt-86-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ein his pocket and takes it out for air, holding it in his two\u003cbr\u003ecupped hands where its shape and weight and beating \u003cb\u003ethump\u003c/b\u003e make\u003cbr\u003ehim feel like he holds a live heart.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2005\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2005_33276.txt-86-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -177.58988611807584, "y": 862.177276209574}, {"color": "#377eb8", "date": "1967", "id": "fic_1967_10484.txt-5601-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003emercy... \" Abruptly then, in a prolonged and dwindling little\u003cbr\u003esob, the voice died and all was silent, and I could hear nothing but\u003cbr\u003ethe piping of frogs in the millpond and a dull \u003cb\u003ethumping\u003c/b\u003e of\u003cbr\u003ehorses against the stable stalls and the sound of my own heart racing\u003cbr\u003emadly, so loud that I thought surely it must be heard above the\u003cbr\u003esoughing of a night wind in the sycamore trees.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1967\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1967_10484.txt-5601-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": 158.856454571, "y": -538.2422293209657}, {"color": "#377eb8", "date": "1998", "id": "fic_1998_43531.txt-376-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe is marching now, thump thump \u003cb\u003ethump\u003c/b\u003e in the rocket\u003cbr\u003eshoes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1998_43531.txt-376-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": -364.9587623847844, "y": -157.72299479378196}, {"color": "#377eb8", "date": "1970", "id": "fic_1970_10530.txt-4200-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA heavy \u003cb\u003ethump\u003c/b\u003e on the floor below the lock followed, then\u003cbr\u003ea hard click as the lock closed and complete darkness returned.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1970\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1970_10530.txt-4200-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 96.70185512679166, "y": -633.4783740763999}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_30713.txt-62-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt made my heart \u003cb\u003ethump\u003c/b\u003e to hear anyone say it, especially\u003cbr\u003eEmily, who, according to Mother, was able to pronounce it perfectly\u003cbr\u003ethe first time she had heard it: cystic fibrosis.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_30713.txt-62-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0\u003c/p\u003e", "x": 196.96682719604067, "y": 558.922142117354}, {"color": "#377eb8", "date": "1986", "id": "fic_1986_780090.txt-511-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA weight dropped, crashed downward, then pounded aside at the\u003cbr\u003elast moment under the synchronized \u003cb\u003ethump\u003c/b\u003e of a sudden force\u003cbr\u003ebeam.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1986\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1986_780090.txt-511-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -634.0432225503203, "y": 51.48474770249597}, {"color": "#377eb8", "date": "2006", "id": "fic_2006_51208.txt-18-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe interior of the club is toweringly loud, noisy enough to\u003cbr\u003emake the ears bleed, but suddenly the \u003cb\u003ethump\u003c/b\u003e of his heart,\u003cbr\u003ealready driven hard by the strength of his magickal invocation, is\u003cbr\u003elouder.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2006_51208.txt-18-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -644.5776291648662, "y": 519.9664263442621}, {"color": "#377eb8", "date": "1966", "id": "fic_1966_13783.txt-506-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e(There is a loud \u003cb\u003ethump\u003c/b\u003e, as if a body had been tossed\u003cbr\u003eonto the ground.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1966\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1966_13783.txt-506-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -215.75692141294982, "y": 106.76159362566031}, {"color": "#377eb8", "date": "1979", "id": "mag_1979_485613.txt-140-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ecolumn of water collapses, and, with a \u003cb\u003ethump\u003c/b\u003e, disappears\u003cbr\u003einto the lake.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1979\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1979_485613.txt-140-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -284.5290056951006, "y": -323.11122290576486}, {"color": "#377eb8", "date": "1976", "id": "fic_1976_16789.txt-540-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBRIEF CUT BACK TO DOG MARKET In a shostly shadow-play,\u003cbr\u003eaccompanied by far-off snarls and growls, and one last muffled\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e of the club, we see and hear Red Sweater breaking one\u003cbr\u003emore dog: which one is unknown to us: just a new arrival.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1976\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1976_16789.txt-540-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -635.778892330162, "y": 651.6456742289464}, {"color": "#377eb8", "date": "1989", "id": "fic_1989_10786.txt-17-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd in her father\u0027s store, she\u0027d tie her apron on, feel the\u003cbr\u003ecool coins between her fingers and the satisfying \u003cb\u003ethump\u003c/b\u003e as they\u003cbr\u003ewould drop down in the till.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1989_10786.txt-17-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 976.6918255295778, "y": 66.51747916406192}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040092.txt-2605-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHis father fit the cover on the tub, a dull \u003cb\u003ethump\u003c/b\u003e of wet\u003cbr\u003ewood on metal.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040092.txt-2605-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 713.0943585619054, "y": 440.97949894311375}, {"color": "#377eb8", "date": "1995", "id": "fic_1995_53082.txt-151-59", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd Zelda listened and at first there was only a creaking of\u003cbr\u003ewheels down in the dark, like crickets, and then a moan of wood and a\u003cbr\u003ehum of piano strings, and then one voice lamenting about this job, and\u003cbr\u003ethe other voice claiming he had nothing to do with it, and then the\u003cbr\u003e\u003cb\u003ethumps\u003c/b\u003e as two derby hats fell, and an exasperated voice\u003cbr\u003eannounced: \" Here\u0027s another fine mess you\u0027ve got us in. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1995_53082.txt-151-59\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 1046.304250584676, "y": 116.04133204608564}, {"color": "#377eb8", "date": "1995", "id": "news_1995_601228.txt-59-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e10: 40-10: 45 p.m.: While talking on the phone, Kaelin hears\u003cbr\u003ethree \u003cb\u003ethumps\u003c/b\u003e on the wall.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1995_601228.txt-59-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn2_vvz\u003c/p\u003e", "x": 501.048233981406, "y": 198.88744584426922}, {"color": "#ff7f00", "date": "1962", "id": "fic_1962_14052.txt-3255-11", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCeil sees him, is brought back to reality with a\u003cbr\u003e\u003cb\u003ethump\u003c/b\u003e.)\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1962\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1962_14052.txt-3255-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1274.0584602023691, "y": -14.619808404338386}, {"color": "#984ea3", "date": "1981", "id": "mag_1981_293638.txt-1-8", "label": "5", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is a regional definition with an old-fashioned \u003cb\u003ethump\u003c/b\u003e\u003cbr\u003eof authenticity.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1981_293638.txt-1-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -988.183745419417, "y": 641.2527979367665}, {"color": "#f781bf", "date": "1985", "id": "mag_1985_123522.txt-5-22", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEric Dickerson ended his 46-day holdout in midseason form,\u003cbr\u003eripping Seattle for 150 yards and three touchdowns in a Monday-night\u003cbr\u003e35-24 \u003cb\u003ethumping\u003c/b\u003e of the Seahawks.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1985\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1985_123522.txt-5-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@\u003c/p\u003e", "x": -1097.3706224030072, "y": -549.673219586183}]);
+        edges = new vis.DataSet([{"color": "black", "from": "fic_1980_10663.txt-162-19", "label": 4, "to": "fic_1970_16380.txt-5042-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1980_10663.txt-162-19", "label": 3, "to": "fic_1967_10489.txt-6302-16", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1975_780160.txt-3970-18", "label": 3, "to": "fic_2002_47140.txt-255-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1975_780160.txt-3970-18", "label": 3, "to": "fic_2008_36180.txt-212-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1997_54789.txt-245-2", "label": 4, "to": "news_1995_601228.txt-59-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54789.txt-245-2", "label": 4, "to": "mag_1999_407980.txt-5-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54789.txt-245-2", "label": 4, "to": "fic_1993_1040092.txt-2605-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54789.txt-245-2", "label": 4, "to": "fic_2001_27749.txt-280-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2003_48329.txt-402-7", "label": 4, "to": "news_1995_601228.txt-59-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2009_36638.txt-1978-3", "label": 4, "to": "fic_2003_47904.txt-517-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2009_36638.txt-1978-3", "label": 4, "to": "fic_1962_14052.txt-3255-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2009_36638.txt-1978-3", "label": 3, "to": "fic_2005_33276.txt-86-24", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1980_23948.txt-23-10", "label": 4, "to": "fic_1960_4217.txt-551-36", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1986_10741.txt-6708-15", "label": 4, "to": "fic_1985_782029.txt-1967-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1998_30880.txt-46-24", "label": 4, "to": "fic_2003_47904.txt-517-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1998_30880.txt-46-24", "label": 3, "to": "mag_1987_480750.txt-86-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1998_30880.txt-46-24", "label": 4, "to": "mag_1979_485613.txt-140-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1998_30880.txt-46-24", "label": 3, "to": "fic_1999_29339.txt-118-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1982_23965.txt-368-20", "label": 4, "to": "news_1995_601228.txt-59-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1982_23965.txt-368-20", "label": 3, "to": "fic_1997_42316.txt-135-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1960_491715.txt-182-21", "label": 4, "to": "news_1995_601228.txt-59-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1960_491715.txt-182-21", "label": 3, "to": "fic_1962_781984.txt-1364-3", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1960_491715.txt-182-21", "label": 3, "to": "fic_1986_780060.txt-916-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1968_16170.txt-2157-20", "label": 4, "to": "fic_1981_10679.txt-5299-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1968_16170.txt-2157-20", "label": 4, "to": "fic_1993_1040078.txt-1341-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1985_782029.txt-1967-12", "label": 4, "to": "fic_2003_47904.txt-517-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1985_782029.txt-1967-12", "label": 4, "to": "fic_1960_4217.txt-551-36", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_42218.txt-90-23", "label": 3, "to": "fic_1961_4832.txt-52-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1997_42218.txt-90-23", "label": 4, "to": "fic_2003_48243.txt-828-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_42218.txt-90-23", "label": 4, "to": "fic_1993_1040092.txt-2605-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_42218.txt-90-23", "label": 4, "to": "fic_1988_10768.txt-7866-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1995_53076.txt-108-15", "label": 4, "to": "fic_1962_23783.txt-278-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1995_53076.txt-108-15", "label": 3, "to": "fic_1997_42316.txt-135-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1995_53076.txt-108-15", "label": 4, "to": "fic_1961_4832.txt-52-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1995_53076.txt-108-15", "label": 4, "to": "fic_1986_780060.txt-916-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1995_53076.txt-108-15", "label": 4, "to": "fic_2002_32720.txt-189-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25006.txt-1237-3", "label": 4, "to": "fic_2002_32720.txt-189-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25006.txt-1237-3", "label": 4, "to": "fic_1993_1040092.txt-2605-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25006.txt-1237-3", "label": 4, "to": "fic_1967_10489.txt-6302-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54541.txt-512-24", "label": 4, "to": "fic_1974_10580.txt-881-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_53680.txt-95-4", "label": 3.5, "to": "fic_1976_16789.txt-540-22", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1992_53680.txt-95-4", "label": 4, "to": "fic_2003_47904.txt-517-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_53680.txt-95-4", "label": 4, "to": "fic_1962_781984.txt-1364-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1962_781984.txt-1364-3", "label": 4, "to": "fic_1960_4217.txt-551-36", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1962_781984.txt-1364-3", "label": 4, "to": "fic_1993_30713.txt-62-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_1040078.txt-1341-8", "label": 4, "to": "fic_1998_43531.txt-376-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1988_10768.txt-7866-5", "label": 4, "to": "fic_1970_16380.txt-5042-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1988_10768.txt-7866-5", "label": 3, "to": "fic_1993_25001.txt-1341-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-1689-26", "label": 3.5, "to": "fic_1993_25001.txt-1341-1", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1964_10443.txt-7509-24", "label": 3.5, "to": "news_1995_601228.txt-59-16", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1964_10443.txt-7509-24", "label": 4, "to": "fic_1997_43069.txt-760-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1964_10443.txt-7509-24", "label": 3, "to": "fic_2003_48243.txt-828-13", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1998_401580.txt-134-9", "label": 4, "to": "news_1995_601228.txt-59-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1998_401580.txt-134-9", "label": 4, "to": "fic_1976_782016.txt-4088-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1998_401580.txt-134-9", "label": 4, "to": "news_2006_636165.txt-23-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1998_401580.txt-134-9", "label": 4, "to": "fic_1989_10786.txt-17-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_29339.txt-118-12", "label": 4, "to": "fic_1981_10679.txt-5299-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_13743.txt-347-31", "label": 4, "to": "fic_1960_4217.txt-551-36", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_13743.txt-347-31", "label": 3, "to": "fic_1997_42316.txt-135-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1997_54541.txt-512-34", "label": 4, "to": "fic_1960_4217.txt-551-36", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 4, "to": "fic_2002_32720.txt-189-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 4, "to": "fic_1983_16197.txt-2014-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 4, "to": "fic_1989_10786.txt-17-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 4, "to": "fic_2005_28065.txt-46-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 4, "to": "fic_1995_53082.txt-151-59", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 4, "to": "fic_1960_5214.txt-481-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 4, "to": "fic_2003_47904.txt-517-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1970_16380.txt-5042-12", "label": 3, "to": "fic_1993_25001.txt-1341-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1971_774393.txt-171-5", "label": 4, "to": "news_1995_601228.txt-59-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1971_774393.txt-171-5", "label": 3.5, "to": "fic_1993_1040082.txt-3185-12", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1971_774393.txt-171-5", "label": 4, "to": "fic_1998_30065.txt-57-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1971_774393.txt-171-5", "label": 4, "to": "fic_2002_32720.txt-189-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1974_10580.txt-881-3", "label": 3, "to": "news_1994_606788.txt-495-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1974_10580.txt-881-3", "label": 3, "to": "mag_1976_317132.txt-12-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1974_10580.txt-881-3", "label": 4, "to": "fic_2002_32720.txt-189-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_42316.txt-135-7", "label": 3, "to": "mag_1985_123522.txt-5-22", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1997_42316.txt-135-7", "label": 4, "to": "mag_1999_407980.txt-5-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_606788.txt-495-2", "label": 4, "to": "fic_2006_51208.txt-18-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_606788.txt-495-2", "label": 3, "to": "fic_1999_29005.txt-114-39", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1994_606788.txt-495-2", "label": 4, "to": "fic_1993_25009.txt-5265-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1995_53083.txt-265-5", "label": 4, "to": "mag_2000_408971.txt-2-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1981_293638.txt-1-8", "label": 2.5, "to": "fic_1999_29005.txt-114-39", "weight": 2.5, "width": 4}, {"color": "black", "from": "mag_1981_293638.txt-1-8", "label": 2.5, "to": "fic_1962_14052.txt-3255-11", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1986_780060.txt-916-2", "label": 4, "to": "fic_1983_16197.txt-2014-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1960_4217.txt-551-36", "label": 4, "to": "fic_1970_10530.txt-4200-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1960_4217.txt-551-36", "label": 4, "to": "mag_2006_398341.txt-86-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1960_4217.txt-551-36", "label": 3, "to": "fic_1993_25001.txt-1341-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1960_4217.txt-551-36", "label": 3, "to": "fic_2008_36180.txt-212-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1960_4217.txt-551-36", "label": 4, "to": "news_1995_601228.txt-59-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1960_4217.txt-551-36", "label": 4, "to": "fic_1976_782016.txt-4088-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1999_407980.txt-5-12", "label": 3, "to": "fic_1993_25001.txt-1341-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1986_332055.txt-3-15", "label": 3, "to": "fic_1978_10636.txt-13922-16", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1986_332055.txt-3-15", "label": 4, "to": "mag_1999_407884.txt-339-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1997_389607.txt-65-17", "label": 4, "to": "fic_1993_1040082.txt-3185-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1967_10489.txt-6302-16", "label": 3, "to": "fic_1999_29005.txt-114-39", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1967_10489.txt-6302-16", "label": 3, "to": "fic_2006_51208.txt-18-20", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_2003_47904.txt-517-7", "label": 4, "to": "fic_1986_780090.txt-511-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_29005.txt-114-39", "label": 3, "to": "mag_1999_407884.txt-339-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1999_29005.txt-114-39", "label": 3.5, "to": "fic_2008_36180.txt-212-12", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1999_29005.txt-114-39", "label": 4, "to": "fic_1976_782016.txt-4088-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25009.txt-5265-15", "label": 3, "to": "fic_1981_10679.txt-5299-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1999_55357.txt-231-4", "label": 3, "to": "fic_2003_48243.txt-828-13", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1962_23783.txt-278-25", "label": 4, "to": "fic_1993_25001.txt-1341-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1962_23783.txt-278-25", "label": 3, "to": "fic_1987_16030.txt-1482-16", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1993_1040056.txt-5489-1", "label": 4, "to": "fic_1996_54197.txt-426-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1962_14052.txt-3255-11", "label": 2.5, "to": "mag_1985_123522.txt-5-22", "weight": 2.5, "width": 4}, {"color": "black", "from": "mag_1987_480750.txt-86-4", "label": 4, "to": "fic_2002_47140.txt-255-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2002_47140.txt-255-12", "label": 4, "to": "fic_2003_48243.txt-828-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2002_47140.txt-255-12", "label": 3, "to": "fic_1997_42340.txt-385-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1981_10679.txt-4749-11", "label": 4, "to": "fic_1993_25001.txt-1341-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25001.txt-1341-1", "label": 3.5, "to": "fic_2002_32720.txt-189-13", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1993_25001.txt-1341-1", "label": 4, "to": "fic_1981_780031.txt-1211-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1981_10679.txt-5299-2", "label": 4, "to": "fic_1970_10530.txt-4200-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1981_10679.txt-5299-2", "label": 4, "to": "fic_1987_16030.txt-1482-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1981_10679.txt-5299-2", "label": 4, "to": "fic_1993_1040082.txt-3185-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1976_23911.txt-596-3", "label": 4, "to": "fic_1966_13783.txt-506-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1976_23911.txt-596-3", "label": 4, "to": "fic_1967_10488.txt-552-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1999_407884.txt-339-10", "label": 3, "to": "fic_1993_1040082.txt-3185-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1961_4832.txt-52-1", "label": 3, "to": "fic_1998_43531.txt-376-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1998_43531.txt-376-7", "label": 3, "to": "fic_1966_13783.txt-506-5", "weight": 3.0, "width": 4}, {"color": "lightgray", "from": "fic_2009_36638.txt-1978-3", "label": 2, "to": "fic_2002_32720.txt-189-13", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_2009_36638.txt-1978-3", "label": 2, "to": "fic_1962_781984.txt-1364-3", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1998_30880.txt-46-24", "label": 2, "to": "fic_1983_16197.txt-2014-11", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1985_782029.txt-1967-12", "label": 2, "to": "fic_1961_4832.txt-52-1", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1985_782029.txt-1967-12", "label": 2, "to": "fic_1975_780111.txt-4781-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1997_54541.txt-512-34", "label": 2, "to": "fic_1993_1040082.txt-3185-12", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "news_1994_606788.txt-495-2", "label": 2, "to": "fic_1993_25001.txt-1341-1", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "news_1994_606788.txt-495-2", "label": 1, "to": "mag_1981_293638.txt-1-8", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "news_1994_606788.txt-495-2", "label": 2, "to": "fic_1978_10636.txt-13922-16", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1981_293638.txt-1-8", "label": 2, "to": "fic_1981_10679.txt-5299-2", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1981_293638.txt-1-8", "label": 1.5, "to": "mag_1985_123522.txt-5-22", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1967_10489.txt-6302-16", "label": 2, "to": "mag_1985_123522.txt-5-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1981_10679.txt-4749-11", "label": 1, "to": "mag_1985_123522.txt-5-22", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1993_25001.txt-1341-1", "label": 1.5, "to": "mag_1985_123522.txt-5-22", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1978_10636.txt-13922-16", "label": 2, "to": "news_1995_601228.txt-59-16", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1978_10636.txt-13922-16", "label": 2, "to": "mag_1985_123522.txt-5-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_2000_52600.txt-267-38", "label": 2, "to": "mag_1999_407884.txt-339-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1981_293638.txt-1-8", "label": NaN, "to": "fic_1967_10489.txt-6302-16", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

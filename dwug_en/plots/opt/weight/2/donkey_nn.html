@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">donkey_nn (2)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1990", "id": "mag_1990_421215.txt-146-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOn the day of our visit, as we returned to the house past\u003cbr\u003evineyard workers in huaso hats and \u003cb\u003edonkey\u003c/b\u003e carts stirring the\u003cbr\u003eroad dust, we were greeted by the team from Panquehue -- Chadwick,\u003cbr\u003eHuneeus and their German friends.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1990_421215.txt-146-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 144.81408000278194, "y": -556.573774049931}, {"color": "#377eb8", "date": "1993", "id": "news_1993_655718.txt-34-45", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA few examples of how Antwerp \u0027 93 hopes to promote this\u003cbr\u003ediscussion: \" Zingaro, \" a circus opera employing a Georgian men\u0027s\u003cbr\u003echoir, a Berber women\u0027s choir, Gypsies, and a menagerie of 12 breeds\u003cbr\u003eof horses, \u003cb\u003edonkeys\u003c/b\u003e, and geese, all performing together in\u003cbr\u003eharmony; \" Pigeons and Pencils, \" a commissioned symphonic work\u003cbr\u003eperformed by young musicians from Antwerp\u0027s Moroccan community; and\u003cbr\u003ethe Antwerp \u0027 93 ark, a performing arts \" refuge \" that will stage\u003cbr\u003egroups of young dancers, musicians, and actors from around the\u003cbr\u003eworld.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1993_655718.txt-34-45\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 75.5899119799853, "y": -86.31650651605904}, {"color": "#377eb8", "date": "1999", "id": "nf_1999_774019.txt-609-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOne has friezes of \u003cb\u003edonkeys\u003c/b\u003e, oxen and olive trees, and\u003cbr\u003ecould have been carved during the start of any Middle Eastern\u003cbr\u003eculture.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1999_774019.txt-609-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -597.4369299970523, "y": -267.4698405063707}, {"color": "#377eb8", "date": "1999", "id": "mag_1999_404075.txt-254-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs if from habit, hundreds of \" nodding \u003cb\u003edonkey\u003c/b\u003e \" oil\u003cbr\u003edrills, their corroded gears whining in the wind, still scavenge the\u003cbr\u003elong-exhausted shoreline reserves, seeking to pump up one last stray\u003cbr\u003emolecule of hydrocarbon.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1999_404075.txt-254-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 480.60201640731054, "y": 568.2233458484983}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-599-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003edonkey\u003c/b\u003e grasped the hindquartersof the mare with his\u003cbr\u003eforelegs, gave a few convulsive jumps and hung in midair with a\u003cbr\u003ecomical look of bliss on his whitepatchedface.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-599-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -867.2065402070984, "y": 490.4655153602645}, {"color": "#377eb8", "date": "1969", "id": "fic_1969_10510.txt-1234-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt times when a \u003cb\u003edonkey\u003c/b\u003e cart carrying a small load of\u003cbr\u003epeasant canes -- those which the villagers grew amid the stones in\u003cbr\u003etheir tiny plots -- would creak onto the scale, he would dash,\u003cbr\u003efussing, outside. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1969\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1969_10510.txt-1234-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -599.4903084953295, "y": -378.6265060765689}, {"color": "#377eb8", "date": "2000", "id": "fic_2000_38940.txt-796-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI have never tried to understand your kind any more than your\u003cbr\u003ekind have tried to see the world through the eyes of the cow you drive\u003cbr\u003eto the slaughter, or the \u003cb\u003edonkey\u003c/b\u003e whose back you break with\u003cbr\u003eburdens, or the stray dog you kick away from the fire.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2000\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2000_38940.txt-796-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 836.5618905101471, "y": 836.6118409242271}, {"color": "#377eb8", "date": "2007", "id": "news_2007_637936.txt-36-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI will try to convince him that it is not only this\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e who will die, but the foal, too.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2007_637936.txt-36-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -511.61593585591936, "y": 7.613836854381235}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_10753.txt-7830-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEven that old man who\u0027d provided the \u003cb\u003edonkeys\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_10753.txt-7830-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -885.389506616088, "y": -6.200269498229559}, {"color": "#377eb8", "date": "1994", "id": "fic_1994_54030.txt-305-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo some it sounds like a mob of crows, to others a\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e\u0027s bray.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1994_54030.txt-305-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -250.35710791909787, "y": 424.5681910736768}, {"color": "#377eb8", "date": "1975", "id": "fic_1975_10601.txt-83-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe didn\u0027t accept defeat gracefully, and was known by his fellow\u003cbr\u003eseminarians as the \u003cb\u003edonkey\u003c/b\u003e, or the\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1975\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1975_10601.txt-83-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 482.19715455385, "y": 355.14700426895604}, {"color": "#377eb8", "date": "1983", "id": "fic_1983_23976.txt-771-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt was not a horse but a donkey, a \u003cb\u003edonkey\u003c/b\u003e so tiny that\u003cbr\u003eits rider\u0027s feet almost touched the ground.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1983_23976.txt-771-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -350.4543333275041, "y": 472.6231586030695}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-2046-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePassatempo killed the uncle who gave him his first\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-2046-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 166.27808367577092, "y": 82.95670420900537}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_10753.txt-7717-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd now this Jesus, the Messiah, sent two men here to claim my\u003cbr\u003e\u003cb\u003edonkeys\u003c/b\u003e! \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_10753.txt-7717-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 638.4142682728616, "y": 422.5676096855705}, {"color": "#377eb8", "date": "1961", "id": "mag_1961_246109.txt-19-52", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI believe Joshua did pray to God and the sun stood still \" On\u003cbr\u003eher Israeli trip she became frightened while traveling over the\u003cbr\u003etwisting roads of the rugged Judean Hills, until a \" Spirit \"\u003cbr\u003ereprimanded her: \" If Joseph could bring Mary over these rough\u003cbr\u003emountains on a \u003cb\u003edonkey\u003c/b\u003e, you ought a be ashamed of yourself,\u003cbr\u003eMahalia. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1961\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1961_246109.txt-19-52\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 107.06391894409005, "y": 344.8900059040775}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_54593.txt-116-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ecould have guessed which building was Branas \u0027 from the number\u003cbr\u003eof horses and \u003cb\u003edonkeys\u003c/b\u003e tied up in front of it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_54593.txt-116-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 45.882039409809906, "y": -230.13337998326847}, {"color": "#377eb8", "date": "1984", "id": "news_1984_671409.txt-15-28", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003egives Mr. Dillon the heartfelt advice that there \u0027 s no point\u003cbr\u003ein going to college; why study Socrates, he asks, when Socrates rode a\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e and not a Ferrari. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1984_671409.txt-15-28\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 179.95563908700348, "y": 291.84005587358917}, {"color": "#377eb8", "date": "1992", "id": "fic_1992_16254.txt-452-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe boards a \u003cb\u003edonkey\u003c/b\u003e and rides off into the jungle with\u003cbr\u003eJahausa.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1992_16254.txt-452-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -421.69052801209943, "y": -799.4790219756997}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-620-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003edonkey\u003c/b\u003e\u0027s work had just begun; he had a much less\u003cbr\u003epleasant task before him.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-620-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 346.790557753892, "y": 698.6842032970766}, {"color": "#377eb8", "date": "1983", "id": "fic_1983_10710.txt-482-40", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNext to an open green door hung a vertical sign, and Mrs.\u003cbr\u003ePollifax brought out her small camera and took a picture of the\u003cbr\u003echarming vignette: a courtyard, a door, a leafy green tree, a\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e cart parked next to the door. \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1983_10710.txt-482-40\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -122.13571831619288, "y": 990.915218317134}, {"color": "#377eb8", "date": "2005", "id": "fic_2005_50069.txt-390-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWHEN YUSUF and his borrowed \u003cb\u003edonkey\u003c/b\u003e returned home,\u003cbr\u003efootsore and hungry after five\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2005\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2005_50069.txt-390-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -241.12497100967622, "y": -292.6988207213261}, {"color": "#377eb8", "date": "2008", "id": "fic_2008_36244.txt-94-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" A \u003cb\u003edonkey\u003c/b\u003e, \" Cyrus said quickly, realizing that the\u003cbr\u003eAdult Conspiracy prevented her from knowing the other term. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2008\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2008_36244.txt-94-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -983.0588080629377, "y": 426.32645673092674}, {"color": "#377eb8", "date": "1999", "id": "nf_1999_774012.txt-1341-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eStreet scenes and marketplaces are hypnotic: cows,\u003cbr\u003e\u003cb\u003edonkeys\u003c/b\u003e, goats, camels, chickens, elephants sharing the roads\u003cbr\u003ewith cars, buses, trucks, motorcycles, human-powered\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1999_774012.txt-1341-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -232.54442873396889, "y": -141.56227185100218}, {"color": "#377eb8", "date": "1969", "id": "fic_1969_10510.txt-1908-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt was instantly at home with the badtemperedfowls who fought\u003cbr\u003eeach other over the scraps tossed them from the doorway, and the\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e standing, abject and morose, near the cactus bush where\u003cbr\u003ethe wash was hung to dry.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1969\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1969_10510.txt-1908-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 568.1010807604154, "y": -142.6848525830066}, {"color": "#377eb8", "date": "1971", "id": "fic_1971_10544.txt-4957-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe resumed his anecdote in Italian about the \u003cb\u003edonkey\u003c/b\u003e that\u003cbr\u003ehad gotten into the grounds the previous week, laid waste to a\u003cbr\u003evegetable patch, and chewed up a wholep260chapter of\u003cbr\u003emanuscript.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1971\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1971_10544.txt-4957-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 687.4029801987913, "y": -161.40224228701936}, {"color": "#377eb8", "date": "1990", "id": "fic_1990_16024.txt-55-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen another sound -- the \u003cb\u003edonkey\u003c/b\u003e starts screeching in\u003cbr\u003ewild panic.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1990_16024.txt-55-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -102.29944687498096, "y": 510.9465626565589}, {"color": "#377eb8", "date": "1977", "id": "fic_1977_10620.txt-714-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Some \u003cb\u003edonkey\u003c/b\u003e, more likely, \" said Heatter wryly.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1977_10620.txt-714-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 741.0566796049739, "y": -178.34603004880657}, {"color": "#377eb8", "date": "1966", "id": "fic_1966_10472.txt-5131-110", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNo rare woods here, no perfumed wine, no choirs of boys, but\u003cbr\u003eBael with the head of a man and a spider\u0027s body, cat and toad growing\u003cbr\u003eout of his neck, commandingforty-six legions of devils; Behemoth, full\u003cbr\u003estomachedas Omensetter\u0027s wife had been with her skin like shining\u003cbr\u003esatin, but otherwise an elephant devouring grass like the oxen, his\u003cbr\u003ewhole strength in his loins and his virtue fitted in the button of his\u003cbr\u003ebelly, commanding thrice seven regiments of furies; Astaroth, the ugly\u003cbr\u003eangel, vulgarly astride a dragon, leading forty legions; Forcas on a\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e; Marchocias vomiting; Buer in a wheel of hooves\u003cbr\u003erevolving; Asmodeus; Theutus; Incubus -- demon after demon drawn\u003cbr\u003edelightfully by Angelo, who made God\u0027s finger like an amorous engine\u003cbr\u003efor the Vatican.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1966\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1966_10472.txt-5131-110\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -773.3295752205165, "y": -428.5651119095812}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-3174-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe cobbled streets and narrow sidewalks had been flushed with\u003cbr\u003ewater and some children were playing around the raised platform where\u003cbr\u003ethe \u003cb\u003edonkey\u003c/b\u003e and mare had been mated on that long-ago fateful\u003cbr\u003eday.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-3174-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 43.256491970328774, "y": 213.0814604087034}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_25024.txt-2073-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYou hit him and he works like a \u003cb\u003edonkey\u003c/b\u003e, like a soldier\u003cbr\u003ewho can not break his oath of allegiance to king and country.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_25024.txt-2073-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1137.571171229285, "y": 393.4065108713856}, {"color": "#377eb8", "date": "1963", "id": "mag_1963_269445.txt-16-39", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFrom Beirut last week he cabled his report on a 23-day trek in\u003cbr\u003ewhich he crossed the peaks, plateaus and wadis from Aden to the Saudi\u003cbr\u003eArabian border, traveling a total of 1,000 miles by camel,\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e, car and shoe leather without once leaving royalist-held\u003cbr\u003eterritory (see map).\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1963\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1963_269445.txt-16-39\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -407.60582796129813, "y": -438.0672393499198}, {"color": "#377eb8", "date": "1980", "id": "fic_1980_10659.txt-2248-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBetter than pin the tail on the \u003cb\u003edonkey\u003c/b\u003e, \" Parker\u003cbr\u003esaid.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1980\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1980_10659.txt-2248-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -310.19724533651214, "y": 386.3011348635502}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_782034.txt-8660-41", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWell, hell, Marty, \" said Kramer, figuring that, having been a\u003cbr\u003efellow soldier with him in the bullshit skirmish at Reverend Bacon\u0027s,\u003cbr\u003ehe could go on a nickname basis with the dauntless little Irish\u003cbr\u003e\u003cb\u003eDonkey\u003c/b\u003e, \" the kids\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_782034.txt-8660-41\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_np1\u003c/p\u003e", "x": -800.6878831740758, "y": -184.19514164375894}, {"color": "#377eb8", "date": "1988", "id": "nf_1988_773806.txt-873-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewas sitting beside the road, in her misery roasting a piece of\u003cbr\u003ea dead \u003cb\u003edonkey\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1988\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1988_773806.txt-873-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -245.02373685575222, "y": -403.7329745314952}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-413-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is rare that a female mule can conceive; they are classified\u003cbr\u003eas a sterile animal, product of the union between a mare and\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-413-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 400.6632375126994, "y": 130.84640908164846}, {"color": "#377eb8", "date": "1994", "id": "fic_1994_41307.txt-1046-52", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI told her her body was rich and lovely but her mind was richer\u003cbr\u003eand lovelier and more durable -- for although she was partly of our\u003cbr\u003ekind, she was a mortal being, like you -- djinns and mortals can not\u003cbr\u003eproduce an immortal scion, you know, as \u003cb\u003edonkeys\u003c/b\u003e and horses can\u003cbr\u003eonly produce a seedless mule.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1994_41307.txt-1046-52\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 352.87695620285905, "y": 359.6758435084509}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040075.txt-370-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI\u0027ve been treated like a \u003cb\u003edonkey\u003c/b\u003e for such a while,\u003cbr\u003esometimes I fear I\u0027ve begun thinking like one. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040075.txt-370-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1205.2734525585097, "y": 559.8460976689156}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040075.txt-591-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShould you ever meet another \u003cb\u003edonkey\u003c/b\u003e, I trust you\u0027ll do\u003cbr\u003eas well\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040075.txt-591-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 356.92022183208974, "y": 299.661405041651}, {"color": "#377eb8", "date": "1990", "id": "fic_1990_53195.txt-165-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA \u003cb\u003edonkey\u003c/b\u003e pulling a heavily loaded wooden cart presses\u003cbr\u003eher into the roughly textured coral rag.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1990_53195.txt-165-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -107.89576570142832, "y": -346.7094379278411}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-565-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSmelling the female mule below, the white-faced \u003cb\u003edonkey\u003c/b\u003e\u003cbr\u003ereared against the rope that held\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-565-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -680.2461128516377, "y": -662.5795089685075}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040090.txt-4023-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe heard the gate creak, the whip cracking on the\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e\u0027s back.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040090.txt-4023-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -135.86745788672863, "y": -494.6699328183286}, {"color": "#377eb8", "date": "1990", "id": "fic_1990_16024.txt-1643-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEARLAll right, I \u0027m about as subtle as a \u003cb\u003edonkey\u003c/b\u003e\u0027s\u003cbr\u003eass.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1990_16024.txt-1643-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -799.5577378281017, "y": -952.7362541736047}, {"color": "#377eb8", "date": "2009", "id": "fic_2009_36726.txt-8-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe mournful cry erupted from the \u003cb\u003edonkey\u003c/b\u003e\u0027s mouth and\u003cbr\u003efilled Nonno\u0027s ears as profoundly as the sounding of a shofar on Rosh\u003cbr\u003eHashanah.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2009\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2009_36726.txt-8-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 342.03194812144363, "y": 816.7774335961933}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_774020.txt-815-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePart of the fun lay in the \u003cb\u003edonkey\u003c/b\u003e \u0027 being unaware of his\u003cbr\u003eacquired identity.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_774020.txt-815-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -869.0267585740357, "y": 235.8482838318271}, {"color": "#377eb8", "date": "1974", "id": "fic_1974_10580.txt-8228-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSomewhere down the slope a tethered \u003cb\u003edonkey\u003c/b\u003e began to\u003cbr\u003ebray.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1974\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1974_10580.txt-8228-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 433.4852432926697, "y": -870.6927609755152}, {"color": "#377eb8", "date": "1996", "id": "fic_1996_29811.txt-147-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn Valdeverdeja, water was still sold house to house from\u003cbr\u003eearthenware jars hauled by mules, and the villagers went around in\u003cbr\u003etwo-wheeled carts pulled by \u003cb\u003edonkeys\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1996\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1996_29811.txt-147-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 30.265202435024293, "y": -853.4633317701226}, {"color": "#377eb8", "date": "1981", "id": "mag_1981_297232.txt-5-42", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe understands the influences that gave their ambitions\u003cbr\u003estrength and direction: the Enlightenment and flowering of scientific\u003cbr\u003ecuriosity; the Puritan ethic that placed religion in the service of\u003cbr\u003eprofit; a vision of industrial progress that would free men from\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e work; a dream of dynasty in which rewards would be\u003cbr\u003epassed on to multiply through the efforts of one\u0027s sons.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1981_297232.txt-5-42\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -632.8310416011054, "y": -1038.6844301660853}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_773851.txt-1129-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePastoralists breed and manage camels, \u003cb\u003edonkeys\u003c/b\u003e, sheep and\u003cbr\u003egoats as well as cattle.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_773851.txt-1129-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 202.49328481139028, "y": 331.99753738437255}, {"color": "#377eb8", "date": "1992", "id": "fic_1992_16254.txt-518-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eRae watches as the natives put her bags back near the\u003cbr\u003e\u003cb\u003edonkeys\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1992_16254.txt-518-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 264.63768765048167, "y": 112.5772870793002}, {"color": "#377eb8", "date": "2000", "id": "fic_2000_28733.txt-74-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey sat with the motor idling until the farmer led the donkey\u003cbr\u003eto a stand of tall grass into which he folded himself as the\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e began to graze. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2000\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2000_28733.txt-74-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -154.71031618302177, "y": 207.15546842705308}, {"color": "#377eb8", "date": "1968", "id": "fic_1968_13276.txt-831-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ep. 21 FENG Many nights I ride on my \u003cb\u003edonkey\u003c/b\u003e over the\u003cbr\u003emountains and I think of new poems.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1968\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1968_13276.txt-831-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -101.28663026292989, "y": -627.9002237906399}, {"color": "#377eb8", "date": "1973", "id": "mag_1973_105602.txt-74-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf we kill one at the top of the mountain, we will have to\u003cbr\u003ecache it somewhere and then return for Mel\u0027s \u003cb\u003edonkey\u003c/b\u003e, Jenny, to\u003cbr\u003epack the meat and the trophy out. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1973\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1973_105602.txt-74-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -397.3090636174239, "y": -674.33090777055}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_774020.txt-861-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs Mashiab removed the tail to cries of \u003cb\u003edonkey\u003c/b\u003e \u0027, Shlomo\u003cbr\u003etickled him.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_774020.txt-861-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -57.45748940034392, "y": -247.8503944941064}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-684-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFinally the two men and their \u003cb\u003edonkey\u003c/b\u003e vanished over a\u003cbr\u003erise in the street, but she kept watching and finally they appeared\u003cbr\u003eagain, high above the town of Montelepre, entering the range of\u003cbr\u003emountains that surrounded the town.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-684-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1057.8912706469062, "y": -25.041678780343666}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-755-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe jerked the \u003cb\u003edonkey\u003c/b\u003e to a halt and held up his hand to\u003cbr\u003eAspanu.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-755-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -60.559741284839966, "y": -423.53768622310344}, {"color": "#377eb8", "date": "2007", "id": "news_2007_637936.txt-1-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEach day, in his modestly sized office decorated with\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e illustrations and photos, he thinks about how to make\u003cbr\u003etheir lives better.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2007_637936.txt-1-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -677.4333373934004, "y": -94.17461460850242}, {"color": "#377eb8", "date": "1983", "id": "fic_1983_10704.txt-1836-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe thought of him as riding on a \u003cb\u003edonkey\u003c/b\u003e, sharing a\u003cbr\u003etruck with a load of sheep, walking along the dusty tracks and clay\u003cbr\u003eroads, hiding in olive groves and in the winding alleys of small towns\u003cbr\u003ebefore he slipped across the far edge of the Spanish plain into\u003cbr\u003ePortugal.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1983_10704.txt-1836-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 481.5495780368575, "y": 258.8233115370796}, {"color": "#377eb8", "date": "1988", "id": "fic_1988_13990.txt-761-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI know I sound like a \u003cb\u003edonkey\u003c/b\u003e but hush.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1988\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1988_13990.txt-761-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1271.996972195637, "y": 482.12116703293754}, {"color": "#377eb8", "date": "1962", "id": "mag_1962_268753.txt-14-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003econtinued, is only Nehru\u0027s \" \u003cb\u003edonkey\u003c/b\u003e... a band of\u003cbr\u003ebakasuras mythological Hindu demons, a swarm of locusts, a band of\u003cbr\u003etyrants. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1962\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1962_268753.txt-14-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 389.8274817535425, "y": 530.2494930809571}, {"color": "#377eb8", "date": "1990", "id": "mag_1990_388658.txt-36-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe goal of a balanced budget, which had been enshrined in the\u003cbr\u003eGramm -- Rudman law, is now replaced by a process analogous to a\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e chasing a carrot tied to the end of a stick.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1990_388658.txt-36-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -363.1891337259144, "y": -786.4823359040472}, {"color": "#377eb8", "date": "2000", "id": "fic_2000_38940.txt-106-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMaster Giles saw with horror bow the woman raised her stick,\u003cbr\u003ethreatening to treat the children after a fashion that was unfit to\u003cbr\u003etreat a \u003cb\u003edonkey\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2000\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2000_38940.txt-106-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 258.04263097161623, "y": -236.5584228622363}, {"color": "#377eb8", "date": "1982", "id": "news_1982_669225.txt-8-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e// The key is to \u0027 \u0027 pin the tail on the \u003cb\u003edonkey\u003c/b\u003e, \u0027 \u0027\u003cbr\u003esays Mr. Vander Jagt, and \u0027 \u0027 make it clear that the Democrats made\u003cbr\u003ethis (economic) mess. \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1982\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1982_669225.txt-8-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 336.73951418159015, "y": -651.1077101512263}, {"color": "#377eb8", "date": "1983", "id": "fic_1983_10704.txt-9963-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI cried as well, not just for love of Hera-Ra, but in the\u003cbr\u003eterrible fear of knowing that the animal would not have gotten ill if\u003cbr\u003eI had kept him away from the \u003cb\u003edonkeys\u003c/b\u003e \u0027 bags. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1983_10704.txt-9963-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 701.6142502926398, "y": -650.1613540964848}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-1278-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLet you play in the mountains while I bring \u003cb\u003edonkeys\u003c/b\u003e out\u003cbr\u003eto work and pick olives?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-1278-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -198.32261030286878, "y": -45.1143866389039}, {"color": "#377eb8", "date": "2009", "id": "mag_2009_405388.txt-18-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAll I remember is Shrek and the \u003cb\u003edonkey\u003c/b\u003e helping me up,\u003cbr\u003eand Liza Minnelli giving me a towel, \" said the singer-\u003cbr\u003eguitarist.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2009\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2009_405388.txt-18-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -932.5058810186722, "y": -819.9398036999329}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_10753.txt-7144-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Never mind \u003cb\u003edonkeys\u003c/b\u003e, \" Cleo said. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_10753.txt-7144-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -860.436706190832, "y": -224.83391582945669}, {"color": "#377eb8", "date": "1978", "id": "mag_1978_479996.txt-153-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ehis \u003cb\u003edonkey\u003c/b\u003e festooned with goat rib cages and\u003cbr\u003elegs?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1978\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1978_479996.txt-153-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -367.79777043927953, "y": -10.14441312417281}, {"color": "#377eb8", "date": "1994", "id": "fic_1994_41271.txt-167-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Don\u0027t be a \u003cb\u003edonkey\u003c/b\u003e, \" my father replied. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1994_41271.txt-167-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 627.1755708294957, "y": 899.6947165417373}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_774020.txt-757-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethe front room, one of the men introduced the motif of the\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e tree \u0027 to mock Zackaria\u0027s paternity.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_774020.txt-757-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 617.444476815899, "y": -236.5291694035474}, {"color": "#377eb8", "date": "1975", "id": "fic_1975_16400.txt-1817-37", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe see Dravot\u0027s whole Army, now of truly impressive size, on\u003cbr\u003ethe march with all its panoply: banners, drums, women camp followers,\u003cbr\u003eherds of goats, a supply train of \u003cb\u003edonkeys\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1975\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1975_16400.txt-1817-37\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 382.6179750280652, "y": -450.99250827766707}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_53894.txt-128-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMary ended her reverie when she heard the clop of the McMahon\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_53894.txt-128-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 289.17031119552024, "y": -183.56643596499725}, {"color": "#377eb8", "date": "1966", "id": "mag_1966_211235.txt-8-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere\u0027s a big \u003cb\u003edonkey\u003c/b\u003e population in this country around\u003cbr\u003ethis time of year. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1966\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1966_211235.txt-8-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 207.113274401327, "y": -149.23015785861315}, {"color": "#377eb8", "date": "1976", "id": "fic_1976_10615.txt-992-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe took observation positions and spotted two horsemen on the\u003cbr\u003ehorizon trailing a pair of \u003cb\u003edonkeys\u003c/b\u003e loaded with\u003cbr\u003eprovisions.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1976\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1976_10615.txt-992-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 447.48047960897253, "y": -58.15696084491966}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-598-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe mare gave a great snort and pushed her rump back at the\u003cbr\u003esame moment the \u003cb\u003edonkey\u003c/b\u003e plunged downward.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-598-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 394.85573337302645, "y": -93.70207819025514}, {"color": "#377eb8", "date": "1999", "id": "fic_1999_30759.txt-67-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYou know, \" Althea Stokes had told my mother, in that big, sad\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e voice\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1999_30759.txt-67-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -519.9751415830285, "y": -816.2099033659503}, {"color": "#377eb8", "date": "2007", "id": "news_2007_637936.txt-33-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe asks the farmer to give the \u003cb\u003edonkey\u003c/b\u003e a break from\u003cbr\u003eworking.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2007_637936.txt-33-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 280.38287583331123, "y": 852.424463796705}, {"color": "#377eb8", "date": "1983", "id": "fic_1983_10710.txt-2763-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn her mind\u0027s eye she saw a long line of camels, horses,\u003cbr\u003e\u003cb\u003edonkeys\u003c/b\u003e slowly moving up this trackless valley to arrive at\u003cbr\u003ethis oasis with its glacier-fed running water, so incongruous in the\u003cbr\u003emidst of the heat and sun and desert.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1983_10710.txt-2763-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 257.7870976858042, "y": -392.0020368270668}, {"color": "#377eb8", "date": "1970", "id": "fic_1970_10536.txt-1122-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhy don\u0027t you wear a cap, you \u003cb\u003edonkey\u003c/b\u003e?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1970\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1970_10536.txt-1122-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 786.1399197362779, "y": -778.6218126047343}, {"color": "#377eb8", "date": "1991", "id": "nf_1991_746789.txt-20-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn North America, as elsewhere, to celebrate Christmas, trees\u003cbr\u003eare forced through living room doors and loaded down with an\u003cbr\u003eanthropologist\u0027s dream of symbolic ornaments-birds, \u003cb\u003edonkeys\u003c/b\u003e,\u003cbr\u003ecandies, stars, and sleighs with fat, bearded gentlemen in strange red\u003cbr\u003esuits.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1991\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1991_746789.txt-20-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -348.45059159587225, "y": 210.46202664471176}, {"color": "#377eb8", "date": "1960", "id": "fic_1960_10402.txt-120-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ea new beauty in \u003cb\u003edonkey\u003c/b\u003e\u0027s years, and his taste is\u003cbr\u003eperfect, so it\u0027s flattering. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1960\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1960_10402.txt-120-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -409.5437522579095, "y": -30.222128950718083}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_774020.txt-1034-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eStill, the very complexity and interdependence of the\u003cbr\u003eactivities that constituted this framework made it less flexible and\u003cbr\u003emore fragile in response to crises than that of the \u003cb\u003edonkey\u003c/b\u003e\u003cbr\u003egame.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_774020.txt-1034-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -186.4204155658896, "y": 532.6261309898497}, {"color": "#377eb8", "date": "1981", "id": "fic_1981_10686.txt-1350-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe next morning Dovid went to the \u003cb\u003edonkey\u003c/b\u003e cart.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1981_10686.txt-1350-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -551.1052120667483, "y": 287.09116566090006}, {"color": "#377eb8", "date": "1966", "id": "fic_1966_781993.txt-2170-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe men who had left Santa Vittoria with the \u003cb\u003edonkey\u003c/b\u003e and\u003cbr\u003ethe mule came back to the city early one evening\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1966\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1966_781993.txt-2170-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -664.2749747838145, "y": 235.2562302434007}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-926-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe mating of the \u003cb\u003edonkey\u003c/b\u003e and the Miracle Mule\u003cbr\u003efailed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-926-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 711.9428147613679, "y": -31.67483671419994}, {"color": "#377eb8", "date": "1961", "id": "fic_1961_14307.txt-2701-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMCGARRY Do you remember the scene where the \u003cb\u003edonkey\u003c/b\u003e cart\u003cbr\u003ebreaks down, in the village?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1961\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1961_14307.txt-2701-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -40.24895463931558, "y": -567.5979865637598}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_10753.txt-7846-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTwo boys raced by on their \u003cb\u003edonkeys\u003c/b\u003e, madly waving shaggy\u003cbr\u003epalm leaves, and calling, \" Don\u0027t you want to see the king? \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_10753.txt-7846-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 757.2173307694028, "y": 792.1059882186656}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_774020.txt-820-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn a few instances the \u003cb\u003edonkey\u003c/b\u003e carried his tail about for\u003cbr\u003eperiods of up to an hour before acknowledging or discovering his new\u003cbr\u003eidentity.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_774020.txt-820-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 269.3007987449434, "y": -786.4250116621091}, {"color": "#377eb8", "date": "1977", "id": "fic_1977_780102.txt-2383-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003edonkey\u003c/b\u003e brayed plaintively as the car accelerated\u003cbr\u003eby.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1977_780102.txt-2383-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -76.83421071304912, "y": 323.44625491743756}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_774020.txt-911-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIndeed, the reciprocal redistribution of roles through the\u003cbr\u003etaking of turns, and the sharing of the identity of \u003cb\u003edonkey\u003c/b\u003e \u0027\u003cbr\u003eboth point to the cooperative tenor of the game.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_774020.txt-911-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 790.8099871399522, "y": -339.3478877777241}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-1931-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey watched for another hour and then as the donkey entered\u003cbr\u003ethe mountain range and took the upward path, Pisciotta said, \" Damn,\u003cbr\u003ethat rider is smaller than his \u003cb\u003edonkey\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-1931-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 14.790659976937198, "y": 762.9200624064181}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-1468-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHis father told the story of how the farmer had come looking\u003cbr\u003efor his \u003cb\u003edonkey\u003c/b\u003e and his own remark to the farmer: \" Stay content\u003cbr\u003eyou have lost a donkey.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-1468-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 794.9723837886384, "y": 41.639551660686536}, {"color": "#377eb8", "date": "1973", "id": "mag_1973_431860.txt-18-42", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eplowing, harvesting, weeding, threshing; little girls and boys\u003cbr\u003ewatering buffalo, shepherding large flocks of geese and ducks or herds\u003cbr\u003eof pigs; fishermen casting their nets; gangs of workers laying\u003cbr\u003erailroad tracks; carts pulled by \u003cb\u003edonkeys\u003c/b\u003e, buffalo, or men,\u003cbr\u003etransporting stone, brick, sorghum.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1973\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1973_431860.txt-18-42\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 56.42323409463877, "y": 828.4258000515784}, {"color": "#377eb8", "date": "1985", "id": "fic_1985_10731.txt-2411-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe had been \" washing the head of a \u003cb\u003edonkey\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1985\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1985_10731.txt-2411-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 899.1357446866303, "y": 728.8642779971768}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_1040057.txt-226-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eenter some air-conditioned American store, a memory of the good\u003cbr\u003ewarm smell of the miserable donkeys of Jerusalem will suddenly rise to\u003cbr\u003emy nose, those heavily laden \u003cb\u003edonkeys\u003c/b\u003e with sores on their rumps\u003cbr\u003eand ankles, the skin on their necks and backs scraped to bleeding\u003cbr\u003ebaldness by whips and bridles, and with it the smell of the dust that\u003cbr\u003ecollects in the prints of their little jet-black hooves.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_1040057.txt-226-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -532.082051193633, "y": 141.99841735557817}, {"color": "#377eb8", "date": "1993", "id": "news_1993_630370.txt-2-41", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCulture shock in this North African country hits you like a\u003cbr\u003emillion volts: Upon arrival, you\u0027re overwhelmed by leathery-faced men\u003cbr\u003ewearing long robes with pointed hoods or turbans; veiled women with\u003cbr\u003etattooed hands; deformed beggars; \u003cb\u003edonkey\u003c/b\u003e carts in chaotic\u003cbr\u003estreets; Muslim prayers wailing from towering mosques.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1993_630370.txt-2-41\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -91.42439388248621, "y": 31.673498114005557}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10723.txt-770-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe two young carabinieri with their machine pistols were not\u003cbr\u003eso much to be feared; they were carelessly approaching the\u003cbr\u003e\u003cb\u003edonkey\u003c/b\u003e, not taking their prisoners seriously.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10723.txt-770-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -194.3475658939649, "y": -830.0205853028624}, {"color": "#377eb8", "date": "1960", "id": "fic_1960_10400.txt-5015-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe heard the frenzied scream of a horse or a \u003cb\u003edonkey\u003c/b\u003e, the\u003cbr\u003ebleatings of goats; back in the village, the dogs had gone\u003cbr\u003ecrazy.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1960\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1960_10400.txt-5015-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -5.621857862778483, "y": 608.5561560886373}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_10753.txt-5243-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eJesus would want to leave at once; they would hire\u003cbr\u003e\u003cb\u003edonkeys\u003c/b\u003e in the village, better yet horses, if they could be\u003cbr\u003efound -- with horses, Jesus could reach him before midnight.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_10753.txt-5243-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -116.401807209876, "y": 608.2275616784488}, {"color": "#377eb8", "date": "1970", "id": "fic_1970_782001.txt-2725-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe added that he needed to work with his \u003cb\u003edonkey\u003c/b\u003e\u003cbr\u003eawhile.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1970\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1970_782001.txt-2725-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -6.0544486618651545, "y": 468.01138515314676}, {"color": "k", "date": "1990", "id": "nf_1990_774020.txt-1017-3", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ejust as the \u003cb\u003edonkey\u003c/b\u003e game showed that play should not be\u003cbr\u003erelegated casually to the garbage-can category of expressive behavior\u003cbr\u003e\u0027.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_774020.txt-1017-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -208.885418503789, "y": 1187.2477455130486}]);
+        edges = new vis.DataSet([{"color": "black", "from": "mag_1990_421215.txt-146-20", "label": 4, "to": "mag_1963_269445.txt-16-39", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1990_421215.txt-146-20", "label": 3, "to": "news_1984_671409.txt-15-28", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1990_421215.txt-146-20", "label": 4, "to": "fic_1983_10710.txt-2763-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1993_655718.txt-34-45", "label": 4, "to": "mag_1978_479996.txt-153-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1993_655718.txt-34-45", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1993_655718.txt-34-45", "label": 4, "to": "fic_1993_53894.txt-128-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1969_10510.txt-1234-4", "label": 4, "to": "fic_1966_10472.txt-5131-110", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2000_38940.txt-796-33", "label": 4, "to": "fic_1994_41307.txt-1046-52", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2007_637936.txt-36-12", "label": 4, "to": "fic_1994_54030.txt-305-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2007_637936.txt-36-12", "label": 4, "to": "mag_1978_479996.txt-153-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1987_10753.txt-7830-8", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1987_10753.txt-7830-8", "label": 4, "to": "fic_1987_10753.txt-7144-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "news_1984_671409.txt-15-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "mag_1978_479996.txt-153-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "fic_1993_1040057.txt-226-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "nf_1990_774020.txt-815-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "fic_1983_10710.txt-482-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "mag_1961_246109.txt-19-52", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "mag_1973_431860.txt-18-42", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_54030.txt-305-13", "label": 4, "to": "fic_1992_16254.txt-518-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1975_10601.txt-83-16", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1983_23976.txt-771-10", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1983_23976.txt-771-10", "label": 4, "to": "mag_1961_246109.txt-19-52", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-2046-9", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-2046-9", "label": 4, "to": "news_1993_630370.txt-2-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1987_10753.txt-7717-15", "label": 3, "to": "fic_1983_10710.txt-482-40", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "nf_1991_746789.txt-20-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "mag_1973_105602.txt-74-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "news_1982_669225.txt-8-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "nf_1990_774020.txt-820-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "fic_1994_41307.txt-1046-52", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "fic_1969_10510.txt-1908-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_54593.txt-116-14", "label": 4, "to": "nf_1988_773806.txt-873-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1984_671409.txt-15-28", "label": 4, "to": "fic_1960_10400.txt-5015-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1984_671409.txt-15-28", "label": 4, "to": "fic_1976_10615.txt-992-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_16254.txt-452-3", "label": 4, "to": "mag_1963_269445.txt-16-39", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50069.txt-390-5", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50069.txt-390-5", "label": 4, "to": "mag_1990_388658.txt-36-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50069.txt-390-5", "label": 4, "to": "fic_1993_1040057.txt-226-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50069.txt-390-5", "label": 3, "to": "news_1993_630370.txt-2-41", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1969_10510.txt-1908-23", "label": 4, "to": "fic_1993_1040075.txt-591-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1966_10472.txt-5131-110", "label": 4, "to": "mag_1963_269445.txt-16-39", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1966_10472.txt-5131-110", "label": 4, "to": "mag_1978_479996.txt-153-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-3174-22", "label": 4, "to": "nf_1990_773851.txt-1129-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-3174-22", "label": 4, "to": "nf_1991_746789.txt-20-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-3174-22", "label": 4, "to": "mag_1978_479996.txt-153-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25024.txt-2073-8", "label": 3, "to": "mag_1962_268753.txt-14-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "fic_1999_30759.txt-67-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "fic_1966_781993.txt-2170-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "mag_1990_388658.txt-36-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "mag_2009_405388.txt-18-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "fic_1990_16024.txt-1643-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 3, "to": "mag_1981_297232.txt-5-42", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "fic_1996_29811.txt-147-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "fic_1961_14307.txt-2701-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "fic_1987_782034.txt-8660-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1963_269445.txt-16-39", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1980_10659.txt-2248-7", "label": 3, "to": "nf_1990_774020.txt-1017-3", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1980_10659.txt-2248-7", "label": 4, "to": "fic_1970_782001.txt-2725-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1987_782034.txt-8660-41", "label": 3, "to": "fic_1984_10723.txt-565-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1987_782034.txt-8660-41", "label": 3.5, "to": "fic_1988_13990.txt-761-6", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1987_782034.txt-8660-41", "label": 3, "to": "fic_1984_10723.txt-1468-14", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1987_782034.txt-8660-41", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1987_782034.txt-8660-41", "label": 4, "to": "fic_1984_10723.txt-684-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1988_773806.txt-873-15", "label": 3.5, "to": "mag_1981_297232.txt-5-42", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1988_773806.txt-873-15", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-413-26", "label": 3, "to": "news_1982_669225.txt-8-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-413-26", "label": 4, "to": "fic_1983_10704.txt-1836-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_1994_41271.txt-167-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_1987_10753.txt-7846-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 3.5, "to": "fic_2000_38940.txt-106-26", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_2009_36726.txt-8-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "mag_1973_431860.txt-18-42", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_1985_10731.txt-2411-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_1993_1040075.txt-591-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_1977_780102.txt-2383-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1994_41307.txt-1046-52", "label": 4, "to": "fic_1983_10704.txt-1836-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_1040075.txt-370-6", "label": 3, "to": "fic_1984_10723.txt-926-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1993_1040075.txt-591-5", "label": 4, "to": "fic_1984_10723.txt-926-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_1040075.txt-591-5", "label": 4, "to": "fic_1983_10704.txt-1836-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_1040075.txt-591-5", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_1040075.txt-591-5", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1990_53195.txt-165-1", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_1040090.txt-4023-11", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_1040090.txt-4023-11", "label": 4, "to": "nf_1990_774020.txt-861-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2009_36726.txt-8-6", "label": 4, "to": "fic_1987_10753.txt-5243-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1990_774020.txt-815-7", "label": 4, "to": "fic_1987_10753.txt-7144-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1974_10580.txt-8228-6", "label": 4, "to": "fic_1996_29811.txt-147-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1990_773851.txt-1129-6", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1990_773851.txt-1129-6", "label": 4, "to": "fic_1984_10723.txt-1931-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2000_28733.txt-74-25", "label": 4, "to": "nf_1990_774020.txt-1034-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1968_13276.txt-831-9", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1968_13276.txt-831-9", "label": 4, "to": "mag_1990_388658.txt-36-27", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1990_774020.txt-861-8", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-755-3", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-755-3", "label": 4, "to": "fic_1984_10723.txt-1278-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1983_10704.txt-1836-8", "label": 4, "to": "fic_1993_53894.txt-128-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1983_10704.txt-9963-35", "label": 4, "to": "mag_1966_211235.txt-8-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-1278-9", "label": 4, "to": "fic_1960_10402.txt-120-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-1278-9", "label": 4, "to": "fic_1981_10686.txt-1350-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_53894.txt-128-12", "label": 4, "to": "fic_1961_14307.txt-2701-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1966_211235.txt-8-4", "label": 4, "to": "nf_1990_774020.txt-911-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1966_211235.txt-8-4", "label": 4, "to": "fic_1984_10723.txt-598-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1984_10723.txt-598-16", "label": 4, "to": "fic_1984_10723.txt-926-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1960_10402.txt-120-4", "label": 4, "to": "fic_1977_780102.txt-2383-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1990_774020.txt-1034-29", "label": 3, "to": "fic_1970_782001.txt-2725-9", "weight": 3.0, "width": 4}, {"color": "lightgray", "from": "mag_1990_421215.txt-146-20", "label": 2, "to": "nf_1990_774020.txt-815-7", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1999_404075.txt-254-9", "label": 1.5, "to": "fic_1993_1040075.txt-591-5", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1975_10601.txt-83-16", "label": 2, "to": "fic_1974_10580.txt-8228-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "news_1984_671409.txt-15-28", "label": 2, "to": "news_1982_669225.txt-8-12", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1992_16254.txt-452-3", "label": 2, "to": "fic_1994_41271.txt-167-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_2008_36244.txt-94-2", "label": 2, "to": "fic_1960_10402.txt-120-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1993_25024.txt-2073-8", "label": 2, "to": "fic_1987_10753.txt-7846-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1993_1040075.txt-370-6", "label": 2, "to": "fic_1981_10686.txt-1350-7", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1981_297232.txt-5-42", "label": 2, "to": "fic_1970_10536.txt-1122-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1966_211235.txt-8-4", "label": 2, "to": "fic_1960_10402.txt-120-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1990_774020.txt-911-20", "label": 2, "to": "news_1993_630370.txt-2-41", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1999_404075.txt-254-9", "label": NaN, "to": "fic_1984_10723.txt-598-16", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1961_246109.txt-19-52", "label": NaN, "to": "fic_1987_10753.txt-7144-3", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1971_10544.txt-4957-8", "label": NaN, "to": "fic_1987_782034.txt-8660-41", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1984_10723.txt-1278-9", "label": NaN, "to": "fic_1987_10753.txt-7144-3", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

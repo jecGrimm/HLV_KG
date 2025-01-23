@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">ounce_nn (1)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-3509-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn proportioning the spice to the vinegar, allow to every two\u003cbr\u003equarts, an ounce of mace, two dozen cloves, and two \u003cb\u003eounces\u003c/b\u003e of\u003cbr\u003emustard seed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-3509-25\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 684.2132255849306, "y": -54.80429048219129}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747505.txt-2577-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethe \u003cb\u003eounce\u003c/b\u003e, if payment should be made in bullion, or\u003cbr\u003eotherwise milled dollars at 65. each, should be the lawful money of\u003cbr\u003ethe province, and no person should receive or pay within the province,\u003cbr\u003ec c /z/ bills of credit of any of the other Governments of New\u003cbr\u003eEngland.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747505.txt-2577-1\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -239.24398451501384, "y": -11.0896378482499}, {"color": "#377eb8", "date": "1834", "id": "fic_1834_7252.txt-2156-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt length, with a promise on the part of the priest that he\u003cbr\u003ewould attend on the day appointed for the marriage, he rode off with\u003cbr\u003ehis three \u003cb\u003eounces\u003c/b\u003e of gold in his\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1834\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1834_7252.txt-2156-30\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -70.87404457965383, "y": 275.83332241062607}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-297-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake sea stonewort an ounce sea onions one /z/ \u003cb\u003eounce\u003c/b\u003e,\u003cbr\u003emix together, and throw where eels come.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-297-9\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -89.48843267644853, "y": 511.98241731866176}, {"color": "#377eb8", "date": "1850", "id": "mag_1850_525559.txt-183-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt can not be sent to China, gold in China being not used as\u003cbr\u003ecurrency, and valued at only $14 the \u003cb\u003eounce\u003c/b\u003e by the silver\u003cbr\u003estandard.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1850_525559.txt-183-23\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 698.3387110646245, "y": -258.17252768466864}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-2982-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMix together two ounces of the best white ginger, an ounce of\u003cbr\u003eblack pepper, an \u003cb\u003eounce\u003c/b\u003e of white pepper, an ounce of cinnamon,\u003cbr\u003ean ounce of nutmeg, and two dozen cloves.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-2982-17\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 141.6725435014156, "y": -677.5852458445722}, {"color": "#377eb8", "date": "1843", "id": "nf_1843_752682.txt-1165-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eof ashes, we can calculate that the daily excrements of the\u003cbr\u003ehorse will contain 21 \u003cb\u003eounces\u003c/b\u003e of inorganic matter which was\u003cbr\u003edrawn from the fields.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1843_752682.txt-1165-16\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 219.5306315472439, "y": -245.0963701129953}, {"color": "#377eb8", "date": "1854", "id": "fic_1854_8328.txt-1016-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThrow not an \u003cb\u003eounce\u003c/b\u003e of lead away -- God and St. Dennis be\u003cbr\u003eour stay! \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1854_8328.txt-1016-3\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -646.3644894510364, "y": -359.6655219519342}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-2144-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNext mix together saltpetre and common salt, in the proportion\u003cbr\u003eof two \u003cb\u003eounces\u003c/b\u003e of saltpetre to a handful of salt.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-2144-13\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -37.85880692376701, "y": -274.3760466886339}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1055-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis should be shook at intervals for twenty -- four hours;\u003cbr\u003ethen add one \u003cb\u003eounce\u003c/b\u003e of chloride of iodine and three fourths\u003cbr\u003eounce of bromine.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1055-15\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 750.945317754451, "y": 269.6893344327054}, {"color": "#377eb8", "date": "1846", "id": "mag_1846_555416.txt-45-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eburning at the Tate of four feet per hour, twenty-two ounces,\u003cbr\u003eor a pint and six \u003cb\u003eounces\u003c/b\u003e, of water, and four feet of carbonic\u003cbr\u003eacid, which will render four hundred cubic feet of atmospheric air\u003cbr\u003eunfit for respiration. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1846\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1846_555416.txt-45-18\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 657.1808287672468, "y": 343.08242223040116}, {"color": "#377eb8", "date": "1852", "id": "mag_1852_555790.txt-93-73", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBefore Th70, a quarter (eight bushels) of wheat of middle\u003cbr\u003equality was sold in England, on an average of a long period of years,\u003cbr\u003efor about two ounces of pure silver; about 1600, (still taking an\u003cbr\u003eaverage of many years, so that the very good and very bad crops may\u003cbr\u003eoffset each other,) the price had advanced to a little over six\u003cbr\u003e\u003cb\u003eounces\u003c/b\u003e; about 1636, it had risen to nearly eight ounces.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1852_555790.txt-93-73\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -194.22771176908375, "y": 251.89013470420056}, {"color": "#377eb8", "date": "1859", "id": "fic_1859_9192.txt-10844-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMy heart is six \u003cb\u003eounces\u003c/b\u003e lighter than it was an hour ago.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1859_9192.txt-10844-4\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -871.2154577343077, "y": -781.8856242412262}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1893-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus: to a few grains of iodine, add an \u003cb\u003eounce\u003c/b\u003e of warm\u003cbr\u003ewater (which will become tinged with iodine); when cold, to half a\u003cbr\u003epint of pure water in a new and clean coating box, put, of the above,\u003cbr\u003efifty drops; stir and mix well this small quantity of iodine in with\u003cbr\u003ethe water; in ten minutes this box will be ready for use.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1893-11\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -66.06499641070764, "y": 1043.2595356666434}, {"color": "#377eb8", "date": "1849", "id": "mag_1849_525380.txt-118-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIr the entire currency of the world consisted of gold and\u003cbr\u003esilver coin, if its quantity were, on a sudden, increased two-fold,\u003cbr\u003efor every ounce of coin a second \u003cb\u003eounce\u003c/b\u003e being called into\u003cbr\u003eexistence and put in circulation, there would be, as a consequence, a\u003cbr\u003every considerable rise in the price of all purchaseable\u003cbr\u003ecommodities.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1849_525380.txt-118-33\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -621.4819315485058, "y": 350.681572317323}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-2900-42", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake a gallon of stale strong beer, a pound of anchovies washed\u003cbr\u003efrom the pickle, a pound of peeled shalots or small onions, half an\u003cbr\u003eounce of mace, half an ounce of cloves, a quarter of an \u003cb\u003eounce\u003c/b\u003e\u003cbr\u003eof whole pepper, three or four large pieces of ginger, and two quarts\u003cbr\u003eof large mushroom-flaps rubbed to pieces.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-2900-42\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -364.4608206025878, "y": -835.3275167431499}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-469-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake of conserve of orange-peel, two ounces; of cinnabar of\u003cbr\u003eantimony levigated an ounce and a half; of gum guaiac in powder an\u003cbr\u003e\u003cb\u003eounce\u003c/b\u003e; of winter\u0027s bark in powder three drams; of syrup of\u003cbr\u003eorange peel a sufficient quantity; mix them.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-469-26\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -954.4382539571892, "y": -771.840250027585}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-2889-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePrepare, by pounding them in a mortar, two ounces of mustard\u003cbr\u003eseed, half an \u003cb\u003eounce\u003c/b\u003e of black pepper, half an ounce of nutmeg, a\u003cbr\u003equarter of an ounce of mace, and a quarter of an ounce of\u003cbr\u003ecloves.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-2889-17\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 216.26318226900196, "y": 166.66885283691224}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747505.txt-2389-80", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eas not having a sufficiency in value in silver and all other\u003cbr\u003eexports to discharge the whole demand of their imports: it would then\u003cbr\u003ebe next to a miracle if silver did not rise to above five shillings\u003cbr\u003eand two pence per ounce in the market, in proportion to the balance of\u003cbr\u003edebt against them; and their trading circumstances continue to\u003cbr\u003edecline, as ours have; their silver would be brought to twenty seven\u003cbr\u003eshillings per \u003cb\u003eounce\u003c/b\u003e, as ours is, and the current money of Great\u003cbr\u003eBritain be at the rate of twenty shillings per ounce, whatever the\u003cbr\u003elawful money might be. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747505.txt-2389-80\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 821.0597469926743, "y": 48.14769125473491}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_747892.txt-594-56", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLet the graft be carefully held in it \u0026; due position, and\u003cbr\u003esecure it with cotton twist, Russia matting, or threads of worsted,\u003cbr\u003ewhichever is most convenient; then cover the bandage with well wrought\u003cbr\u003eclay, or grafting wax, which is made as follows: Two ounces beeswax,\u003cbr\u003eone \u003cb\u003eounce\u003c/b\u003e tallow, four ounces common pitch, twelve ounces\u003cbr\u003eBurgundy pitch, all melted together, and used when warm, with a\u003cbr\u003ebrush.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_747892.txt-594-56\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 106.95214076213333, "y": 360.1764947326017}, {"color": "#377eb8", "date": "1847", "id": "fic_1847_8805.txt-756-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd may be you find half an \u003cb\u003eounce\u003c/b\u003e o \u0027 lead lodged in\u003cbr\u003eyour phrenological developments.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1847_8805.txt-756-7\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -348.9989331734539, "y": 1172.9279553482954}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1522-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eand over, one quarter of an \u003cb\u003eounce\u003c/b\u003e, or even less, will\u003cbr\u003ework to advantage.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1522-7\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 511.39087351285974, "y": 62.29015188284448}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_8541.txt-550-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhy, let me see: his ransom\u0027s thirty \u003cb\u003eounces\u003c/b\u003e; -- No, no!\u003cbr\u003e\u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_8541.txt-550-10\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -368.50590292289496, "y": -44.678767296961254}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-478-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAdd about a teaspoonful to two \u003cb\u003eounces\u003c/b\u003e of the\u003cbr\u003egilding.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-478-6\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 333.01175038572774, "y": -617.6800922559838}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747610.txt-431-106", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNotwithstanding the obstructions thrown in the way of the mint\u003cbr\u003ehere by royal authority, it is leased again, in 167 5. accordance with\u003cbr\u003ethe subsequent report: \" That the forJul y mer masters of the mint,\u003cbr\u003eRobert Saunderson and John Hull, doe continue to mint what silver\u003cbr\u003ebullion shall come in for this seven yeares next to come, if either of\u003cbr\u003ethem liue so long, and doe receive of those that bring bullion to the\u003cbr\u003emint as a full reward for their pains twelve pence for every twenty\u003cbr\u003eshillings, and three pence for the waste of every three \u003cb\u003eounces\u003c/b\u003e\u003cbr\u003eof sterling silver\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747610.txt-431-106\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -337.90660319444635, "y": -999.4953690938564}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747507.txt-922-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is, in short, but a nominal difference in the value of any\u003cbr\u003ecommodity, whether it will universally exchange for an \u003cb\u003eounce\u003c/b\u003e,\u003cbr\u003eor half ounce, of silver or - gold; but it is a real difference,\u003cbr\u003ewhether it exchange for a greater or less quantity of any other\u003cbr\u003ecommodity.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747507.txt-922-24\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 848.2891324172049, "y": -618.7338505885904}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_754783.txt-1658-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTwo large nutmegs, Half an \u003cb\u003eounce\u003c/b\u003e of cloves beaten to a\u003cbr\u003epowder.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_754783.txt-1658-6\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 133.00559092919244, "y": 780.7744225813902}, {"color": "#377eb8", "date": "1852", "id": "nf_1852_748165.txt-2839-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf a barrel of flour in New York, be exchanged for seven\u003cbr\u003e\u003cb\u003eounces\u003c/b\u003e of silver, the cost and\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1852_748165.txt-2839-13\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 78.48944593093188, "y": -1006.6296109985549}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-3610-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo a hundred walnuts allow a gallon of vinegar, an ounce of\u003cbr\u003ecloves, an \u003cb\u003eounce\u003c/b\u003e of allspice, an ounce of black pepper, half an\u003cbr\u003eounce of mace, and half an ounce of nutmeg.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-3610-16\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -121.42785693123534, "y": -266.08508896086784}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747507.txt-810-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eedition, in 1784, silver was underrated in proportion to gold,\u003cbr\u003eand that the market price of standard silver bullion was not five\u003cbr\u003eshillings and two pence an \u003cb\u003eounce\u003c/b\u003e, (the mint price,) but had\u003cbr\u003ebeen from five shillings and three pence to five shillings and five\u003cbr\u003epence.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747507.txt-810-30\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 653.2728405689402, "y": -335.01631191394705}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_754783.txt-1737-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOne table-spoonful of sweet basil, / A quarter of an\u003cbr\u003e\u003cb\u003eounce\u003c/b\u003e of mace, Half an ounce of cloves, powdered.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_754783.txt-1737-11\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -427.87131980937477, "y": -526.3800970025468}, {"color": "#377eb8", "date": "1845", "id": "mag_1845_565473.txt-197-43", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAdmitting that the expense of transporting the four ounces at\u003cbr\u003eone conveyance is no less than the expense of transporting the four\u003cbr\u003eounces in four separate conveyances, -- which is certainly a liberal\u003cbr\u003econcesslon, -- every other expense on the four \u003cb\u003eounces\u003c/b\u003e is\u003cbr\u003ediminished three quarters.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1845_565473.txt-197-43\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 251.24329259502275, "y": -481.12895848022214}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_754783.txt-605-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTwo \u003cb\u003eounces\u003c/b\u003e of blanched sweet almonds, pounded in a\u003cbr\u003emortar.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_754783.txt-605-1\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 7.27384788222952, "y": -237.05986299527632}, {"color": "#377eb8", "date": "1849", "id": "nf_1849_747900.txt-864-68", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe story is as follows: \" A poor Indian appeared before the\u003cbr\u003eviceroy, and stated that he had found in the street a bag full of\u003cbr\u003egolden ounces, which had been advertised, with the promise of a\u003cbr\u003ehandsome reward to the person who should restore them to the owner;\u003cbr\u003ethat upon carrying it to the Don he received the bag, counted the\u003cbr\u003e\u003cb\u003eounces\u003c/b\u003e, extracted two, which he had seen him slip into his\u003cbr\u003epocket; and had then reproached the poor man with having stolen part\u003cbr\u003eof the money, had called him a thief and\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1849_747900.txt-864-68\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 358.86512328363915, "y": -807.8633885761278}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1176-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo one \u003cb\u003eounce\u003c/b\u003e of chloride of iodine add two ounces of\u003cbr\u003ewater; place this mixture in a coating-box, the same as quick stuff;\u003cbr\u003ecoat the plate with dry iodine to a light yellow, or lemon color; then\u003cbr\u003ebring the coating to a deep pink over the chloride.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1176-2\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 153.3854600337587, "y": 440.88709727502436}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_754783.txt-1737-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOne table-spoonful of sweet basil, / A quarter of an ounce of\u003cbr\u003emace, Half an \u003cb\u003eounce\u003c/b\u003e of cloves, powdered.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_754783.txt-1737-17\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -339.9461595886218, "y": 989.2206983241869}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-2960-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eDissolve three ounces of salt in a quart of boiling vinegar,\u003cbr\u003eand pour it hot upon two \u003cb\u003eounces\u003c/b\u003e of scraped\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-2960-18\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 732.8693582385913, "y": -1039.8705797682683}, {"color": "#377eb8", "date": "1845", "id": "mag_1845_522622.txt-197-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus, all letters under half an ounce weight pay one penny; all\u003cbr\u003eletters above half an \u003cb\u003eounce\u003c/b\u003e, and not exceeding an ounce, pay\u003cbr\u003etwopence; all letters above an ounce, and not exceeding two\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1845_522622.txt-197-18\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -321.99027545403555, "y": 245.5751741403685}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-469-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake of conserve of orange-peel, two ounces; of cinnabar of\u003cbr\u003eantimony levigated an \u003cb\u003eounce\u003c/b\u003e and a half; of gum guaiac in powder\u003cbr\u003ean ounce; of winter\u0027s bark in powder three drams; of syrup of orange\u003cbr\u003epeel a sufficient quantity; mix them.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-469-15\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 932.8609786757489, "y": -413.0617724844655}, {"color": "#377eb8", "date": "1847", "id": "nf_1847_748116.txt-1506-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eGive me an \u003cb\u003eounce\u003c/b\u003e of civet, good apothecary, to sweeten\u003cbr\u003emy imagination! \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1847_748116.txt-1506-3\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -244.10788723331666, "y": -555.4880641356054}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-481-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo a solution of three \u003cb\u003eounces\u003c/b\u003e of water, in which is\u003cbr\u003edissolved a quarter of an ounce of cyanide of potassium, add one\u003cbr\u003eteaspoonful of a solution containing six ounces of water and half an\u003cbr\u003eounce of each pure carbonate of potash, alum, common salt,\u003cbr\u003egallic\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-481-5\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 843.1270251901178, "y": 269.55034571517035}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1098-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e-- In preparing large quantities of this, we adopt the\u003cbr\u003efollowing method: Fill a four-quart bottle about two-thirds full of\u003cbr\u003ehydrate of lime; pour into this about one or two \u003cb\u003eounces\u003c/b\u003e of\u003cbr\u003ebromine; then shake well, add more of the bromine, shake well and let\u003cbr\u003eit stand for a few hours, adding sufficient bromine to give it a\u003cbr\u003efine\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1098-33\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -485.9841575213005, "y": 617.9484580374572}, {"color": "#377eb8", "date": "1845", "id": "mag_1845_565473.txt-193-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFour times in a month, this sheet of one \u003cb\u003eounce\u003c/b\u003e weight is\u003cbr\u003etaken in at one post-office and\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1845_565473.txt-193-10\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 726.24157245239, "y": -659.0417420055413}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-465-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake of julap in powder, two \u003cb\u003eounces\u003c/b\u003e; of ginger in\u003cbr\u003epowder, three drams; of syrup of oranges enough to make an\u003cbr\u003eelectuary.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-465-7\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -493.5389020520564, "y": 793.8796999813185}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7154.txt-819-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI have half a mind to reward him with one \u003cb\u003eounce\u003c/b\u003e of lead\u003cbr\u003einstead of two of gold. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7154.txt-819-10\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 343.0571728950304, "y": 422.6799691887219}, {"color": "#377eb8", "date": "1846", "id": "mag_1846_555416.txt-45-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eburning at the Tate of four feet per hour, twenty-two\u003cbr\u003e\u003cb\u003eounces\u003c/b\u003e, or a pint and six ounces, of water, and four feet of\u003cbr\u003ecarbonic acid, which will render four hundred cubic feet of\u003cbr\u003eatmospheric air unfit for respiration. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1846\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1846_555416.txt-45-11\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 95.88619396785076, "y": -195.66887437702144}, {"color": "#377eb8", "date": "1850", "id": "fic_1850_7304.txt-6902-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt such banquets, my body methought did not weigh an\u003cbr\u003e\u003cb\u003eounce\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1850_7304.txt-6902-11\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -408.9006715952798, "y": -795.3447354933023}, {"color": "#377eb8", "date": "1843", "id": "nf_1843_752682.txt-309-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen used by the silversmith, or in coining, 16 \u003cb\u003eounces\u003c/b\u003e\u003cbr\u003emust contain in Germany 13 ounces of silver, in England about 14\u003cbr\u003e1/2.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1843_752682.txt-309-11\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 875.4887998061098, "y": -754.7921100882427}, {"color": "#377eb8", "date": "1849", "id": "nf_1849_748465.txt-1135-68", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe preparation of the wood is simply as follows: -- Place its\u003cbr\u003eface or smooth side downwards, in a plate containing twenty grains of\u003cbr\u003ecommon salt dissolved in an ounce of water; here let it remain for\u003cbr\u003efive minutes, take it out and dry it; then place it again face\u003cbr\u003edownwards in another plate containing sixty grains of nitrate of\u003cbr\u003esilver to an \u003cb\u003eounce\u003c/b\u003e of water; here let it rest one minute, when\u003cbr\u003etaken out and dried in the dark it will be fit for use, and will\u003cbr\u003ebecome, on exposure to the light, of a fine brown color.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1849_748465.txt-1135-68\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -2.7610707107593297, "y": -144.1598202797911}, {"color": "#377eb8", "date": "1831", "id": "mag_1831_554110.txt-117-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe Roman as or pondo, which, in the reign of Servius Tullius,\u003cbr\u003econtained twelve \u003cb\u003eounces\u003c/b\u003e, was, 175 years before Christ, reduced\u003cbr\u003eto half an ounce.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1831\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1831_554110.txt-117-17\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 3.4494618675540885, "y": -597.2175875428126}, {"color": "#377eb8", "date": "1833", "id": "fic_1833_7059.txt-366-53", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOn my anxiously inquiring what was the matter, he seemed\u003cbr\u003esurprised at the question, and civilly stated \" that nothing was the\u003cbr\u003ematter -- that four o\u0027clock was his usual time for getting up -- that\u003cbr\u003ehe found it conducive to health -- that he had eaten three quarters of\u003cbr\u003ean \u003cb\u003eounce\u003c/b\u003e too much at supper -- that the rising sun was a\u003cbr\u003eglorious spectacle, and that nothing aided the digestive powers\u003cbr\u003eso\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1833_7059.txt-366-53\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -341.6561868552288, "y": 325.7291548388433}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_754783.txt-198-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHave ready a puff-paste made of five \u003cb\u003eounces\u003c/b\u003e of sifted\u003cbr\u003eflour, and a quarter of a pound of fresh butter.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_754783.txt-198-7\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 294.78122958101784, "y": 9.3446341533997}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747505.txt-2389-43", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eas not having a sufficiency in value in silver and all other\u003cbr\u003eexports to discharge the whole demand of their imports: it would then\u003cbr\u003ebe next to a miracle if silver did not rise to above five shillings\u003cbr\u003eand two pence per \u003cb\u003eounce\u003c/b\u003e in the market, in proportion to the\u003cbr\u003ebalance of debt against them; and their trading circumstances continue\u003cbr\u003eto decline, as ours have; their silver would be brought to twenty\u003cbr\u003eseven shillings per ounce, as ours is, and the current money of Great\u003cbr\u003eBritain be at the rate of twenty shillings per ounce, whatever the\u003cbr\u003elawful money might be. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747505.txt-2389-43\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -489.25707565627084, "y": 1087.9670324650915}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747505.txt-99-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ean half of an \u003cb\u003eounce\u003c/b\u003e of pure silver, worth as much as a\u003cbr\u003ecoin containing an ounce.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747505.txt-99-4\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 151.3178602570033, "y": 39.98631128973364}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1166-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAdd to it about 40 \u003cb\u003eounces\u003c/b\u003e of common water (heated to 60\u003cbr\u003eor 70 degrees), by little and little, moving, the bottle to warm it,\u003cbr\u003efor fear of breaking.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1166-5\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 538.9646856498, "y": -623.6756545511784}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-485-44", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo six quarts of rain or river water, (but rain water is the\u003cbr\u003ebest) put one pound and a half of fresh blue galls of Alepoo, for\u003cbr\u003ethose of Smyrna are not strong enough, bruised pretty small, eight\u003cbr\u003e\u003cb\u003eounces\u003c/b\u003e of copperas, clean rocky and green; also eight ounces of\u003cbr\u003eclean, bright, and clear gum arabic, and two ounces of rock alum; let\u003cbr\u003ethese stand together in a large stone bottle, or clean stone-pot, with\u003cbr\u003ea narrow mouth to keep it free from dust; shake, roll or stir it well\u003cbr\u003eonce every day, and you will have excellent ink in about a month\u0027s\u003cbr\u003etime; and the older it grows the better it will be for use.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-485-44\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 939.0886094682877, "y": -657.2997279544326}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-2857-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePut all the walnut liquor together, and boil and skim it, then\u003cbr\u003eto every quart allow an ounce of bruised ginger, an ounce of black\u003cbr\u003epepper, half an \u003cb\u003eounce\u003c/b\u003e of cloves, and half\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-2857-32\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 575.7886043190327, "y": 594.6333510455555}, {"color": "#377eb8", "date": "1849", "id": "nf_1849_747900.txt-880-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003enever have brought back the bag, and stolen merely two\u003cbr\u003e\u003cb\u003eounces\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1849_747900.txt-880-11\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 175.4569454008984, "y": 663.7597062359218}, {"color": "#377eb8", "date": "1853", "id": "mag_1853_566331.txt-172-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe ingredients were, an \u003cb\u003eounce\u003c/b\u003e of the jaw-bone of a dog\u003cbr\u003eburned and pulverized, the false tongue of a newly foaled colt, dried\u003cbr\u003eand pulverized, and one scruple of verdigris, raised from the surface\u003cbr\u003eof old copper, by laying in moist earth -- the coppers of George I, or\u003cbr\u003eII, being preferred as most pure.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_566331.txt-172-5\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 828.0360851671275, "y": -92.15823328133928}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-56-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake of bees wax an \u003cb\u003eounce\u003c/b\u003e, three ounces of \u0027 olive oil,\u003cbr\u003ethree drams of staves acre; of these\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-56-5\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 804.6791995877911, "y": 394.40554437791997}, {"color": "#377eb8", "date": "1835", "id": "nf_1835_747966.txt-510-81", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTaking North America as the standard, and that the value in\u003cbr\u003esilver of the produce of a. year\u0027s labour of one man, his wages having\u003cbr\u003ebeen advanced for a year, is two hundred and eighty ounces of silver,\u003cbr\u003ethe value in silver in Hindostan and in England, of the produce of a\u003cbr\u003eyear\u0027s labour of one man, his wages having been advanced for a year,\u003cbr\u003ewould also be two hundred and eighty \u003cb\u003eounces\u003c/b\u003e, and as\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1835_747966.txt-510-81\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 69.85725163318689, "y": -1099.116102438535}, {"color": "#377eb8", "date": "1830", "id": "mag_1830_554014.txt-186-63", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe first went round to the left side of the diligence, ai) d\u003cbr\u003ehaving unhooked the iron shoe and placed it under the wheel as an\u003cbr\u003eadditional security against escape, he opened the door of the\u003cbr\u003einterior, and, mounting on the steps, I could hear him distinctly\u003cbr\u003euttering a terrible threat in Spanish, and demanding an \u003cb\u003eounce\u003c/b\u003e\u003cbr\u003eof gold from each of the passengers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1830_554014.txt-186-63\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 700.5483541003007, "y": -975.0213168923018}, {"color": "#377eb8", "date": "1852", "id": "nf_1852_748165.txt-2923-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut suppose that a barrel of flour will purchase more wine in\u003cbr\u003eBordeaux, than four dollars or four \u003cb\u003eounces\u003c/b\u003e of silver.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1852_748165.txt-2923-19\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -113.07033291471106, "y": -709.9748734147347}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_747892.txt-1232-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA recent writer says, he uses one \u003cb\u003eounce\u003c/b\u003e of nitre to one\u003cbr\u003egallon of water, with which he syringes the plants once in ten days,\u003cbr\u003eand finds it an effectual cure.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_747892.txt-1232-8\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -526.0713613525061, "y": 699.2566354249187}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_754783.txt-935-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake two \u003cb\u003eounces\u003c/b\u003e of shelled bitter almonds or peach-\u003cbr\u003ekernels.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_754783.txt-935-2\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 594.6383995347335, "y": -448.2373321519243}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1529-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePut one pound of sulphate of copper in one quart of water; stir\u003cbr\u003eit until the sulphate of copper is all dissolved, and then add one\u003cbr\u003ehalf ounce of sulphuric acid and a quarter of an \u003cb\u003eounce\u003c/b\u003e of\u003cbr\u003enitric acid.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1529-38\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 429.7277529036659, "y": 27.924731958340484}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747610.txt-1318-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is, to hire 220,000 \u003cb\u003eounces\u003c/b\u003e of silver or gold\u003cbr\u003eequivalent, for ten years at four per cent, in England, on the credit\u003cbr\u003eof the Province.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747610.txt-1318-6\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -136.4542931738166, "y": -24.605347544206143}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1043-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor this purpose, take one and a half \u003cb\u003eounce\u003c/b\u003e of each, to\u003cbr\u003ewhich add ten ounces water, for warm weather, or from six to seven for\u003cbr\u003ecold.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1043-9\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 1149.4688646496072, "y": 361.37457540869195}, {"color": "#377eb8", "date": "1853", "id": "mag_1853_555823.txt-95-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCorresponding official returns of the gold plate annually\u003cbr\u003emanufactured in England, on which duty was paid, show that the average\u003cbr\u003edid not exceed 7,000 \u003cb\u003eounces\u003c/b\u003e troy, or about?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_555823.txt-95-26\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -352.0387799889875, "y": -230.82933587776793}, {"color": "#377eb8", "date": "1850", "id": "mag_1850_525559.txt-174-41", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eGold is worth a dollar more the ounce measured by the standard\u003cbr\u003eof silver, in New York than inSanFrancisco; if, therefore, a merchant\u003cbr\u003eof Valparaiso receives m payment for lumber, or other produce, ten\u003cbr\u003ethousand \u003cb\u003eounces\u003c/b\u003e of gold in San Francisco, and desires to\u003cbr\u003epurchase goods from the United States or Europe, he will gain $10,000\u003cbr\u003eby sending this gold to New York, and purchasing with it there.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1850_525559.txt-174-41\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 201.69499932216513, "y": -132.83527080570914}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747505.txt-2334-62", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn the third year of Q, ueen Anne, an attempt was made to put\u003cbr\u003ean end to this confusion, by a Royal Proclamation and act of\u003cbr\u003eParliament, fixing the plantation pound at two ounces sixteen\u003cbr\u003epennyweights sixteen grains of silver, of the fineness of common\u003cbr\u003epieces of eight, at six shillings and ten pence half-penny per\u003cbr\u003e\u003cb\u003eounce\u003c/b\u003e; but, from various causes, the act proved effective in\u003cbr\u003eBarbadoes only.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747505.txt-2334-62\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 162.75575314671272, "y": 1084.6830061226194}, {"color": "#377eb8", "date": "1850", "id": "nf_1850_747863.txt-2462-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEighteen Ounce, Twenty \u003cb\u003eOunce\u003c/b\u003e Pippin,\u003cbr\u003eerroneously.)\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1850_747863.txt-2462-4\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 436.22308386458747, "y": 523.3007836975507}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_9779.txt-8800-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen, here comes the field-piece, of which such large\u003cbr\u003eexpectations are formed; and not an \u003cb\u003eounce\u003c/b\u003e of powder! \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_9779.txt-8800-18\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 550.0721534081871, "y": -240.5998891619007}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_757476.txt-2889-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePrepare, by pounding them in a mortar, two ounces of mustard\u003cbr\u003eseed, half an ounce of black pepper, half an \u003cb\u003eounce\u003c/b\u003e of nutmeg, a\u003cbr\u003equarter of an ounce of mace, and a quarter of an ounce of\u003cbr\u003ecloves.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_757476.txt-2889-24\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -489.57830129814596, "y": 302.9073131552219}, {"color": "#377eb8", "date": "1845", "id": "mag_1845_522622.txt-197-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus, all letters under half an \u003cb\u003eounce\u003c/b\u003e weight pay one\u003cbr\u003epenny; all letters above half an ounce, and not exceeding an ounce,\u003cbr\u003epay twopence; all letters above an ounce, and not exceeding two\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1845_522622.txt-197-7\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 629.478585404123, "y": -191.7187350673502}, {"color": "#377eb8", "date": "1849", "id": "nf_1849_747900.txt-864-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe story is as follows: \" A poor Indian appeared before the\u003cbr\u003eviceroy, and stated that he had found in the street a bag full of\u003cbr\u003egolden \u003cb\u003eounces\u003c/b\u003e, which had been advertised, with the promise of a\u003cbr\u003ehandsome reward to the person who should restore them to the owner;\u003cbr\u003ethat upon carrying it to the Don he received the bag, counted the\u003cbr\u003eounces, extracted two, which he had seen him slip into his pocket; and\u003cbr\u003ehad then reproached the poor man with having stolen part of the money,\u003cbr\u003ehad called him a thief and\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1849_747900.txt-864-29\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -581.9908684166578, "y": -316.63700277873915}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-493-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOr you may dissolve half an \u003cb\u003eounce\u003c/b\u003e of gum Senegal, or\u003cbr\u003eArabic, in half a pint of water; then put a penny-worth of vermillion\u003cbr\u003einto a small gallipot, and pour some of the gumwater to it, and stir\u003cbr\u003eit well, and mix it together with a hair pencil, to a proper\u003cbr\u003econsistency; but it will not incoporate presently, but by the next day\u003cbr\u003eit will; then having a clean pen, dip it into the ink, having first\u003cbr\u003ewell stirred it with a pencil, and\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-493-6\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -1030.1774613827338, "y": -134.6702549454461}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-1527-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAfter filling the cell, of common size, nearly full with water;\u003cbr\u003eadd about quarter of an \u003cb\u003eounce\u003c/b\u003e of sulphuric acid.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-1527-19\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 803.0866478340921, "y": -39.856138799953094}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-725-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis can be readily done by pouring one ounce and a half of\u003cbr\u003emuriatic acid upon a quarter of an \u003cb\u003eounce\u003c/b\u003e of powdered black\u003cbr\u003eoxide of manganese, and heat it gradually in a flask, to which is\u003cbr\u003eadapted a bent glass tube.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-725-20\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 627.2247272607915, "y": 1289.015352297264}, {"color": "#377eb8", "date": "1858", "id": "fic_1858_1282.txt-4291-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd when it did, a great excitement was got up against Leon,\u003cbr\u003ewho was charged with various crimes against the dignity of the family;\u003cbr\u003eindeed, so far was their indignation carried that several ambitious\u003cbr\u003emembers of the family threatened him with no few \u003cb\u003eounces\u003c/b\u003e of cold\u003cbr\u003elead.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1858_1282.txt-4291-47\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -558.3373483518901, "y": -947.1529833201964}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-297-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake sea stonewort an \u003cb\u003eounce\u003c/b\u003e sea onions one /z/ ounce,\u003cbr\u003emix together, and throw where eels come.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-297-4\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -377.34982970773575, "y": -280.8477048200025}, {"color": "#377eb8", "date": "1849", "id": "mag_1849_525337.txt-223-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf any man is fortunate enough to find a few \u003cb\u003eounces\u003c/b\u003e at\u003cbr\u003ethe surface, it is heralded by the storekeepers and others interested\u003cbr\u003ein promoting emigration, to all parts of the world, while nothing is\u003cbr\u003eheard of the thousands who are daily undergoing extreme labor,\u003cbr\u003esickness, and privation, without a return sufficient to pay their\u003cbr\u003eexpenses.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1849_525337.txt-223-10\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -770.8037422584371, "y": 801.9359740754048}, {"color": "#377eb8", "date": "1850", "id": "mag_1850_525559.txt-209-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe supposes that the average earnings of the gold diggers axe\u003cbr\u003eabout an \u003cb\u003eounce\u003c/b\u003e, or seventeen dollars the day; which will give\u003cbr\u003ean amount of $40,000,000, collected during the gold digging season of\u003cbr\u003e48, 49; one half of which was probably collected and carried out of\u003cbr\u003ethe country by foreigners.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1850_525559.txt-209-13\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -600.8682704094343, "y": 42.956430062591856}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_748464.txt-824-40", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e-- Mix half an ounce of slacked lime (hydrate of lime) with six\u003cbr\u003eounces of water, and conduct into this milk of lime, with frequent\u003cbr\u003eagitation, as much chlorine gas as will evolve from two \u003cb\u003eounces\u003c/b\u003e\u003cbr\u003eof muriatic acid and half an ounce of black oxide of manganese.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_748464.txt-824-40\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 435.524415914078, "y": -387.36147597719264}, {"color": "#377eb8", "date": "1834", "id": "nf_1834_747938.txt-1181-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTiie large male, they said, yielded from five to six\u003cbr\u003e\u003cb\u003eounces\u003c/b\u003e, and the females only two ounces a piece.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1834\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1834_747938.txt-1181-12\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 65.92501323482063, "y": 390.0519256371356}, {"color": "#377eb8", "date": "1850", "id": "mag_1850_525559.txt-166-53", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eUnder the head of \" commercial resources, \" Mr. King takes\u003cbr\u003enotice that the precious metals are the only products of California; a\u003cbr\u003estate of things that must remain as long as the pursuit of gold\u003cbr\u003econtinues profitable The gold, as it is taken from the earth, weighed\u003cbr\u003ein \u003cb\u003eounces\u003c/b\u003e, is the medium of domestic and foreign exchange\u003cbr\u003eVessels departing from all other ports 1850.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1850_525559.txt-166-53\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 1040.1493109603873, "y": 84.31339246102088}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-2803-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003esolitary confinement\u0027s dry work as the gad-fly thought when he\u003cbr\u003ewas corked in an \u003cb\u003eounce\u003c/b\u003e vial! \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-2803-15\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 399.03972716157386, "y": 142.99957991680225}, {"color": "#377eb8", "date": "1848", "id": "nf_1848_747893.txt-3340-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eof Muscats, of two pounds, nine \u003cb\u003eounces\u003c/b\u003e, to one of the\u003cbr\u003esame kind weighing two pounds, three ounces, -- and such are the\u003cbr\u003edifferences between Mr. Hutchison\u0027s Castle Malgwjn grapes and those of\u003cbr\u003eEshton Hall, -- we must retain our opinion, that grapes are not\u003cbr\u003eimproved by being fed on carrion.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1848_747893.txt-3340-8\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -463.19714477703366, "y": -195.5530766297605}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747610.txt-1995-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, the aforesaid sum of in coined silver of sterling alloy, at\u003cbr\u003esix shillings and eight pence per \u003cb\u003eounce\u003c/b\u003e, or in Spanish milled\u003cbr\u003edollars of full weight, at six shillings each, with interest annually,\u003cbr\u003eat the rate of six per cent, per annum.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747610.txt-1995-19\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 998.7720580248589, "y": -143.61820646364131}, {"color": "#377eb8", "date": "1831", "id": "mag_1831_554110.txt-108-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut, as an \u003cb\u003eounce\u003c/b\u003e of gold is really worth a little more\u003cbr\u003ethan fifteen and a half ounces of silver, payments are made in\u003cbr\u003epreference in the latter metal, which is generally employed in France\u003cbr\u003eas money.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1831\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1831_554110.txt-108-4\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 457.63895659556954, "y": -688.1244096359294}, {"color": "#377eb8", "date": "1855", "id": "nf_1855_750257.txt-2426-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe essential oil of cinnamon is usually made from the refuse\u003cbr\u003eof the crop; but the quantity produced, in proportion to the weight of\u003cbr\u003ecinnamon, is exceedingly small, being about five \u003cb\u003eounces\u003c/b\u003e of oil\u003cbr\u003eto half a hundred-weight of the spice.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1855_750257.txt-2426-35\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 502.96828086158763, "y": 383.4859672203133}, {"color": "#377eb8", "date": "1824", "id": "nf_1824_747448.txt-3494-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBetween the pericardium and the heart there was about an\u003cbr\u003e\u003cb\u003eounce\u003c/b\u003e of lymph, and the heart itself was of greater size than\u003cbr\u003eusual; but its muscular substance was extremely flaccid.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1824\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1824_747448.txt-3494-10\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -763.4260316975418, "y": 590.2148684845282}, {"color": "#377eb8", "date": "1849", "id": "nf_1849_748465.txt-1241-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003equite, dry, dip it into a solution of twenty-five grains of\u003cbr\u003eiodide of potassium to one \u003cb\u003eounce\u003c/b\u003e of distilled water, drain it,\u003cbr\u003ewash it in distilled water and again drain it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1849_748465.txt-1241-18\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": 703.9781734206075, "y": -171.74552838746453}, {"color": "#377eb8", "date": "1843", "id": "nf_1843_752682.txt-548-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ei. p.136), a horse consumes 79 1/10 \u003cb\u003eounces\u003c/b\u003e of carbon in\u003cbr\u003etwenty-four hours, a milch cow 70 3/4 ounces; so that the horse\u003cbr\u003erequires 13 pounds 3 1/2 ounces, and the cow 11 pounds 10 3/4 ounces\u003cbr\u003eof oxygen\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1843_752682.txt-548-9\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 489.7734120174556, "y": 574.187655475516}, {"color": "#377eb8", "date": "1811", "id": "fic_1811_8637.txt-1910-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFour hundred \u003cb\u003eounces\u003c/b\u003e, paid to you in gold. \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1811\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1811_8637.txt-1910-2\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -782.845424104356, "y": -592.7836849900655}, {"color": "#377eb8", "date": "1849", "id": "nf_1849_748465.txt-1205-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e-- In order to fix the picture thus obtained, first dip it into\u003cbr\u003ewater; then partly dry it with bibulous paper, and wash it with a\u003cbr\u003esolution of bromide of potassium -- containing one hundred grains of\u003cbr\u003ethat salt dissolved in eight or ten \u003cb\u003eounces\u003c/b\u003e of distilled\u003cbr\u003ewater.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1849_748465.txt-1205-47\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": -153.83302531807206, "y": 367.4423488328336}, {"color": "#377eb8", "date": "1855", "id": "fic_1855_1280.txt-1010-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut you have promised me the fifty \u003cb\u003eounces\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_1280.txt-1010-7\u003cbr\u003etype: usage\u003cbr\u003epos: nnu2\u003c/p\u003e", "x": 892.3897484360009, "y": -199.6418641652977}, {"color": "k", "date": "1852", "id": "mag_1852_555790.txt-492-2", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eon the \u003cb\u003eounce\u003c/b\u003e, the Bank being required to pay?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1852_555790.txt-492-2\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -317.721870884156, "y": -1853.5580980683847}, {"color": "#ff7f00", "date": "1856", "id": "fic_1856_2655.txt-1899-10", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eassociation, and show beyond a doubt that \" an \u003cb\u003eounce\u003c/b\u003e of\u003cbr\u003eprevention is worth a pound of cure, \" a maxim of the \" wisdom of\u003cbr\u003enations \" which has proved of little practical efficacy as yet.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_2655.txt-1899-10\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -479.7165517432983, "y": 220.68496113298497}, {"color": "#4daf4a", "date": "1827", "id": "fic_1827_7168.txt-1308-148", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewrought on, considering that every story he had heard, was\u003cbr\u003estrongly attested; some of the narrators having gone so far as to say,\u003cbr\u003ethat if necessary, they would not mind swearing to what they had\u003cbr\u003ebeheld on the brass clasps of Dominie Van Gieson\u0027s great parchment\u003cbr\u003ecovered Bible, -- a folio, whose size and sacredness, was believed to\u003cbr\u003ebe hallowed: and further, as to the very manner and distinct dress of\u003cbr\u003ethe relations, the vividness of the Hollander\u0027s recollection, seemed\u003cbr\u003eto perfect itself nearly in a moment, as he looked about him midst the\u003cbr\u003edarkness of the forest; the groan of the tall pine tree, disturbed by\u003cbr\u003ethe blast, as it rushed with the wing of an eagle o\u0027er its towering\u003cbr\u003ecrest, the sudden and startling yell of the \u003cb\u003eounce\u003c/b\u003e, as it roamed\u003cbr\u003eabroad in the jungles of the mountain, were conjured up, and dressed\u003cbr\u003eout in the livery of dire and nameless phantasies of the woud gest \u0027\u003cbr\u003eand the koubold; -- and ever and anon,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1827_7168.txt-1308-148\u003cbr\u003etype: usage\u003cbr\u003epos: nnu1\u003c/p\u003e", "x": -578.9024432954105, "y": 1896.1710662514781}]);
+        edges = new vis.DataSet([{"color": "black", "from": "nf_1837_757476.txt-3509-25", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1844_747892.txt-594-56", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1833_747505.txt-2577-1", "label": "4/-/-/-/-/3/-/4/2/-/-/-/-", "to": "nf_1830_754783.txt-1737-11", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1833_747505.txt-2577-1", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "nf_1849_747900.txt-864-68", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1833_747505.txt-2577-1", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1847_748116.txt-1506-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1834_7252.txt-2156-30", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1850_525559.txt-174-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1834_7252.txt-2156-30", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1853_748464.txt-1529-38", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1834_7252.txt-2156-30", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1837_757476.txt-2889-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1834_7252.txt-2156-30", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1846_555416.txt-45-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1821_747955.txt-297-9", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1821_747955.txt-465-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-183-23", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1843_7208.txt-2803-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-183-23", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1853_566331.txt-172-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2982-17", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "mag_1850_525559.txt-174-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2982-17", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1848_8541.txt-550-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2982-17", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1843_752682.txt-309-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1843_752682.txt-1165-16", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1843_752682.txt-1165-16", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1839_747507.txt-810-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1843_752682.txt-1165-16", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-198-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2144-13", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "mag_1853_555823.txt-95-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2144-13", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1839_747610.txt-1318-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2144-13", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1833_7059.txt-366-53", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2144-13", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1845_522622.txt-197-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1055-15", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1055-15", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1834_747938.txt-1181-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1055-15", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1853_748464.txt-1043-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1846_555416.txt-45-18", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1843_752682.txt-548-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1846_555416.txt-45-18", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1849_747900.txt-880-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1846_555416.txt-45-18", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1843_7208.txt-2803-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1852_555790.txt-93-73", "label": "4/-/-/-/-/-/-/-/-/-/4/3/-", "to": "nf_1830_754783.txt-605-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1852_555790.txt-93-73", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1853_748464.txt-1176-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1852_555790.txt-93-73", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1853_555823.txt-95-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1852_555790.txt-93-73", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1834_747938.txt-1181-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1859_9192.txt-10844-4", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "mag_1849_525337.txt-223-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1859_9192.txt-10844-4", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1837_757476.txt-2900-42", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1893-11", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-1658-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1849_525380.txt-118-33", "label": "-/-/-/-/-/-/-/-/-/4/-/-/-", "to": "mag_1850_525559.txt-209-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1849_525380.txt-118-33", "label": "-/-/-/-/-/-/-/-/-/4/-/-/-", "to": "mag_1853_555823.txt-95-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1849_525380.txt-118-33", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1833_7059.txt-366-53", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2900-42", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-605-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1821_747955.txt-469-26", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-1737-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1821_747955.txt-469-26", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1821_747955.txt-297-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2889-17", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1849_747900.txt-880-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1833_747505.txt-2389-80", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1837_757476.txt-2857-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1847_8805.txt-756-7", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1833_747505.txt-2334-62", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1847_8805.txt-756-7", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_1849_525337.txt-223-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1522-7", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1837_757476.txt-2857-32", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1522-7", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "nf_1830_754783.txt-198-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1522-7", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1853_748464.txt-1166-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_8541.txt-550-10", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "fic_1843_7208.txt-2803-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_8541.txt-550-10", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "fic_1856_2655.txt-1899-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_8541.txt-550-10", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1849_747900.txt-864-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747610.txt-431-106", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "nf_1830_754783.txt-1737-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747610.txt-431-106", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1835_747966.txt-510-81", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747610.txt-431-106", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "nf_1837_757476.txt-3610-16", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1839_747507.txt-922-24", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "nf_1849_748465.txt-1135-68", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1839_747507.txt-922-24", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1855_1280.txt-1010-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747507.txt-922-24", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1853_748464.txt-1166-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747507.txt-922-24", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1821_747955.txt-485-44", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-1658-6", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "fic_1843_7208.txt-2803-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1852_748165.txt-2839-13", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1852_748165.txt-2923-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-3610-16", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1830_754783.txt-605-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-3610-16", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1846_555416.txt-45-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747507.txt-810-30", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1839_747610.txt-1995-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747507.txt-810-30", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1833_747505.txt-99-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1839_747507.txt-810-30", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1853_748464.txt-1527-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-1737-11", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-605-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-1737-11", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1811_8637.txt-1910-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-197-43", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-198-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-197-43", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1830_754783.txt-605-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-197-43", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1853_748464.txt-824-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-197-43", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_1830_554014.txt-186-63", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-605-1", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1831_554110.txt-117-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_747900.txt-864-68", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-198-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_747900.txt-864-68", "label": "-/-/-/-/-/-/-/-/-/-/-/4/-", "to": "mag_1831_554110.txt-117-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_747900.txt-864-68", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "nf_1837_757476.txt-2960-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-1737-17", "label": "-/-/-/-/-/-/-/-/-/-/-/3/-", "to": "mag_1849_525337.txt-223-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1852_555790.txt-492-2", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "fic_1850_7304.txt-6902-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2960-18", "label": "-/-/-/-/-/4/-/4/2/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2960-18", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1835_747966.txt-510-81", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_522622.txt-197-18", "label": "4/-/-/-/-/-/-/4/2/-/-/-/-", "to": "nf_1821_747955.txt-493-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_522622.txt-197-18", "label": "-/-/-/-/-/-/-/4/4/-/-/-/-", "to": "nf_1821_747955.txt-465-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_522622.txt-197-18", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1834_747938.txt-1181-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_522622.txt-197-18", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1850_525559.txt-174-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_522622.txt-197-18", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1849_747900.txt-880-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1821_747955.txt-469-15", "label": "4/-/-/-/-/-/-/-/4/-/-/-/-", "to": "nf_1830_754783.txt-198-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1821_747955.txt-469-15", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1853_748464.txt-1166-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-193-10", "label": "4/-/-/-/-/4/-/-/4/-/-/-/-", "to": "mag_1850_525559.txt-174-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-193-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1830_754783.txt-935-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-193-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1831_554110.txt-108-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_565473.txt-193-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1856_9779.txt-8800-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7154.txt-819-10", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_1845_522622.txt-197-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7154.txt-819-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1833_7059.txt-366-53", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7154.txt-819-10", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1856_9779.txt-8800-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1846_555416.txt-45-11", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1839_747610.txt-1318-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_2655.txt-1899-10", "label": "3/-/-/-/-/2/-/4/-/-/4/-/-", "to": "nf_1833_747505.txt-2334-62", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1856_2655.txt-1899-10", "label": "3/-/-/-/-/1/-/0/3/-/-/-/-", "to": "fic_1827_7168.txt-1308-148", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1856_2655.txt-1899-10", "label": "3/-/-/-/-/-/3/-/-/-/-/-/-", "to": "mag_1850_525559.txt-174-41", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1856_2655.txt-1899-10", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1830_754783.txt-198-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1843_752682.txt-309-11", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_748465.txt-1135-68", "label": "4/-/-/-/-/-/-/-/4/-/-/-/-", "to": "nf_1849_748465.txt-1205-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_748465.txt-1135-68", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1848_747893.txt-3340-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_748465.txt-1135-68", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1839_747610.txt-1318-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_748465.txt-1135-68", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1831_554110.txt-108-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1831_554110.txt-117-17", "label": "4/-/-/-/-/2/-/-/3/-/-/-/-", "to": "fic_1843_7208.txt-2803-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1833_7059.txt-366-53", "label": "4/-/-/-/-/-/-/-/1/-/-/-/-", "to": "mag_1853_555823.txt-95-26", "weight": 2.5, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-198-7", "label": "4/-/-/-/-/2/-/-/4/-/-/-/-", "to": "mag_1831_554110.txt-108-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-198-7", "label": "-/-/-/-/-/-/-/4/3/-/-/-/-", "to": "nf_1833_747505.txt-2389-43", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1830_754783.txt-198-7", "label": "-/-/-/-/-/-/-/-/-/-/-/3/-", "to": "nf_1837_757476.txt-2857-32", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1833_747505.txt-2389-43", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1849_525337.txt-223-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1166-5", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1853_555823.txt-95-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1849_747900.txt-880-11", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "nf_1843_752682.txt-548-9", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1853_566331.txt-172-5", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1853_748464.txt-1043-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1853_566331.txt-172-5", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1821_747955.txt-56-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1853_566331.txt-172-5", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1856_9779.txt-8800-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1821_747955.txt-56-5", "label": "4/-/-/-/-/-/-/4/3/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1821_747955.txt-56-5", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1853_748464.txt-1527-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1835_747966.txt-510-81", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1858_1282.txt-4291-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1844_747892.txt-1232-8", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1849_748465.txt-1205-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1529-38", "label": "4/-/-/-/-/-/-/-/-/-/4/-/-", "to": "nf_1853_748464.txt-1527-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1529-38", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1856_9779.txt-8800-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1043-9", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-174-41", "label": "4/4/-/-/-/4/4/-/-/-/-/-/-", "to": "fic_1843_7208.txt-2803-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-174-41", "label": "-/4/-/-/-/-/4/-/-/-/-/-/-", "to": "nf_1849_748465.txt-1205-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-174-41", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "nf_1853_748464.txt-824-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1833_747505.txt-2334-62", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1850_747863.txt-2462-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1837_757476.txt-2889-24", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1848_747893.txt-3340-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_522622.txt-197-7", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-1527-19", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1855_1280.txt-1010-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1849_525337.txt-223-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1824_747448.txt-3494-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-209-13", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1848_747893.txt-3340-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-209-13", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "nf_1824_747448.txt-3494-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-824-40", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1843_7208.txt-2803-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_748464.txt-824-40", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1855_1280.txt-1010-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_525559.txt-166-53", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "fic_1843_7208.txt-2803-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-2803-15", "label": "4/-/-/4/-/3/-/4/4/-/-/-/-", "to": "nf_1839_747610.txt-1995-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1855_750257.txt-2426-35", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1855_1280.txt-1010-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1855_750257.txt-2426-35", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1843_752682.txt-548-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1811_8637.txt-1910-2", "label": "-/-/-/-/-/2/-/4/3/4/-/-/-", "to": "nf_1849_748465.txt-1205-47", "weight": 3.5, "width": 4}, {"color": "lightgray", "from": "nf_1837_757476.txt-3509-25", "label": "-/-/-/-/-/-/-/-/-/-/1/-/-", "to": "fic_1827_7168.txt-1308-148", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1833_747505.txt-2577-1", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1856_2655.txt-1899-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1854_8328.txt-1016-3", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "fic_1855_1280.txt-1010-7", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1854_8328.txt-1016-3", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "mag_1846_555416.txt-45-11", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1837_757476.txt-2144-13", "label": "3/-/-/-/-/2/-/-/2/-/-/-/-", "to": "fic_1856_2655.txt-1899-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1833_747505.txt-2389-80", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "mag_1852_555790.txt-492-2", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_8541.txt-550-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1850_7304.txt-6902-11", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1839_747610.txt-431-106", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "fic_1827_7168.txt-1308-148", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1839_747507.txt-810-30", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "fic_1856_2655.txt-1899-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_754783.txt-1737-17", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "fic_1858_1282.txt-4291-47", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1852_555790.txt-492-2", "label": "-/-/-/-/-/-/-/0/2/-/-/-/-", "to": "nf_1849_748465.txt-1241-18", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_748464.txt-1098-33", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "nf_1849_747900.txt-864-29", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1845_565473.txt-193-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "nf_1849_747900.txt-864-29", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_2655.txt-1899-10", "label": "-/-/-/-/-/2/-/-/-/-/-/-/-", "to": "fic_1858_1282.txt-4291-47", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_2655.txt-1899-10", "label": "3/-/-/-/-/2/-/1/-/-/-/-/-", "to": "mag_1850_525559.txt-209-13", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_2655.txt-1899-10", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1856_9779.txt-8800-18", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1833_7059.txt-366-53", "label": "-/-/-/-/2/2/-/-/-/-/-/-/-", "to": "mag_1850_525559.txt-209-13", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1853_555823.txt-95-26", "label": "-/-/-/-/-/-/-/-/-/1/-/-/-", "to": "fic_1827_7168.txt-1308-148", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1833_747505.txt-2334-62", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1856_9779.txt-8800-18", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1849_747900.txt-864-29", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "nf_1821_747955.txt-297-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1827_7168.txt-1308-148", "label": "-/-/-/-/-/-/-/-/-/-/1/-/-", "to": "mag_1849_525337.txt-223-10", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1827_7168.txt-1308-148", "label": "-/-/3/-/-/-/-/-/-/-/-/-/1", "to": "nf_1824_747448.txt-3494-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7208.txt-2803-15", "label": "-/-/-/-/-/2/-/-/2/-/-/-/-", "to": "nf_1824_747448.txt-3494-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_8541.txt-550-10", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "nf_1853_748464.txt-1176-2", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1852_555790.txt-492-2", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "mag_1853_555823.txt-95-26", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

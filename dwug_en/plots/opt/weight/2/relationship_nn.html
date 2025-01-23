@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">relationship_nn (2)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1966", "id": "mag_1966_490646.txt-59-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt was something all but unheard of -- a long period during\u003cbr\u003ewhich the police and the public were in a close and non-antagonistic\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1966\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1966_490646.txt-59-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 472.8410994395718, "y": 284.6913141033558}, {"color": "#377eb8", "date": "1981", "id": "nf_1981_774357.txt-981-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt\u0027s not necessary to build a personal \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003eunless the Driver indicates that that\u0027s part of the objective.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1981_774357.txt-981-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 731.9254843261967, "y": -1586.4186617831467}, {"color": "#377eb8", "date": "1979", "id": "mag_1979_293051.txt-1-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAfter Jimmy Carter and Leonid Brezhnev sign the SALT II treaty\u003cbr\u003enext week, it goes before the Senate for a ratification debate that\u003cbr\u003ewill range over the whole \u003cb\u003erelationship\u003c/b\u003e between the world\u0027s two\u003cbr\u003esuperpowers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1979\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1979_293051.txt-1-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 772.9811149595737, "y": -328.28620873676255}, {"color": "#377eb8", "date": "1977", "id": "nf_1977_774125.txt-8425-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eof abstraction, we have noted, are distinguished by their\u003cbr\u003econflicting accounts of the \u003cb\u003erelationship\u003c/b\u003e between perception and\u003cbr\u003ethinking, the traditional theory assuming that concepts are formed\u003cbr\u003ewhen particular sensations are organized in thought, whereas the more\u003cbr\u003erecent theory affirms that thinking elaborates the forms of\u003cbr\u003eorganization gained in perception.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1977_774125.txt-8425-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 324.50341892471187, "y": 149.2342146438504}, {"color": "#377eb8", "date": "1987", "id": "nf_1987_773531.txt-589-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe fourth and fifth sections describe courseware that allows\u003cbr\u003estudents to manipulate data and explore \u003cb\u003erelationships\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1987_773531.txt-589-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 995.9560990162096, "y": 860.022552714401}, {"color": "#377eb8", "date": "2006", "id": "fic_2006_51124.txt-668-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIndeed, to want to kill your lover in the first place, rather\u003cbr\u003ethan merely end the \u003cb\u003erelationship\u003c/b\u003e on rational terms.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2006_51124.txt-668-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -502.6764332345239, "y": -496.2466083189241}, {"color": "#377eb8", "date": "1997", "id": "nf_1997_773513.txt-486-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis will eliminate the customer/supplier \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003ebetween the Baby Bells and AT \u0026T; in the purchase and sale of\u003cbr\u003eswitching machines, but now AT \u0026T; and the Baby Bells will battle even\u003cbr\u003emore fiercely over long distance.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1997_773513.txt-486-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1553.5891533094875, "y": -772.7314746730125}, {"color": "#377eb8", "date": "1991", "id": "mag_1991_421245.txt-23-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eby considering placement, size, spatial \u003cb\u003erelationships\u003c/b\u003e,\u003cbr\u003eand rhythms. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1991\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1991_421245.txt-23-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -52.077657485427295, "y": -726.9850364411561}, {"color": "#377eb8", "date": "1971", "id": "fic_1971_780007.txt-518-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen, if we don\u0027t get anywhere with this, that leaves you and |\u003cbr\u003ehim in the same \u003cb\u003erelationship\u003c/b\u003e as before.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1971\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1971_780007.txt-518-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 275.58534912841003, "y": -1006.5129151296319}, {"color": "#377eb8", "date": "2001", "id": "mag_2001_415828.txt-264-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eStruggling to find life within their classrooms, participants\u003cbr\u003ereached out to establish a \u003cb\u003erelationship\u003c/b\u003e with others.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2001_415828.txt-264-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1875.8650463045567, "y": 763.6817151440363}, {"color": "#377eb8", "date": "1997", "id": "nf_1997_773530.txt-135-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003einfant \u003cb\u003erelationship\u003c/b\u003e is an important and supportive\u003cbr\u003esetting for learning a number skills necessary for establishing and\u003cbr\u003emaintaining effective social engagement with others, such as\u003cbr\u003econversations and play.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1997_773530.txt-135-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -654.6842598195691, "y": 1019.5999657465711}, {"color": "#377eb8", "date": "1994", "id": "nf_1994_746583.txt-738-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e1988) (recognizing \u003cb\u003erelationship\u003c/b\u003e between CERCLA section\u003cbr\u003e113(h)\u0027s goal of prompt cleanups and Congress\u0027s goal of protection of\u003cbr\u003epublic health and the environment from hazardous wastes).\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1994_746583.txt-738-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1187.157223692187, "y": 502.04074884129193}, {"color": "#377eb8", "date": "2004", "id": "news_2004_660955.txt-53-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut Arnett defends the close \u003cb\u003erelationship\u003c/b\u003e between\u003cbr\u003e20-somethings and their parents today. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2004_660955.txt-53-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -0.7746973561044691, "y": 32.93197807309403}, {"color": "#377eb8", "date": "1968", "id": "mag_1968_491434.txt-187-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePolice efforts to establish a friendly \u003cb\u003erelationship\u003c/b\u003e with\u003cbr\u003ethe ghetto are matched by their efforts to find out what is going on\u003cbr\u003ethere.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1968\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1968_491434.txt-187-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 102.69659377998228, "y": -99.93340399548413}, {"color": "#377eb8", "date": "1960", "id": "nf_1960_774194.txt-2266-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis method provided a marital-integration scale for the\u003cbr\u003emeasurement of the relative degree of strength of the marriage\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e of different couples.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1960\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1960_774194.txt-2266-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -420.009633406673, "y": 685.1541822299602}, {"color": "#377eb8", "date": "1987", "id": "nf_1987_773755.txt-816-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethe latter is a valuable guide.i \" The concepts of culture \u0027\u003cbr\u003eand civilization \u0027 are obviously important in studying India and other\u003cbr\u003edeveloping countries today, for one of the outstanding questions\u003cbr\u003econcerns the \u003cb\u003erelationship\u003c/b\u003e between the traditional culture and\u003cbr\u003ethe values and beliefs which have been introduced from the\u003cbr\u003eWest.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1987_773755.txt-816-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 530.5441974677127, "y": -619.4414044715292}, {"color": "#377eb8", "date": "2004", "id": "mag_2004_413445.txt-44-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo his detractors inside and outside Sony, Stringer\u0027s primary\u003cbr\u003esuccess has been managing his own \u003cb\u003erelationship\u003c/b\u003e with his\u003cbr\u003ebosses.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2004_413445.txt-44-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -674.3004484826662, "y": -1249.5406698320007}, {"color": "#377eb8", "date": "2005", "id": "fic_2005_31471.txt-363-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt had been a couple of years since Grand Nagus Zek instituted\u003cbr\u003ehis sweeping reforms, many of them inspired by his \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003ewith Quark\u0027s mother, Ishka.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2005\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2005_31471.txt-363-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -515.6165932382659, "y": -121.73614858465398}, {"color": "#377eb8", "date": "1989", "id": "nf_1989_773527.txt-1135-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs the adult \u003cb\u003erelationship\u003c/b\u003e changes, there are likely to\u003cbr\u003ebe corresponding shifts\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1989_773527.txt-1135-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1055.7386325657126, "y": 1151.3004011821167}, {"color": "#377eb8", "date": "1984", "id": "news_1984_671374.txt-1-54", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e// For many months, I have encouraged the Soviet Union to join\u003cbr\u003ewith us in a major effort to see if we could make progress in these\u003cbr\u003ebroad problem areas, reducing the threat and use of force in solving\u003cbr\u003einternational disputes, reducing armaments in the world and\u003cbr\u003eestablishing a better working \u003cb\u003erelationship\u003c/b\u003e with each\u003cbr\u003eother.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1984_671374.txt-1-54\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -236.7819516855456, "y": -1137.4073811851733}, {"color": "#377eb8", "date": "2004", "id": "mag_2004_413218.txt-203-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYou need to educate yourself about childhood development and\u003cbr\u003eparent-child \u003cb\u003erelationships\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2004_413218.txt-203-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 302.91544983468515, "y": -425.9696621581895}, {"color": "#377eb8", "date": "1987", "id": "news_1987_670537.txt-23-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e// In a novel, the prose is the hero, the human thing; the\u003cbr\u003eauthor \u0027 s voice is our foremost point of contact and upholds one side\u003cbr\u003eof the shifting, teasing \u003cb\u003erelationship\u003c/b\u003e we as reader are invited\u003cbr\u003einto.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1987_670537.txt-23-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1193.3448354077643, "y": -468.92142912017044}, {"color": "#377eb8", "date": "1999", "id": "nf_1999_773697.txt-443-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003erelationships\u003c/b\u003e makes the course of economic affairs a\u003cbr\u003elimitless and often unique series of historical facts.ls Yet one might\u003cbr\u003ewell gather from many an economic principles textbook that perfect\u003cbr\u003ecompetition is a sort of norm, which might be taken to imply that any\u003cbr\u003edepartures from perfect competition are generally unfortunate.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1999_773697.txt-443-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 287.56190982942786, "y": 1419.0987935488026}, {"color": "#377eb8", "date": "1969", "id": "nf_1969_773553.txt-656-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethe second case nothing necessarily follows from homogeneity\u003cbr\u003eexcept that it will facilitate the establishment of relationships,\u003cbr\u003eprovided that people seek the formation of \u003cb\u003erelationships\u003c/b\u003e within\u003cbr\u003ethe locality which they will have to do if the locality is a\u003cbr\u003esettlement and relatively isolated.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1969\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1969_773553.txt-656-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 416.9947984394256, "y": -612.1304981168212}, {"color": "#377eb8", "date": "1970", "id": "nf_1970_774162.txt-1426-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus when the word hsin is used, it is not easy to tell from\u003cbr\u003ethe context what kind of mind is talked about or referred to, partly\u003cbr\u003ebecause the distinction and/or \u003cb\u003erelationship\u003c/b\u003e between the\u003cbr\u003ephenomenal mind and the noumenal mind is theoretically problematic in\u003cbr\u003eBuddhist thought.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1970\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1970_774162.txt-1426-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -256.04281887137535, "y": -53.6533067126422}, {"color": "#377eb8", "date": "2003", "id": "nf_2003_746676.txt-28-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFurther, findings indicating a \u003cb\u003erelationship\u003c/b\u003e between\u003cbr\u003eintolerance for ambiguity and low endorsement for diversity\u003cbr\u003einterventions in business students\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2003\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_2003_746676.txt-28-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -2000.0, "y": 667.4610942152297}, {"color": "#377eb8", "date": "1995", "id": "mag_1995_397042.txt-75-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWilliam P. George is a senior fellow researching the\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e between religion and international law\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1995_397042.txt-75-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 380.7754168194518, "y": 1726.9403282353298}, {"color": "#377eb8", "date": "2002", "id": "nf_2002_746524.txt-91-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eUnfortunately, there are insufficient data with which to assess\u003cbr\u003ethe \u003cb\u003erelationship\u003c/b\u003e between urban population growth and violence\u003cbr\u003ein other regions of the world.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_2002_746524.txt-91-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 998.5618795032726, "y": 663.939113381342}, {"color": "#377eb8", "date": "1990", "id": "mag_1990_419883.txt-14-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSuch changes obscure historical \u003cb\u003erelationships\u003c/b\u003e among\u003cbr\u003elanguages after about 6,000 years, Campbell says. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1990_419883.txt-14-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 184.97547832290664, "y": 1040.8966570406178}, {"color": "#377eb8", "date": "1981", "id": "nf_1981_774357.txt-1630-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eabout \u003cb\u003erelationships\u003c/b\u003e, the Amiable person can rely on\u003cbr\u003ethese qualities in some social dealings.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1981_774357.txt-1630-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 108.26156607377229, "y": -1106.845157351488}, {"color": "#377eb8", "date": "1988", "id": "news_1988_670637.txt-52-54", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e// Frustrated by what he felt was RCA \u0027 s failure to market his\u003cbr\u003erecords properly (RCA wasn \u0027 t happy with sales, either) and by the\u003cbr\u003econtractual hassles whenever he wanted to record with Mr. Ma (who\u003cbr\u003erecords for CBS Masterworks), the pianist recently severed his\u003cbr\u003elongterm \u003cb\u003erelationship\u003c/b\u003e with RCA to sign with CBS.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1988\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1988_670637.txt-52-54\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -553.1281261538063, "y": 620.4732602893943}, {"color": "#377eb8", "date": "2001", "id": "mag_2001_416749.txt-96-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen the \u003cb\u003erelationship\u003c/b\u003e is good, all is well at your home\u003cbr\u003eand hers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2001_416749.txt-96-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -32.83458602146755, "y": -218.464461213909}, {"color": "#377eb8", "date": "2007", "id": "fic_2007_33947.txt-229-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe asked, \" Could you tell me about your \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003ewith that prisoner in Capitola? \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2007_33947.txt-229-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 962.2407928410054, "y": -1144.2898181565174}, {"color": "#377eb8", "date": "1980", "id": "fic_1980_10672.txt-5050-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTraube was revealed to have had a close \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003ewith Hans Joachim Klein, a young Libyan-trained terrorist who\u003cbr\u003eparticipated along with \" Carlos \" in the Vienna kidnapping of the\u003cbr\u003eOPEC oil ministers in December1975.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1980\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1980_10672.txt-5050-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -8.35520593274692, "y": -1282.1507244062573}, {"color": "#377eb8", "date": "1999", "id": "fic_1999_30057.txt-31-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMirax and I put this free time to good use, rebuilding our home\u003cbr\u003eand our \u003cb\u003erelationship\u003c/b\u003e, but with that came some consequences that\u003cbr\u003eI saw as incredibly disruptive -- on the scale of Thrawn\u003cbr\u003edisruptive.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1999_30057.txt-31-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -273.9659063064276, "y": -402.9816259629798}, {"color": "#377eb8", "date": "1993", "id": "nf_1993_773791.txt-93-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBy contrast, the vowel \u003cb\u003erelationships\u003c/b\u003e in the Indo-\u003cbr\u003eEuropean languages were extensively examined to arrive at current\u003cbr\u003eanalyses.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1993_773791.txt-93-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 844.4896944964296, "y": 881.3933638375809}, {"color": "#377eb8", "date": "2004", "id": "mag_2004_414034.txt-51-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eand it could be a \u003cb\u003erelationship\u003c/b\u003e at any price, \" says\u003cbr\u003eSusan Forward, PhD, author of Men Who Hate Women and the Women Who\u003cbr\u003eLove Them.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2004_414034.txt-51-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -359.6640915048351, "y": 526.1644783079524}, {"color": "#377eb8", "date": "2004", "id": "news_2004_617168.txt-56-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI think there\u0027s a little better \u003cb\u003erelationship\u003c/b\u003e with the\u003cbr\u003emayor than there has been.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2004_617168.txt-56-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 937.7717518634261, "y": 575.031649362745}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_54734.txt-225-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003erelationship\u003c/b\u003e between them and King Islanders is\u003cbr\u003esymbiotic.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_54734.txt-225-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -81.13290217736608, "y": 386.73136971868877}, {"color": "#377eb8", "date": "1989", "id": "mag_1989_327864.txt-8-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHere was every ingredient of the true-crime blockbuster:\u003cbr\u003ecocaine, an S-M \u003cb\u003erelationship\u003c/b\u003e, a beautiful six-year-old and a\u003cbr\u003ebattered woman, all set against the background of Greenwich\u003cbr\u003eVillage.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1989_327864.txt-8-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 661.7437955283659, "y": -1137.3534543525766}, {"color": "#377eb8", "date": "1987", "id": "fic_1987_10756.txt-6386-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI had headed into Utah for answers to both relationships, but\u003cbr\u003eonce there it had become not future revelations that held me but the\u003cbr\u003equality of immediate ones, \u003cb\u003erelationships\u003c/b\u003e that in this place had\u003cbr\u003ea way of remaining jettisoned from the past.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1987_10756.txt-6386-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 707.8992597453287, "y": -736.7495132163007}, {"color": "#377eb8", "date": "2001", "id": "news_2001_661949.txt-88-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eProof \" - which concerns the \u003cb\u003erelationship\u003c/b\u003e between a\u003cbr\u003ebrilliant university mathematician and his daughter - debuted in May\u003cbr\u003e2000 at off-Broadway\u0027s Manhattan Theatre Club and moved to Broadway in\u003cbr\u003ethe fall.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2001_661949.txt-88-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 56.79091979988563, "y": -266.5209300663336}, {"color": "#377eb8", "date": "1993", "id": "nf_1993_746761.txt-49-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, teachers in early childhood classes seldom concern themselves\u003cbr\u003ewith the possible goals of art activities and the \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003eof those goals to the arts themselves.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1993_746761.txt-49-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 369.15493597767494, "y": -29.868649057585703}, {"color": "#377eb8", "date": "2001", "id": "mag_2001_417637.txt-47-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhile these epidemiologic studies do not establish a cause and\u003cbr\u003eeffect \u003cb\u003erelationship\u003c/b\u003e, the lower incidence of climacteric\u003cbr\u003esymptoms may be attributable to diet rather than genetic disposition-a\u003cbr\u003etheory supported by a review article showing that Asian people who\u003cbr\u003econsume more Western diets have a higher risk of chronic and\u003cbr\u003edegenerative disease, including hormone-dependent cancers, colon\u003cbr\u003ecancer and cardiovascular disease, compared with those who consume\u003cbr\u003etraditional Japanese diets.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2001_417637.txt-47-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 877.3909126377264, "y": -853.0597509728152}, {"color": "#377eb8", "date": "1978", "id": "news_1978_733544.txt-40-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ecomplaint also sheds new lieht on Mr. Lance\u0027s\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e with Mr. Abedi and the Bank of Credit and Commerce\u003cbr\u003eInternational.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1978\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1978_733544.txt-40-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1069.4747158441128, "y": -132.7184164551735}, {"color": "#377eb8", "date": "1983", "id": "mag_1983_124496.txt-118-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI tried to keep it in perspective and tried not to let it\u003cbr\u003eaffect my \u003cb\u003erelationships\u003c/b\u003e with people.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1983_124496.txt-118-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 791.303079790778, "y": -583.9728196308399}, {"color": "#377eb8", "date": "1965", "id": "mag_1965_97767.txt-125-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eArthur\u0027s \u003cb\u003erelationship\u003c/b\u003e with the car had become a close\u003cbr\u003eone.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1965\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1965_97767.txt-125-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -308.72278659173907, "y": 836.8409501608777}, {"color": "#377eb8", "date": "1979", "id": "mag_1979_493953.txt-1-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere is a \u003cb\u003erelationship\u003c/b\u003e of consequence between these two\u003cbr\u003eseemingly disparate events.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1979\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1979_493953.txt-1-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 686.123082390323, "y": 732.9367922813018}, {"color": "#377eb8", "date": "1978", "id": "fic_1978_13992.txt-3116-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHis body is in the same \u003cb\u003erelationship\u003c/b\u003e to DODGE \u0027S.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1978\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1978_13992.txt-3116-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 660.0991269950001, "y": -1021.0096639278491}, {"color": "#377eb8", "date": "1995", "id": "mag_1995_396720.txt-13-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIndividual identity is forged not in isolation but in the\u003cbr\u003econtext of \u003cb\u003erelationships\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1995_396720.txt-13-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 286.9354765038516, "y": 223.93567724627715}, {"color": "#377eb8", "date": "1975", "id": "news_1975_732273.txt-29-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus, it now seem fairly assured that the U.S.-China\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e is likely to keep moving along at somewhat the\u003cbr\u003esame level as it has been since former President Richard M. Nixon\u003cbr\u003ebroke the ice between the countries.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1975\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1975_732273.txt-29-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1557.0530754381712, "y": -3.945993519113497}, {"color": "#377eb8", "date": "1993", "id": "news_1993_600205.txt-74-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe first tribal leader to speak before a joint session said\u003cbr\u003ethe state and federal governments should deal with tribes in a\u003cbr\u003egovernment-to-government \u003cb\u003erelationship\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1993_600205.txt-74-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1141.7873824247154, "y": 262.98459665814426}, {"color": "#377eb8", "date": "1987", "id": "nf_1987_774092.txt-541-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePoliticians have shown a lot of concern, especially since the\u003cbr\u003eSecond World War, with employment \u003cb\u003erelationships\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1987_774092.txt-541-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -841.0719269177206, "y": 257.5640347688838}, {"color": "#377eb8", "date": "1995", "id": "nf_1995_773555.txt-336-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd as we do, may I make a suggestion for those who enjoy a\u003cbr\u003epersonal \u003cb\u003erelationship\u003c/b\u003e with the Lord?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1995_773555.txt-336-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 662.4899113533498, "y": -621.6954519726145}, {"color": "#377eb8", "date": "1987", "id": "mag_1987_432335.txt-56-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA homosexual who has been in a monogamous \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003ewith a faithful lover for many years is at less risk than a\u003cbr\u003eheterosexual who has had many sexual partners and hasn\u0027t used\u003cbr\u003econdoms.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1987\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1987_432335.txt-56-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -962.0263163363167, "y": -3.6277702867553856}, {"color": "#377eb8", "date": "1981", "id": "fic_1981_782024.txt-95-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnn\u0027s \u003cb\u003erelationship\u003c/b\u003e with Josh started out vague and\u003cbr\u003eunpromising.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1981_782024.txt-95-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1545.845981603218, "y": -426.1799623752321}, {"color": "#377eb8", "date": "1978", "id": "fic_1978_10634.txt-7311-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMargie Tallworth was ignorant, but she was not ignorant of\u003cbr\u003eMichael Milton\u0027s \u003cb\u003erelationship\u003c/b\u003e with Helen.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1978\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1978_10634.txt-7311-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -176.13601556595492, "y": -1108.2873375437007}, {"color": "#377eb8", "date": "1991", "id": "news_1991_649979.txt-5-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003erealities: in our increasingly female, work-centered world,\u003cbr\u003emost of our \u003cb\u003erelationships\u003c/b\u003e, including intimate ones, are\u003cbr\u003einitiated in the workplace; gender relations, especially new ones, are\u003cbr\u003ecomplex and invariably ambiguous; in our heterogeneous society, the\u003cbr\u003eperception of what constitutes proper and effective male-female\u003cbr\u003erelations varies across gender, class, ethnicity and region; and in\u003cbr\u003ekeeping with our egalitarian ideals, we take pride in the fact that\u003cbr\u003ethe WASP boss may legitimately desire or want to marry his or her\u003cbr\u003ePuerto Rican aide or chauffeur.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1991\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1991_649979.txt-5-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -153.5239097066423, "y": -611.2857082573039}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_773757.txt-502-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003emakes a love \u003cb\u003erelationship\u003c/b\u003e particularly vulnerable and\u003cbr\u003efragile is the need for reciprocity.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_773757.txt-502-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 672.6383914061445, "y": -33.706176197746416}, {"color": "#377eb8", "date": "1969", "id": "nf_1969_773553.txt-571-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThat is to say, it will determine whether the\u003cbr\u003e\u003cb\u003erelationships\u003c/b\u003e within the area can be used to form groups\u003cbr\u003ethrough which the people concerned can co-operate to carry out\u003cbr\u003edifferent types of activities.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1969\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1969_773553.txt-571-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 215.00555793150937, "y": -76.31610800736344}, {"color": "#377eb8", "date": "1980", "id": "news_1980_669182.txt-94-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf you were to ask me what would be the biggest thing the US\u003cbr\u003ecould do in coping with this difficult \u003cb\u003erelationship\u003c/b\u003e, it would\u003cbr\u003ebe to present a consistently strong demonstration of national\u003cbr\u003ewill.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1980\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1980_669182.txt-94-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 607.4295095359356, "y": -1191.3853328223263}, {"color": "#377eb8", "date": "1974", "id": "mag_1974_314761.txt-23-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe close, conspiratorial \u003cb\u003erelationship\u003c/b\u003e between Rose and\u003cbr\u003eSarah, the rebel maid, was inspired by the two maids in Henry Green\u0027s\u003cbr\u003enovel Loving (belowstairs in a country house).\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1974\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1974_314761.txt-23-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -63.938689481128115, "y": 1020.9638391464732}, {"color": "#377eb8", "date": "1965", "id": "mag_1965_488190.txt-87-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen water-pollution personnel moved into states to enforce\u003cbr\u003ecleanups, this long-standing \u003cb\u003erelationship\u003c/b\u003e got in their\u003cbr\u003eway;\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1965\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1965_488190.txt-87-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -961.9553745413366, "y": -149.63278954770382}, {"color": "#377eb8", "date": "1990", "id": "nf_1990_746497.txt-148-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFormal relationships provide written documentation for grants\u003cbr\u003eor proposal applications and demonstrate that a program has\u003cbr\u003ecooperative \u003cb\u003erelationships\u003c/b\u003e that enable it to provide an ongoing,\u003cbr\u003ecomprehensive program.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1990_746497.txt-148-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -196.88232626888066, "y": 1162.3666076471736}, {"color": "#377eb8", "date": "1981", "id": "nf_1981_774357.txt-1047-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYes, in another sense because you are approaching others in a\u003cbr\u003eway that pleases, rather than irritates them, so you can set a\u003cbr\u003epositive stage for effective performance from the\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1981_774357.txt-1047-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -786.7685644747802, "y": -765.5489647808917}, {"color": "#377eb8", "date": "1981", "id": "nf_1981_774357.txt-336-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMembers of a tennis club or a volunteer organization who\u003cbr\u003ecomment on our versatility provide a weak basis for generalizing about\u003cbr\u003ehow we might perform in \u003cb\u003erelationships\u003c/b\u003e as a manager, salesman,\u003cbr\u003eteacher, or parent.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1981_774357.txt-336-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -1003.7797343946015, "y": -704.6361230894368}, {"color": "#377eb8", "date": "1985", "id": "fic_1985_782029.txt-6754-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut I can\u0027t just end our \u003cb\u003erelationship\u003c/b\u003e like we\u003cbr\u003edid.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1985\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1985_782029.txt-6754-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1310.5426961124904, "y": -716.7582669021497}, {"color": "#377eb8", "date": "1992", "id": "mag_1992_394713.txt-120-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eRELATIONSHIPS\u003c/b\u003e TO METEORS, METEORITES, AND COMETS The\u003cbr\u003eknown NEOs are just the largest members\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1992_394713.txt-120-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 1496.4183546186405, "y": -1239.7989350765044}, {"color": "#377eb8", "date": "2001", "id": "fic_2001_29273.txt-78-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003emarriage would erode a \u003cb\u003erelationship\u003c/b\u003e I had come to\u003cbr\u003evalue.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2001_29273.txt-78-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -908.9082369270442, "y": 509.00104909096234}, {"color": "#377eb8", "date": "2001", "id": "mag_2001_416325.txt-28-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eKristina Orth-Gomer reports in the Journal of the American\u003cbr\u003eMedical Association that women with heart disease tripled their risk\u003cbr\u003eof recurrent heart trouble if they were involved in a stressful\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2001_416325.txt-28-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -52.95881327039412, "y": -572.7141172270075}, {"color": "#377eb8", "date": "1988", "id": "news_1988_668934.txt-3-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn addition, for new customers, CDs give him a foot in the door\u003cbr\u003eand a broker-client \u003cb\u003erelationship\u003c/b\u003e that may permit him to offer\u003cbr\u003eother financial products later.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1988\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1988_668934.txt-3-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1141.4588940532728, "y": -43.808272843469176}, {"color": "#377eb8", "date": "2009", "id": "fic_2009_36818.txt-200-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe and Christine were still in the midst of that awkward\u003cbr\u003egetting-to-know-you phase, but Peyton felt they\u0027d made great strides\u003cbr\u003ein their \u003cb\u003erelationship\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2009\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2009_36818.txt-200-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 137.73268643086925, "y": 1422.3491412099415}, {"color": "#377eb8", "date": "2007", "id": "mag_2007_389494.txt-18-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eit was an abusive \u003cb\u003erelationship\u003c/b\u003e; that was just another\u003cbr\u003eexperience of being powerless.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2007_389494.txt-18-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -364.2609944079795, "y": -866.2464691423637}, {"color": "#377eb8", "date": "1964", "id": "news_1964_724317.txt-2-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlthough he has considerably oversimplified this\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e, the example that a President sets does matter and\u003cbr\u003ehis personal ethics are a legitimate campaign topic.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1964\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1964_724317.txt-2-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -175.17809618558354, "y": 436.5623402806255}, {"color": "#377eb8", "date": "1992", "id": "mag_1992_395615.txt-14-48", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" We are brought up to expect that a father should provide\u003cbr\u003eincome, food and clothing, \" says Gail Wyatt, Ph.D., a psychologist\u003cbr\u003ewho is a professor at the Neuropsychiatricte at the University of\u003cbr\u003eCalifornia, Los Angeles, and who specializes in male-female\u003cbr\u003e\u003cb\u003erelationships\u003c/b\u003e in her private practice.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1992_395615.txt-14-48\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -927.1493005056808, "y": 634.4041057701227}, {"color": "#377eb8", "date": "1995", "id": "mag_1995_396716.txt-10-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMEMENTOS OF OUR \u003cb\u003eRELATIONSHIP\u003c/b\u003e -- BOXES OF LETTERS, OUR\u003cbr\u003eWEDDING ALBUM, OUR SON \u0027S FIRST LOCK OF HAIR.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1995_396716.txt-10-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -553.4270149071073, "y": 260.2563555205594}, {"color": "#377eb8", "date": "2002", "id": "mag_2002_373783.txt-11-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe concedes that the locket is part of the story of Monica\u0027s\u003cbr\u003eordeal but says no one should suppose there was a cause-and-effect\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e between it and the cure. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2002_373783.txt-11-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 89.60753705293789, "y": 918.2777076328989}, {"color": "#377eb8", "date": "1972", "id": "mag_1972_479400.txt-316-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePerhaps I should recall here that my \u003cb\u003erelationship\u003c/b\u003e with\u003cbr\u003eRidder was different from that of the paper\u0027s other reporters.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1972\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1972_479400.txt-316-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1521.3774777706076, "y": 1063.3555155240313}, {"color": "#377eb8", "date": "1981", "id": "nf_1981_773751.txt-564-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethe avoidance of orthogonal \u003cb\u003erelationships\u003c/b\u003e, the central,\u003cbr\u003epivotal mast as the one unifying principle, the tri-partite vertical\u003cbr\u003eorganization.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1981_773751.txt-564-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -311.1496370054002, "y": -613.1604229798282}, {"color": "#377eb8", "date": "1990", "id": "mag_1990_420398.txt-79-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003enaturally led to some difficult \u003cb\u003erelationships\u003c/b\u003e between\u003cbr\u003evarious elements, not all resolved satisfactorily; an example is the\u003cbr\u003erelationship between the large corner capitals and the miniature\u003cbr\u003earcade above them, in which no convincing rapport was made.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1990\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1990_420398.txt-79-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 990.5228570459216, "y": 197.7358409889603}, {"color": "#377eb8", "date": "1962", "id": "news_1962_722734.txt-49-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe balance of payments is the \u003cb\u003erelationship\u003c/b\u003e of money\u003cbr\u003eflowing into and out of the country, and low short-term interest rates\u003cbr\u003einduce money to flow out.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1962\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1962_722734.txt-49-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1226.0024447624785, "y": 576.6001782815779}, {"color": "#377eb8", "date": "1993", "id": "mag_1993_408283.txt-46-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBecause the parent - child \u003cb\u003erelationship\u003c/b\u003e is less likely\u003cbr\u003eto be influenced by the child\u0027s sex, and chores aren\u0027t as likely to be\u003cbr\u003esex - differentiated, she explains, \" Only children are also less\u003cbr\u003elikely to be sexually stereotyped than children with siblings.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1993_408283.txt-46-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -551.483001275086, "y": -600.6083132951588}, {"color": "#377eb8", "date": "1995", "id": "nf_1995_746519.txt-93-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYet it would be a mistake to ascribe descriptions of the\u003cbr\u003ecloseness of Anglo-American relations during this period either to\u003cbr\u003eChurchillian romanticism or to the isolated quality of the personal\u003cbr\u003e\u003cb\u003erelationship\u003c/b\u003e between the American president and\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1995_746519.txt-93-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 998.4582007263266, "y": -401.739985479921}, {"color": "#377eb8", "date": "1977", "id": "fic_1977_10629.txt-2699-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eApparently the old man had adopted him, a \u003cb\u003erelationship\u003c/b\u003e\u003cbr\u003eDavid didn\u0027t mind.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1977_10629.txt-2699-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 659.2806935772352, "y": 175.08414703236872}, {"color": "#377eb8", "date": "1986", "id": "news_1986_670404.txt-34-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe Secretary said the security \u003cb\u003erelationship\u003c/b\u003e is\u003cbr\u003eterminated. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1986\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1986_670404.txt-34-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1414.2420319806915, "y": -139.1576133455373}, {"color": "#377eb8", "date": "1989", "id": "nf_1989_774215.txt-1653-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAn even more important impediment to presidential control of\u003cbr\u003ethe executive branch is the limited effectiveness of his political\u003cbr\u003eappointees in their \u003cb\u003erelationship\u003c/b\u003e to the permanent civil\u003cbr\u003eservants (i.e., persons protected by a merit system which bars\u003cbr\u003epartisan or other political considerations in hiring and\u003cbr\u003efiring).\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1989_774215.txt-1653-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1294.664943793161, "y": 193.6486004999948}, {"color": "#377eb8", "date": "1984", "id": "mag_1984_299239.txt-6-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen the U.S. could sever the umbilical cord that links us to\u003cbr\u003eIsrael in a \u003cb\u003erelationship\u003c/b\u003e that costs us so much money and gives\u003cbr\u003eus so much trouble in dealing with other nations.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1984_299239.txt-6-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 329.9736672576172, "y": -213.0740645242181}, {"color": "#377eb8", "date": "1974", "id": "mag_1974_479549.txt-78-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003etrike down Jaws in the name of \" lib\u0027rty \" or \" property \"\u003cbr\u003egenerally when hey could be thought to bear, by ny stretch of the\u003cbr\u003eimagination, a raional \u003cb\u003erelationship\u003c/b\u003e to a legitimate ocial\u003cbr\u003eend.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1974\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1974_479549.txt-78-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 320.13850648148986, "y": 404.7098891228078}, {"color": "#377eb8", "date": "2002", "id": "mag_2002_397821.txt-24-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen the \u003cb\u003erelationship\u003c/b\u003e gathered steam and momentum, \"\u003cbr\u003eSavage says. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2002_397821.txt-24-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -714.7597674889951, "y": -347.5102813342097}, {"color": "#377eb8", "date": "1974", "id": "mag_1974_491563.txt-283-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe ostensible purpose would be to establish some sort of\u003cbr\u003eworking \u003cb\u003erelationship\u003c/b\u003e between the mobs in control of the various\u003cbr\u003eregions of the country.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1974\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1974_491563.txt-283-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 91.81634762373443, "y": 667.2309618753397}, {"color": "#377eb8", "date": "1966", "id": "news_1966_725896.txt-19-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is increasing my \u003cb\u003erelationship\u003c/b\u003e with the Philharmonic\u003cbr\u003eto a lifelong one, and it makes me very happy because I have a\u003cbr\u003elifelong feeling about them.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1966\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1966_725896.txt-19-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -99.5348098606538, "y": -67.73392562752754}, {"color": "#377eb8", "date": "1984", "id": "fic_1984_10716.txt-7443-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI have it from my closest girl friend, Madeleine -- she, uh,\u003cbr\u003ehas a special \u003cb\u003erelationship\u003c/b\u003e with Inspector Fontaine, who is the\u003cbr\u003ehead of the Lourdes gendarmerie -- \" \" Yes? \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1984\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1984_10716.txt-7443-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 372.6867229555213, "y": 1102.199691265065}, {"color": "#377eb8", "date": "1967", "id": "news_1967_726232.txt-126-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMr. Levin is aware that I travel 60 to 70 per cent of my\u003cbr\u003eworking time, which I think suffices for his various aspersions about\u003cbr\u003emy \u003cb\u003erelationship\u003c/b\u003e with Lord Russell.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1967\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1967_726232.txt-126-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -814.5201336114203, "y": 725.7612017554529}, {"color": "#ff7f00", "date": "1968", "id": "nf_1968_773613.txt-380-1", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003erelationship\u003c/b\u003e is this: Characters both do and feel,\u003cbr\u003eJames observed, but their actions impart interest only in terms of\u003cbr\u003etheir feelings; to represent the wholeness of the character,\u003cbr\u003etherefore?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1968\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1968_773613.txt-380-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1094.5214842203193, "y": 1070.4881939259224}, {"color": "#f781bf", "date": "1978", "id": "news_1978_733719.txt-90-4", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBecause of this special \u003cb\u003erelationship\u003c/b\u003e, there is every\u003cbr\u003ereason to urge Mr. Marcos to implement genuine economic and human\u003cbr\u003erights reforms which will benefit the people of his country and, if he\u003cbr\u003echooses not to do so, to question the wisdom of continuing to support\u003cbr\u003ehis Government with large infusions of American aid.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1978\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1978_733719.txt-90-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -1800.4556269849038, "y": 32.72640244729486}, {"color": "k", "date": "1992", "id": "mag_1992_395592.txt-103-2", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlicia\u0027s \u003cb\u003erelationship\u003c/b\u003e with her female lover has helped\u003cbr\u003eher resolve childhood pains of sexual abuse and abandonment.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1992_395592.txt-103-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -202.42100153042904, "y": 964.6998101267064}, {"color": "k", "date": "1998", "id": "news_1998_653834.txt-47-15", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThat\u0027s because the best-compensated investment bankers tend to\u003cbr\u003ebe those with the tightest client \u003cb\u003erelationships\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1998_653834.txt-47-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -500.7248047807069, "y": 975.047666491231}, {"color": "k", "date": "1962", "id": "nf_1962_774267.txt-1702-7", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is obvious that with these price \u003cb\u003erelationships\u003c/b\u003e it\u003cbr\u003ewould be more profitable to buy the feeder than it would be to raise\u003cbr\u003ehim.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1962\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1962_774267.txt-1702-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -756.6695141141585, "y": -1173.2369627592761}, {"color": "#984ea3", "date": "1995", "id": "nf_1995_773555.txt-1137-11", "label": "5", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe wrote me the following letter which speaks volumes about\u003cbr\u003eparent-child \u003cb\u003erelationships\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1995_773555.txt-1137-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 1304.1799653703372, "y": -1364.495950391705}, {"color": "#a65628", "date": "1973", "id": "nf_1973_774239.txt-1000-4", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe underlying ground for \u003cb\u003erelationship\u003c/b\u003e quality is\u003cbr\u003eclearly the continuous physical textures of the body.24 The event\u003cbr\u003equality of each successive perception becomes gradually enriched in a\u003cbr\u003eprocess called funding\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1973\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1973_774239.txt-1000-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1250.3700735834518, "y": -312.69482866634326}]);
+        edges = new vis.DataSet([{"color": "black", "from": "mag_1966_490646.txt-59-24", "label": 4, "to": "news_2004_617168.txt-56-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1966_490646.txt-59-24", "label": 3.5, "to": "mag_1974_491563.txt-283-11", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1966_490646.txt-59-24", "label": 3, "to": "nf_1987_773755.txt-816-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1966_490646.txt-59-24", "label": 4, "to": "news_1964_724317.txt-2-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1966_490646.txt-59-24", "label": 3, "to": "nf_1969_773553.txt-656-25", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1966_490646.txt-59-24", "label": 3, "to": "mag_1995_396720.txt-13-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1981_774357.txt-981-8", "label": 3, "to": "mag_1984_299239.txt-6-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1979_293051.txt-1-29", "label": 3.5, "to": "nf_1969_773553.txt-656-25", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1979_293051.txt-1-29", "label": 3, "to": "mag_2001_416749.txt-96-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 3, "to": "fic_1981_782024.txt-95-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 3, "to": "news_1986_670404.txt-34-5", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 3.5, "to": "nf_1969_773553.txt-571-10", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 3, "to": "mag_1995_396720.txt-13-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 3.5, "to": "nf_1994_746583.txt-738-4", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 4, "to": "mag_1968_491434.txt-187-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 3, "to": "nf_1969_773553.txt-656-25", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 4, "to": "news_1964_724317.txt-2-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-8425-15", "label": 4, "to": "mag_1995_396716.txt-10-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1987_773531.txt-589-15", "label": 4, "to": "mag_1979_493953.txt-1-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1987_773531.txt-589-15", "label": 3, "to": "fic_1984_10716.txt-7443-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1987_773531.txt-589-15", "label": 4, "to": "nf_2002_746524.txt-91-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2006_51124.txt-668-18", "label": 3, "to": "mag_1965_488190.txt-87-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1997_773513.txt-486-5", "label": 3, "to": "nf_1987_773755.txt-816-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1991_421245.txt-23-7", "label": 3.5, "to": "nf_1987_773755.txt-816-35", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1991_421245.txt-23-7", "label": 3, "to": "nf_1970_774162.txt-1426-33", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1991_421245.txt-23-7", "label": 3, "to": "nf_1993_746761.txt-49-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1971_780007.txt-518-20", "label": 4, "to": "mag_1989_327864.txt-8-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2001_415828.txt-264-14", "label": 3, "to": "news_1988_670637.txt-52-54", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1997_773530.txt-135-1", "label": 4, "to": "mag_1992_395615.txt-14-48", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2004_660955.txt-53-5", "label": 3, "to": "nf_1995_773555.txt-336-16", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_2004_660955.txt-53-5", "label": 3, "to": "mag_1987_432335.txt-56-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1968_491434.txt-187-6", "label": 4, "to": "fic_1999_30057.txt-31-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1968_491434.txt-187-6", "label": 4, "to": "nf_1993_746761.txt-49-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1960_774194.txt-2266-18", "label": 4, "to": "mag_1995_396716.txt-10-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1960_774194.txt-2266-18", "label": 3, "to": "news_1978_733544.txt-40-9", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1987_773755.txt-816-35", "label": 2.5, "to": "mag_1995_396720.txt-13-12", "weight": 2.5, "width": 4}, {"color": "black", "from": "nf_1987_773755.txt-816-35", "label": 4, "to": "mag_1989_327864.txt-8-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1987_773755.txt-816-35", "label": 4, "to": "mag_2001_417637.txt-47-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1987_773755.txt-816-35", "label": 3, "to": "nf_1995_773555.txt-1137-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1987_773755.txt-816-35", "label": 3, "to": "news_1964_724317.txt-2-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1987_773755.txt-816-35", "label": 3, "to": "nf_1995_773555.txt-336-16", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1987_773755.txt-816-35", "label": 3, "to": "nf_1981_773751.txt-564-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_2005_31471.txt-363-22", "label": 4, "to": "fic_1999_30057.txt-31-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_31471.txt-363-22", "label": 3, "to": "news_1967_726232.txt-126-27", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_2004_413218.txt-203-10", "label": 4, "to": "fic_1999_30057.txt-31-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2004_413218.txt-203-10", "label": 3, "to": "mag_2001_417637.txt-47-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1987_670537.txt-23-35", "label": 3, "to": "mag_1965_488190.txt-87-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1999_773697.txt-443-0", "label": 3, "to": "mag_2004_414034.txt-51-5", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1969_773553.txt-656-25", "label": 4, "to": "news_1980_669182.txt-94-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1969_773553.txt-656-25", "label": 4, "to": "fic_1987_10756.txt-6386-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1969_773553.txt-656-25", "label": 3.5, "to": "mag_1995_396720.txt-13-12", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1969_773553.txt-656-25", "label": 3, "to": "mag_1984_299239.txt-6-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1969_773553.txt-656-25", "label": 3, "to": "news_1964_724317.txt-2-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1969_773553.txt-656-25", "label": 4, "to": "fic_1999_30057.txt-31-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1970_774162.txt-1426-33", "label": 3, "to": "mag_1995_396720.txt-13-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1970_774162.txt-1426-33", "label": 3, "to": "news_1988_670637.txt-52-54", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1995_397042.txt-75-9", "label": 2.5, "to": "fic_1999_30057.txt-31-16", "weight": 2.5, "width": 4}, {"color": "black", "from": "nf_2002_746524.txt-91-11", "label": 4, "to": "news_1993_600205.txt-74-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_2002_746524.txt-91-11", "label": 4, "to": "nf_1993_773791.txt-93-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1990_419883.txt-14-4", "label": 4, "to": "mag_1979_493953.txt-1-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1981_774357.txt-1630-1", "label": 3, "to": "mag_1984_299239.txt-6-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1988_670637.txt-52-54", "label": 3, "to": "mag_1972_479400.txt-316-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1988_670637.txt-52-54", "label": 3.5, "to": "nf_1987_774092.txt-541-17", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_2001_416749.txt-96-2", "label": 4, "to": "news_1991_649979.txt-5-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2001_416749.txt-96-2", "label": 4, "to": "nf_1995_773555.txt-336-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33947.txt-229-10", "label": 4, "to": "nf_1995_773555.txt-336-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_30057.txt-31-16", "label": 4, "to": "nf_1981_774357.txt-1047-33", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_30057.txt-31-16", "label": 4, "to": "news_2001_661949.txt-88-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_30057.txt-31-16", "label": 4, "to": "mag_2007_389494.txt-18-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1999_30057.txt-31-16", "label": 3, "to": "news_1964_724317.txt-2-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1999_30057.txt-31-16", "label": 3, "to": "nf_1969_773553.txt-571-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1993_773791.txt-93-5", "label": 3, "to": "news_1993_600205.txt-74-23", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1993_773791.txt-93-5", "label": 3, "to": "fic_1984_10716.txt-7443-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1993_773791.txt-93-5", "label": 3, "to": "mag_1965_97767.txt-125-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_2004_414034.txt-51-5", "label": 3.5, "to": "mag_1995_396720.txt-13-12", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_2004_414034.txt-51-5", "label": 3, "to": "news_1967_726232.txt-126-27", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_2004_617168.txt-56-7", "label": 3, "to": "nf_1990_773757.txt-502-3", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1997_54734.txt-225-1", "label": 4, "to": "mag_1995_396720.txt-13-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1978_733719.txt-90-4", "label": 3, "to": "mag_1995_396716.txt-10-3", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_2001_661949.txt-88-6", "label": 4, "to": "mag_2001_416325.txt-28-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2001_661949.txt-88-6", "label": 3, "to": "fic_1978_13992.txt-3116-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_2001_661949.txt-88-6", "label": 4, "to": "news_1991_649979.txt-5-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2001_661949.txt-88-6", "label": 3, "to": "mag_1974_491563.txt-283-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_2001_661949.txt-88-6", "label": 4, "to": "nf_1969_773553.txt-571-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1992_395592.txt-103-2", "label": 4, "to": "fic_1984_10716.txt-7443-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1978_733544.txt-40-9", "label": 3, "to": "mag_1993_408283.txt-46-5", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1998_653834.txt-47-15", "label": 4, "to": "news_1964_724317.txt-2-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1983_124496.txt-118-15", "label": 4, "to": "mag_1984_299239.txt-6-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1983_124496.txt-118-15", "label": 3, "to": "news_1980_669182.txt-94-21", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1965_97767.txt-125-2", "label": 3, "to": "nf_1987_774092.txt-541-17", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1979_493953.txt-1-3", "label": 3, "to": "nf_1995_773555.txt-336-16", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1979_493953.txt-1-3", "label": 2.5, "to": "fic_1984_10716.txt-7443-18", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1978_13992.txt-3116-6", "label": 4, "to": "nf_1995_773555.txt-336-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1978_13992.txt-3116-6", "label": 3, "to": "news_1991_649979.txt-5-13", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1995_396720.txt-13-12", "label": 3, "to": "mag_1984_299239.txt-6-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1995_396720.txt-13-12", "label": 4, "to": "mag_1995_396716.txt-10-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1995_396720.txt-13-12", "label": 4, "to": "fic_1977_10629.txt-2699-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1975_732273.txt-29-10", "label": 3, "to": "mag_1995_396716.txt-10-3", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1993_600205.txt-74-23", "label": 3, "to": "nf_1968_773613.txt-380-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1993_600205.txt-74-23", "label": 4, "to": "nf_1995_746519.txt-93-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1995_773555.txt-336-16", "label": 4, "to": "fic_1985_782029.txt-6754-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1995_773555.txt-336-16", "label": 4, "to": "nf_1995_746519.txt-93-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1995_773555.txt-336-16", "label": 3, "to": "mag_2002_397821.txt-24-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1995_773555.txt-336-16", "label": 3, "to": "news_1986_670404.txt-34-5", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1987_432335.txt-56-8", "label": 3, "to": "news_1966_725896.txt-19-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1981_782024.txt-95-2", "label": 4, "to": "fic_1985_782029.txt-6754-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1991_649979.txt-5-13", "label": 4, "to": "mag_1993_408283.txt-46-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1974_314761.txt-23-4", "label": 4, "to": "news_1964_724317.txt-2-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1965_488190.txt-87-12", "label": 3, "to": "news_1962_722734.txt-49-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1990_746497.txt-148-17", "label": 3.5, "to": "news_1964_724317.txt-2-6", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_2001_29273.txt-78-4", "label": 4, "to": "mag_1995_396716.txt-10-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2001_416325.txt-28-30", "label": 4, "to": "mag_2007_389494.txt-18-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1988_668934.txt-3-18", "label": 4, "to": "mag_2002_397821.txt-24-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2009_36818.txt-200-24", "label": 3, "to": "mag_1974_491563.txt-283-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1964_724317.txt-2-6", "label": 3.5, "to": "news_1967_726232.txt-126-27", "weight": 3.5, "width": 4}, {"color": "black", "from": "news_1964_724317.txt-2-6", "label": 4, "to": "mag_1984_299239.txt-6-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1964_724317.txt-2-6", "label": 3, "to": "fic_1984_10716.txt-7443-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1995_396716.txt-10-3", "label": 3, "to": "nf_1981_773751.txt-564-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1995_396716.txt-10-3", "label": 3.5, "to": "news_1962_722734.txt-49-6", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1990_420398.txt-79-5", "label": 3, "to": "news_1986_670404.txt-34-5", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1984_299239.txt-6-15", "label": 4, "to": "news_1966_725896.txt-19-4", "weight": 4.0, "width": 4}, {"color": "lightgray", "from": "nf_1987_773531.txt-589-15", "label": 2, "to": "news_1988_670637.txt-52-54", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1991_421245.txt-23-7", "label": 2, "to": "fic_1999_30057.txt-31-16", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1971_780007.txt-518-20", "label": 2, "to": "news_1978_733719.txt-90-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1960_774194.txt-2266-18", "label": 2, "to": "news_1975_732273.txt-29-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1987_773755.txt-816-35", "label": 2, "to": "news_1993_600205.txt-74-23", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1999_773697.txt-443-0", "label": 2, "to": "nf_1973_774239.txt-1000-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_2002_746524.txt-91-11", "label": 1.5, "to": "fic_1987_10756.txt-6386-30", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "nf_2002_746524.txt-91-11", "label": 1.5, "to": "news_1991_649979.txt-5-13", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "nf_1993_773791.txt-93-5", "label": 2, "to": "nf_1968_773613.txt-380-1", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1993_773791.txt-93-5", "label": 2, "to": "news_1964_724317.txt-2-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_2004_414034.txt-51-5", "label": 2, "to": "nf_1973_774239.txt-1000-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1987_10756.txt-6386-30", "label": 2, "to": "news_1993_600205.txt-74-23", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "news_2001_661949.txt-88-6", "label": 2, "to": "nf_1989_774215.txt-1653-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1993_746761.txt-49-18", "label": 2, "to": "nf_1995_773555.txt-1137-11", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_2001_417637.txt-47-11", "label": 2, "to": "mag_1984_299239.txt-6-15", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1979_493953.txt-1-3", "label": 2, "to": "news_1993_600205.txt-74-23", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1979_493953.txt-1-3", "label": 2, "to": "nf_1981_774357.txt-336-26", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "news_1991_649979.txt-5-13", "label": 2, "to": "nf_1968_773613.txt-380-1", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1968_773613.txt-380-1", "label": 2, "to": "mag_1984_299239.txt-6-15", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1992_395592.txt-103-2", "label": NaN, "to": "mag_1995_396716.txt-10-3", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1992_395592.txt-103-2", "label": NaN, "to": "nf_1981_774357.txt-1047-33", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "news_1998_653834.txt-47-15", "label": NaN, "to": "mag_2007_389494.txt-18-4", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1962_774267.txt-1702-7", "label": NaN, "to": "mag_1974_479549.txt-78-32", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

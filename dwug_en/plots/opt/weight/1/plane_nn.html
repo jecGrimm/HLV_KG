@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">plane_nn (1)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1926-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf the sun\u0027s rays be parallel to any plane, that plane to which\u003cbr\u003ethey are parallel, is called a \u003cb\u003eplane\u003c/b\u003e of shade.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1926-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 488.98951679908265, "y": 1642.5334839069574}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1855-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eits angles upon a given point A, in the \u003cb\u003eplane\u003c/b\u003e, on which\u003cbr\u003ethe ichnography is to be described; given the ichnography A L, of an\u003cbr\u003eangle, which the two under planes make with each other; the angle Ma/,\u003cbr\u003ewhich the angle of the solid makes with its ichnography A L; the\u003cbr\u003eintersection A a, of one of its ends with the plane of the\u003cbr\u003eichnography; the angle D A a, which one side of the end makes at A,\u003cbr\u003ewith the intersection A a of that end; also given one of the sides of\u003cbr\u003ethe ends, and the length of the prism.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1855-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 516.7395788941956, "y": 1128.4412054423726}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2089-55", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewill be no difference between the shadow on the plane, and the\u003cbr\u003eside of the prism which projects that shadow; and if the plane be\u003cbr\u003eentirely deprived of light, by the extensive breadth of the shadow,\u003cbr\u003ethe side of the prism will in general be darker than the shadow on the\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e: but this will depend very much on the situation of other\u003cbr\u003eobjects.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2089-55\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -655.926685354951, "y": 744.4518421184199}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-281-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNow if you make the object of the same size and distance from\u003cbr\u003ethe eye, and put the perspective \u003cb\u003eplane\u003c/b\u003e in the same place as the\u003cbr\u003eoriginal, (that is, the same proportion, measuring by a scale,) you\u003cbr\u003ewill obtain the same angle as the original makes, and this angle will\u003cbr\u003eintersect the perspective plane precisely as the original angle would\u003cbr\u003ea pane of glass, at the given distance from the eye.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-281-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -466.5055683365754, "y": 1077.2144928707555}, {"color": "#377eb8", "date": "1859", "id": "fic_1859_270.txt-3039-45", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe marrowy organisms, with skins that shed water like the\u003cbr\u003ebacks of ducks, with smooth surfaces neatly padded beneath, and velvet\u003cbr\u003elinings to their singing-pipes, are not so common among us as that\u003cbr\u003eother pattern of humanity with angular outlines and \u003cb\u003eplane\u003c/b\u003e\u003cbr\u003esurfaces, and integuments, hair like the fibrous covering of a cocoa-\u003cbr\u003enut in gloss and suppleness as well as color, and voices at once thin\u003cbr\u003eand strenuous, - - acidulous enough to produce effervescence with\u003cbr\u003ealkalis, and stridulous enough to sing duets with the katydids.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1859_270.txt-3039-45\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -263.8588410559758, "y": 979.4689144466424}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2425-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003efront of the triglyphs, or to the front of the architrave; and\u003cbr\u003eif these planes be in the same \u003cb\u003eplane\u003c/b\u003e with each otlier, and\u003cbr\u003erecessed beyond the ends of the triglyph, so as to show a small part\u003cbr\u003eof the vertical sides of the beams; that is, to be further in than the\u003cbr\u003echannels of the triglyph; then these spaces so filled up, are called\u003cbr\u003emetopes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2425-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -198.319147287456, "y": 999.4790583670541}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2011-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen because that the point q is in the \u003cb\u003eplane\u003c/b\u003e 6 c\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2011-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -135.82889680464277, "y": 1263.9499195159706}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_747976.txt-544-27", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBond, in masonry, consists in the placing of the stones in such\u003cbr\u003erelative positions that no joint in any course shall be in the same\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e with any other joint in the course immediately above or\u003cbr\u003ebelow it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-544-27\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -174.0644434528633, "y": 1696.486203827697}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_765349.txt-396-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAfter three months \u0027 labor with 800 men, the obelisk was\u003cbr\u003eremoved on an inclined \u003cb\u003eplane\u003c/b\u003e into the vessel, through a hole\u003cbr\u003emade in the end for the purpose.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_765349.txt-396-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 193.2992730372118, "y": 550.3185155322461}, {"color": "#377eb8", "date": "1848", "id": "mag_1848_565759.txt-87-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut we are most familiar with the exhibitions of gravity in\u003cbr\u003ebodies descending inclined \u003cb\u003eplanes\u003c/b\u003e, as in the avalanche and the\u003cbr\u003ecataract.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1848_565759.txt-87-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 459.78228127416844, "y": 1562.761439043273}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2098-31", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe rays of the sun being reflected from the horizon in all\u003cbr\u003edirections, the projecture of the prism will prevent a part of the\u003cbr\u003ereflected rays from proceeding to the \u003cb\u003eplane\u003c/b\u003e behind the prism,\u003cbr\u003eand consequently the dane would be something darker than the face of\u003cbr\u003ethe prism which is parallel to it; but the side of the prism adjoining\u003cbr\u003eto the plane will throw a reflection upon the plane, and therefore it\u003cbr\u003ewould be difficult to perceive the difference between the face of the\u003cbr\u003eprism, and the plane parallel behind the prism.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2098-31\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -319.9415967797652, "y": 1011.8492193416757}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1786-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf a plane has only one trace, and this trjice parallel to the\u003cbr\u003eground-line, let it be in the vertical plane; then the plane will be\u003cbr\u003eparallel to the horizontal \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1786-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 98.82069203658554, "y": 794.1987659696462}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-644-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eProvide a large table; this is a horizontal \u003cb\u003eplane\u003c/b\u003e, and\u003cbr\u003ewill represent the ground plane, viz.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-644-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -298.8173590840598, "y": 866.0364304209256}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1787-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSo if the trace of the plane be in the horizontal plane, and\u003cbr\u003eparallel to the ground - line, the \u003cb\u003eplane\u003c/b\u003e will be parallel to\u003cbr\u003ethe vertical plane.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1787-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -52.5781314624984, "y": 1148.4965270475116}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1779-34", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf a plane be parallel to one of the planes of projection, this\u003cbr\u003eplane will have only one trace, which will be parallel to the ground-\u003cbr\u003eline, and soluated in the other \u003cb\u003eplane\u003c/b\u003e of projection.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1779-34\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1506.7311240539182, "y": 1281.6914963818135}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1789-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus, if it be a horizontal trace which is perpendicular tothe\u003cbr\u003egroundline, the \u003cb\u003eplane\u003c/b\u003e will be perpendicular to the vertical\u003cbr\u003eplane of projection; and if, on the contrary, the vertical trace be\u003cbr\u003ethat which is perpendicular to the ground-line, then the plane will be\u003cbr\u003eperpendicular to the horizontal plane.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1789-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 379.6284502261809, "y": 1198.8751446687559}, {"color": "#377eb8", "date": "1852", "id": "nf_1852_748165.txt-661-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn their simple form, they are the lever, the wheel and axle,\u003cbr\u003ethe inclined \u003cb\u003eplane\u003c/b\u003e\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1852_748165.txt-661-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1016.7026425212356, "y": 996.0818259381368}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-45-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor a writing desk, which is an inclined \u003cb\u003eplane\u003c/b\u003e, does not\u003cbr\u003emake a right angle with the table on which it stands, as the book when\u003cbr\u003eplaced upright does; but it makes a smaller angle, and this angle is\u003cbr\u003emore or less acute (that is, small) according to the greater or less\u003cbr\u003einclination of the desk.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-45-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -6.348018945999472, "y": 1336.7718423548847}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1400-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe section of a cylinder cut by any \u003cb\u003eplane\u003c/b\u003e inclined to\u003cbr\u003eits axis, is an ellipsis.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1400-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -210.29236806023715, "y": 703.3708356330537}, {"color": "#377eb8", "date": "1827", "id": "nf_1827_747521.txt-191-66", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlthough I have made use of the Roman ovolo and ogee iu all the\u003cbr\u003eorders, I do not generally use them in practice; the bending, or\u003cbr\u003eturning inward, of the upper edge of the Grecian, ot quirk ovolo, when\u003cbr\u003ethe sun shines on its surface, causes a beautiful variety of light and\u003cbr\u003eshade, which greatly relieves it from \u003cb\u003eplane\u003c/b\u003e surfaces; and if it\u003cbr\u003eis entirely in shadow, but receive a reflected\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1827_747521.txt-191-66\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 136.93810591632544, "y": 1408.4591828246964}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-452-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn some the list or edge, throughout all the circumvolutions,\u003cbr\u003eis in the same line or \u003cb\u003eplane\u003c/b\u003e: - such are the antique Ionic\u003cbr\u003evolutes, and those of Vignola.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-452-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -291.9899500108168, "y": 719.9886293700234}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-670-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSubstitute for the vacant frame, one with a plate of glass in\u003cbr\u003eit, as a perspective \u003cb\u003eplane\u003c/b\u003e; you can trace with a pencil on this\u003cbr\u003eglass, or measure with compasses, the appearance of the figures\u003cbr\u003ebeyond.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-670-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 320.21205418956544, "y": 932.6269494591701}, {"color": "#377eb8", "date": "1827", "id": "nf_1827_748059.txt-1330-69", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe observed (161) that if df, representing the weight of W, be\u003cbr\u003eresolved into the two forces f e perpendicular to the beam and d e in\u003cbr\u003ethe direction of it, d e will represent the force exerted by W in the\u003cbr\u003edirection of the beam, d e therefore will represent the force with\u003cbr\u003ewhich a spherical weight W will move down the \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1827_748059.txt-1330-69\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -593.7242235427208, "y": 749.440420773196}, {"color": "#377eb8", "date": "1859", "id": "mag_1859_567139.txt-171-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey are, as it were, the steps by which it rises to the\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e of conviction, emotion, action.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1859_567139.txt-171-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 680.6068204107461, "y": 1657.493379844899}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2012-175", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, and the points t and w, in the plan 9 / g 10, and the lines\u003cbr\u003eJ, k, I, m, parallel to these planes; the lines j \u0027, Ar, I, m, n, will\u003cbr\u003emake parallel shadows; therefore, draw q, c, rdjt u, parallel to j k,\u003cbr\u003ek /, or m n, to cut c 6 in e, k 7 in d, and G g at w; join d q; then\u003cbr\u003eto find the depth of the shadow of Z m on the elevation, draw 5 on the\u003cbr\u003eichnography parallel to J W; draw 4* \u0026^; perpendicular to W P,\u003cbr\u003elikewise 4* b, parallel to the ray on the elevation, and S s, parallel\u003cbr\u003eto the axis of the prism; then s ii the depth of the shadow; but as\u003cbr\u003ethe projections of the extremities of I m, fall upon the adjacent\u003cbr\u003e\u003cb\u003eplanes\u003c/b\u003e at r, and tf draw e f through s, cutting 8 e at\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2012-175\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 484.5806062549462, "y": 1373.8850580445526}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1391-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA segment of a cylinder is comprehended under three\u003cbr\u003e\u003cb\u003eplanes\u003c/b\u003e, and the curve surface of the cylinder; two of these are\u003cbr\u003esegments of circles: the other plane is a parallelogram, which is\u003cbr\u003ehere, for distinction\u0027s sake, called the plane of the segment, and the\u003cbr\u003ecircular segments are called the ends of the cylinder.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1391-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 92.56024849662307, "y": 1127.6316796008077}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1726-50", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHence the horizontal projectant is parallel to the vertical\u003cbr\u003eplane, and is equal to the distance between the original point and the\u003cbr\u003ehorizontal plane; and the vertical projectant is parallel to the\u003cbr\u003ehorizontal plane, and is equal to the distance between the original\u003cbr\u003epoint and the vertical \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1726-50\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -113.70937954745762, "y": 913.7739388113429}, {"color": "#377eb8", "date": "1827", "id": "nf_1827_748059.txt-1356-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn this case the power: weight as g f: d f, or, which is the\u003cbr\u003esame thing, as A B: C B, or as the height of the \u003cb\u003eplane\u003c/b\u003e: the\u003cbr\u003ebase.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1827_748059.txt-1356-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 352.5730935870243, "y": 1166.2153787490504}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-737-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e3d, If the sun is on a line with the perspective \u003cb\u003eplane\u003c/b\u003e;\u003cbr\u003ethat is, so placed, that were the perspective plane extended till it\u003cbr\u003ereached the sun, it would go neither before nor behind, but just\u003cbr\u003ethrough it, then the sun is in the same plane as the picture, and the\u003cbr\u003eshadows fall in a line parallel with the ground line.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-737-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 168.37855812617343, "y": 952.905344219364}, {"color": "#377eb8", "date": "1858", "id": "mag_1858_556423.txt-70-46", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAgain, when we see the broad tail of the fish placed\u003cbr\u003evertically, and that of the whale horizontally, we know that, as it s\u003cbr\u003ethe chief instrument of progression in both, and exerts its power from\u003cbr\u003eside to side of its \u003cb\u003eplane\u003c/b\u003e, therefore the first can have but\u003cbr\u003ecomparatively slender capacity of diving, and is limited to a narrow\u003cbr\u003erange of ascent and descent; while the latter has this capacity in\u003cbr\u003eexcess.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1858_556423.txt-70-46\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 281.26076926807457, "y": 1611.2779135031733}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1797-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eReciprocally, if a \u003cb\u003eplane\u003c/b\u003e be parallel to the ground-line,\u003cbr\u003eits two traces will be parallel to the ground-line.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1797-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 272.29987751785217, "y": 798.8184218200814}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-105-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor if you suppose the perspective plane set upright on the\u003cbr\u003eground before you, higher than your eye; then the horizontal\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e, to reach from your eye to the verge of the sky, must\u003cbr\u003epass through the perspective plane, and thus make a line exactly\u003cbr\u003eparallel with the top and bottom line of your perspective\u003cbr\u003eplane.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-105-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 452.5584559465194, "y": 850.3530332723758}, {"color": "#377eb8", "date": "1853", "id": "mag_1853_566255.txt-503-41", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe human race does not revolve in a circle, but ascends in a\u003cbr\u003espiral; passing, indeed, again and again through the same errors to\u003cbr\u003ethe same truths, but passing through them each time on a higher\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_566255.txt-503-41\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -72.69101318025487, "y": 742.3785856731624}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2101-61", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ Given the ichnography and elevation of a base and capital,\u003cbr\u003eand the seat of the sun\u0027s rays on the ichnographj, and on the\u003cbr\u003eelevation; to project the shadows caused by the several parts of\u003cbr\u003eitself, and the line of shade upon the baseImagine the object to be\u003cbr\u003esliced, or cut, by as many \u003cb\u003eplanes\u003c/b\u003e, parallel to the axes of the\u003cbr\u003ecolumns, * and to the sun\u0027s rays, as may be tliought convenient for\u003cbr\u003ethe purpose: then it is plain, if a ray of light enter any of those\u003cbr\u003eplanes, that every part of the ray will be in that plane, and that the\u003cbr\u003eprojecting parts upon the edges of * It 18 not abiolutelj necessary to\u003cbr\u003esuppose the plane parallel to the axis of the\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2101-61\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 60.63119124988267, "y": 789.7388462830904}, {"color": "#377eb8", "date": "1851", "id": "mag_1851_555706.txt-293-28", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEach stratum, he argues, must have a force of rotation\u003cbr\u003eproportioned to its own level, and can impart force only by descent to\u003cbr\u003ea lower \u003cb\u003eplane\u003c/b\u003e\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1851_555706.txt-293-28\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 137.59120988307095, "y": 697.5392155006147}, {"color": "#377eb8", "date": "1850", "id": "mag_1850_565904.txt-183-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003emeans follows that the work of the medical profession lies on\u003cbr\u003ethis loftiest \u003cb\u003eplane\u003c/b\u003e, and, consequently, the argument in\u003cbr\u003equestion has nothing to do with the matter at issue.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1850_565904.txt-183-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -353.70385574018235, "y": 1581.9768101344034}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-779-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe opaque object A (figure 1, Plate 18) is oblique both to the\u003cbr\u003ehorizon and the ground \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-779-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 637.7057642285783, "y": 1255.3411158258714}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1734-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMoreover we see, and it is very important, that the lines A a,\u003cbr\u003eB b, perpendicular to the ground line U V, will not cease to be so in\u003cbr\u003ethe motion of the \u003cb\u003eplane\u003c/b\u003e U V Y Z; and as the corresponding lines\u003cbr\u003ea a, \u0026; b, are also perpendiculars, to the ground line U V, it follows\u003cbr\u003ethat the lines, a a \u0027, b 6 \u0027, will be the respective prolongation of\u003cbr\u003ethe lines a a, \u0026; b.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1734-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 225.87235611410725, "y": 1000.3261993615226}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-527-50", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe four sides reaching from the seat to the floor, where the\u003cbr\u003ecross pieces are placed, are four upright planes, at right angles with\u003cbr\u003eeach other: for if the chair were boxed up from the floor to the seat,\u003cbr\u003ethis box would form the four \u003cb\u003eplanes\u003c/b\u003e or sides.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-527-50\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 212.95794090774038, "y": 1114.6246729994355}, {"color": "#377eb8", "date": "1827", "id": "nf_1827_747521.txt-56-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003ePlane\u003c/b\u003e figures having more than four sides are in general\u003cbr\u003ecalled polygons, and receive other particular names, according to the\u003cbr\u003enumber of their sides or angles.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1827_747521.txt-56-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -151.0932909309026, "y": 834.0002511466585}, {"color": "#377eb8", "date": "1838", "id": "nf_1838_747585.txt-200-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe interior of the pyramid is excessively hot, particularly\u003cbr\u003ewhen surrounded by a number of Arabs and flaring torches * Leaving the\u003cbr\u003eKings Chamber, I descended the inclined \u003cb\u003eplane\u003c/b\u003e, and prepared to\u003cbr\u003edescend the well referred to by Pliny.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1838\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1838_747585.txt-200-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -311.07756140692675, "y": 920.463339645409}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1801-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eReciprocally, if on each plane of projection the traces of the\u003cbr\u003etwo planes are parallel, the \u003cb\u003eplanes\u003c/b\u003e will also be\u003cbr\u003eparallel.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1801-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -392.84138910790955, "y": 784.1473912995455}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1787-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSo if the trace of the plane be in the horizontal \u003cb\u003eplane\u003c/b\u003e,\u003cbr\u003eand parallel to the ground - line, the plane will be parallel to the\u003cbr\u003evertical plane.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1787-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 171.01147849793912, "y": 809.4816549909397}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7039.txt-2743-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eminerals, the magnet points ever to the North; so is there a\u003cbr\u003eplant in the prairies, called by travellers the Polar Plant, or Indian\u003cbr\u003eCompass, because the \u003cb\u003eplane\u003c/b\u003e of its leaf points due North and\u003cbr\u003eSouth, without other variation than the temporary ruffling of the\u003cbr\u003ebreeze.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7039.txt-2743-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -282.0672321610148, "y": 1263.8407580882251}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-384-48", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe wall of a house which stands parallel or square before vou,\u003cbr\u003eis a plane parallel with the perspective plane, or the window through\u003cbr\u003ewhich you look; but the roof is not, it makes an angle more or less\u003cbr\u003elarge, with the perspective \u003cb\u003eplane\u003c/b\u003e, consequently any lines lying\u003cbr\u003eon it, (viz.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-384-48\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -276.2856676000418, "y": 1585.7904461105877}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-598-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe open box C, Plate 14, affords an example of lines depressed\u003cbr\u003ebelow the ground \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-598-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 55.91689400048599, "y": 1657.4928730184115}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1845-73", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlthough the term orthography signifies, in general, the\u003cbr\u003eprojection of any plane which is perpendicular to the projecting rays,\u003cbr\u003ewithout regarding the position of the plane on which the object is\u003cbr\u003eprojected; yet writers on projection substitute it for elevation, as\u003cbr\u003ealready defined; by which means it will be impossible to know when we\u003cbr\u003emean that particular position of orthographical projection, which is\u003cbr\u003emade on a \u003cb\u003eplane\u003c/b\u003e perpendicular to the horizon.1 /z/ If any\u003cbr\u003epoint, line, or plane of any original figure, or object, touch the\u003cbr\u003eplane on which it is to be projected, the place where it touches the\u003cbr\u003eprojecting plane, is the projection of that point, line, or plane of\u003cbr\u003ethe original figure or object.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1845-73\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 503.7934741752857, "y": 1017.7031739884146}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1569-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ When two \u003cb\u003eplanes\u003c/b\u003e ABC D, A B F E, Fig.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1569-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 217.5106420473622, "y": 657.5139088547586}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-544-31", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYou will observe that the two circles partly described on the\u003cbr\u003eplate, for the purpose of determining the opening of the box, are\u003cbr\u003ecircles standing upright on the ground \u003cb\u003eplane\u003c/b\u003e, and not laying on\u003cbr\u003eit, as are the circles in Plate 10.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-544-31\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -443.0091230044312, "y": 737.5166535947263}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1787-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSo if the trace of the plane be in the horizontal plane, and\u003cbr\u003eparallel to the ground - line, the plane will be parallel to the\u003cbr\u003evertical \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1787-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 79.53679731515224, "y": 880.3030150085201}, {"color": "#377eb8", "date": "1829", "id": "mag_1829_553985.txt-220-31", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn the neighboring building, we saw it standing in rows, with\u003cbr\u003ethe lower part of the cone in a hole, to drop the molasses again upon\u003cbr\u003ean inclined \u003cb\u003eplane\u003c/b\u003e, which conveys it to a vat holding thirty\u003cbr\u003ethousand gallons.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1829_553985.txt-220-31\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 88.06905661679049, "y": 1046.948485839952}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1789-54", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus, if it be a horizontal trace which is perpendicular tothe\u003cbr\u003egroundline, the plane will be perpendicular to the vertical plane of\u003cbr\u003eprojection; and if, on the contrary, the vertical trace be that which\u003cbr\u003eis perpendicular to the ground-line, then the plane will be\u003cbr\u003eperpendicular to the horizontal \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1789-54\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -399.84954355062774, "y": 1286.9364292364896}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1808-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf a right line, situated in a given plane by its traces, is\u003cbr\u003eparallel to tte horizontal \u003cb\u003eplane\u003c/b\u003e, its horizontal projection\u003cbr\u003ewill be parallel to the horizontal trace of the given plane, and its\u003cbr\u003evertical projection will be parallel to the ground-line.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1808-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -12.771821543367258, "y": 934.17810805673}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-368-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt represents a ray of light coming straight from the\u003cbr\u003eperspective \u003cb\u003eplane\u003c/b\u003e through the eye, and marks the point of sight\u003cbr\u003eas S, and also the distance of the spectator as D, and it is plain\u003cbr\u003ethat the /z/ farther off the spectator is placed from the perspective\u003cbr\u003eplane, the longer would be this ray.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-368-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -207.37931760364006, "y": 636.0113119503353}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1542-36", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA cycloid or epicycloid, is a figure generated by a circle\u003cbr\u003erolling alotog tbe.atraigbt edgof a ruler, or another circle at rest,\u003cbr\u003ewhile a point in the circumference describes a figure on the\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e called a cycloid or epicycloid.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1542-36\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 924.6260949515583, "y": 1198.0487434841004}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1760-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus the Ijne will be perpendicular to the horizontal\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e, if its projection be the given point in the horizontal\u003cbr\u003eplane.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1760-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 395.46591550148975, "y": 741.3014812407235}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-304-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e- You ascertain by this process precisely how much the house\u003cbr\u003ediminishes, in consequence of its distance N I from the perspective\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-304-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -464.6861458445315, "y": 1724.1077569355273}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_747976.txt-286-72", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf, therefore, we call the weight of the prism ABC, W, the\u003cbr\u003ebreadth AC, b, the height AB, h, and the specific gravity of the\u003cbr\u003eearth, s, we shall have W = If we call the /z/ thrust of W in the\u003cbr\u003edirection of the slope W, then (neglect * ing friction,) on the\u003cbr\u003eprinciple of the inclined \u003cb\u003eplane\u003c/b\u003e, W will be to W as the length\u003cbr\u003eof the incline is to its height; or calling the length B C, /, then AW\u003cbr\u003ebh * s * lih:: W: W \u0027 = =.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-286-72\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1017.8231335497632, "y": 1152.3229216337302}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2098-72", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe rays of the sun being reflected from the horizon in all\u003cbr\u003edirections, the projecture of the prism will prevent a part of the\u003cbr\u003ereflected rays from proceeding to the plane behind the prism, and\u003cbr\u003econsequently the dane would be something darker than the face of the\u003cbr\u003eprism which is parallel to it; but the side of the prism adjoining to\u003cbr\u003ethe plane will throw a reflection upon the \u003cb\u003eplane\u003c/b\u003e, and therefore\u003cbr\u003eit would be difficult to perceive the difference between the face of\u003cbr\u003ethe prism, and the plane parallel behind the prism.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2098-72\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -392.7036051599624, "y": 1142.4388907669406}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7039.txt-2742-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs the approach of different \u003cb\u003eplanes\u003c/b\u003e in existence is\u003cbr\u003eindicated in forms\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7039.txt-2742-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -94.42882057777733, "y": 1042.3331545013098}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-51-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ All objects situate on the earth are, in perspective, said\u003cbr\u003eto be on the same plane, called the ground \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-51-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 632.1188963364091, "y": 927.905373073694}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-85-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis point, where the rays pass through the perspective\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e, is called the seat of their representation.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-85-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 774.6076593035677, "y": 1305.5336374350552}, {"color": "#377eb8", "date": "1829", "id": "mag_1829_553976.txt-20-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBy the adoption of stationary powers, on inclined\u003cbr\u003e\u003cb\u003eplanes\u003c/b\u003e, in surmounting some of the steeper declivities, it is\u003cbr\u003esupposed the distance might be reduced to something less than a\u003cbr\u003ehundred and ninety miles, without any considerable increase of the\u003cbr\u003eelevation to be passed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1829_553976.txt-20-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 273.3451001919039, "y": 1261.7275872500177}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-118-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen the \u003cb\u003eplane\u003c/b\u003e D, would represent the horizon\u003cbr\u003eplane.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-118-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 425.6124730089229, "y": 1319.73712632012}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_747976.txt-1558-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMoulding planes are used for sticking mouldings, as the\u003cbr\u003eoperation of forming mouldings with the \u003cb\u003eplane\u003c/b\u003e is called.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-1558-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -553.5299874333806, "y": 1037.1606114541455}, {"color": "#377eb8", "date": "1829", "id": "mag_1829_553985.txt-211-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003efalling on an inclined \u003cb\u003eplane\u003c/b\u003e, placed like a roof\u003cbr\u003ebeneath, and running into casks below.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1829_553985.txt-211-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -555.8659834676399, "y": 826.8002666149396}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1926-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf the sun\u0027s rays be parallel to any \u003cb\u003eplane\u003c/b\u003e, that plane\u003cbr\u003eto which they are parallel, is called a plane of shade.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1926-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 213.57391612655832, "y": 1421.2642585909298}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2088-121", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003efrom its edge upon the plane; and if the shadow upon the plane\u003cbr\u003ebe of no considerable breadth, and if the plane be extended at any\u003cbr\u003econsiderable distance beyond the shadow, then the lightest part of the\u003cbr\u003eplane on which the rays will reflect a great part of the rays towards\u003cbr\u003ethe prism: but as these reflected rays will not fall upon the shadow,\u003cbr\u003eit will be deprived of reflection: but as the side of the prism which\u003cbr\u003eprojects the shadow, is opposed to the reflected rays, that side of\u003cbr\u003ethe prism will receive a strong reflection, which will cause it to\u003cbr\u003eappear much lighter than the shadow it throws on the \u003cb\u003eplane\u003c/b\u003e; but\u003cbr\u003eif the shadow be projected farther on the plane, it will diminish the\u003cbr\u003ereflecting surface behind the prism, and will also cause the\u003cbr\u003ereflecting surface to be at a greater distance from the side of the\u003cbr\u003eprism, and consequently will receive less reflection from the plane;\u003cbr\u003eand in general the reflection on the prism will be continually\u003cbr\u003ediminished, according as the shadow\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2088-121\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -611.5929865402502, "y": 674.8669240716009}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-303-45", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn order to ascertain the apparent height, raise a\u003cbr\u003eperpendicular from the point I, this is the point at which the line O\u003cbr\u003eN, when produced, intersects the ground line; for could the house be\u003cbr\u003emoved up to the perspective \u003cb\u003eplane\u003c/b\u003e, it would touch it at I F.\u003cbr\u003eMeasure on this perpendicular, by means of your scale, the actual\u003cbr\u003eheight of the house (of which it is presumed you have on your plan an\u003cbr\u003eexact description) set this off, from I to u, from u rule u S, which\u003cbr\u003eintersects the perpendicular d e, at e, this gives the apparent\u003cbr\u003eheight.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-303-45\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -693.5641848533049, "y": 900.7104659069861}, {"color": "#377eb8", "date": "1852", "id": "fic_1852_3671.txt-62-28", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI am sure travelling over the world must be pleasanter than\u003cbr\u003espending a life in one place; and pulling a rope is easier work than\u003cbr\u003epushing a \u003cb\u003eplane\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1852_3671.txt-62-28\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -529.1283027726096, "y": 1229.1344495724782}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-579-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/q/ Where this intersects at d is the apparent size of this\u003cbr\u003eside, because it is parallel with the ground \u003cb\u003eplane\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-579-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -65.16555201546852, "y": 858.461915941205}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1959-34", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ A, r. - /z/ Dograpby, cutting the thickness of the ring at\u003cbr\u003eA and B; let A C D be the angle which the sun\u0027s rays nnake with the\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e of the ichnography, or seat A C. Bisect A B in c; with\u003cbr\u003ethe radius c A or c B, describe a circle; and through the centre c,\u003cbr\u003edraw c d parallel to G D, cutting the circle at d; also through c,\u003cbr\u003edraw the line a i, at right angle to c d cutting the circles at a and\u003cbr\u003eb; through the points d and 6, draw lines parallel to the sides A and\u003cbr\u003eB of the ring; then the dark line nearest to A, will represent the\u003cbr\u003eline of light; and that which is nearest to B, will represent that\u003cbr\u003eline which separates\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1959-34\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 76.08764751409592, "y": 716.5845422978883}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1737-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt follows, that if the point in space be upon the horizontal\u003cbr\u003eplane, its distance with regard to this last named \u003cb\u003eplane\u003c/b\u003e will\u003cbr\u003ebe zero or nothing, and the vertical A a will be zero also.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1737-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 550.3089843506448, "y": 1426.3317850683632}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1454-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNote A D N t a section of the \u003cb\u003eplane\u003c/b\u003e, passing through its\u003cbr\u003eaxis at right angles with the sections of the ellipsis, parabola, or\u003cbr\u003ehyperbola.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1454-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 346.8487551162443, "y": 1714.3896939372896}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_747976.txt-1543-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ealso of many kinds; those called bench planes - %s the jack\u003cbr\u003eplane, the trying plane, the long plane, the jointer, and the\u003cbr\u003esmoothing \u003cb\u003eplane\u003c/b\u003e, are used for bringing the stuff to a plane\u003cbr\u003esurface.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-1543-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 941.5104940706678, "y": 1328.6390693328797}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1705-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe two \u003cb\u003eplanes\u003c/b\u003e, upon which we project any line whatever,\u003cbr\u003eare called the planes of projection.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1705-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -190.6195868144456, "y": 1318.1798683477343}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747561.txt-330-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe intersection of these lines on the perspective\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e, make the figure i j k I, which is the perspective\u003cbr\u003erepresentation of a d b c m the plan: because, these points of\u003cbr\u003eintersection on the perspective plane are the same which would be made\u003cbr\u003eby the rays of light coming from the points in the original to the\u003cbr\u003eeye, provided the dimensions and position correspond to those in the\u003cbr\u003eplate, as has been shown in Lesson 7.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-330-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -341.1110372814052, "y": 759.0584073220425}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2671-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA section through the upper torus of the base, which is of an\u003cbr\u003eeUiptical form, the transverse axis being inclined to the \u003cb\u003eplane\u003c/b\u003e\u003cbr\u003eof the horizon.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2671-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 41.91291163574039, "y": 1164.4261696456554}, {"color": "#377eb8", "date": "1857", "id": "mag_1857_556339.txt-42-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe author believes that it is our privilege and duty, as\u003cbr\u003eChristians, to rise into a higher \u003cb\u003eplane\u003c/b\u003e of life than is\u003cbr\u003egenerally hoped for in the present day.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1857_556339.txt-42-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -298.5477280876256, "y": 1477.1663099585985}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-1752-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThus, for example, if a line be parallel to a horizontal plane,\u003cbr\u003eits vertical projection will be parallel to the ground-line; and if it\u003cbr\u003eis parallel to the vertical \u003cb\u003eplane\u003c/b\u003e, its horizontal projection\u003cbr\u003ewill be parallel to the ground-line.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1752-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 111.16474119760743, "y": 1521.3344056431902}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2002-42", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ The ichnography and elevation of the prism standing upon a\u003cbr\u003epolygonal base, having the projecture or cap of the same figure upon\u003cbr\u003eit, projecting equally over its sides; given the seat of the sun\u0027s\u003cbr\u003erays on the \u003cb\u003eplane\u003c/b\u003e of the ichnography, and also on the\u003cbr\u003eelevation; to project the shadow of the cap on the prism, and also on\u003cbr\u003ea plain parallel to the axis of the prism.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2002-42\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -729.6458428200008, "y": 1030.5901263879086}, {"color": "#377eb8", "date": "1845", "id": "fic_1845_7295.txt-4689-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe deep leaves of the olive lay here and there like glittering\u003cbr\u003especks of water before his eye, as they gave a \u003cb\u003eplane\u003c/b\u003e surface to\u003cbr\u003eher rising glance; and the vine spreading with dark purple clusters,\u003cbr\u003ein a wanton maze that clasped even the tops of the gigantic oak-tree,\u003cbr\u003eand bound them in many places to the wall itself, upon which he\u003cbr\u003eleaned, and over it wandered with unrestrained luxuriance, made a roof\u003cbr\u003eto the verdant neighborhood, which rendered it a spot as secret and\u003cbr\u003esecure as it seemed sacred to the generous nature to which it owed so\u003cbr\u003emuch.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1845_7295.txt-4689-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -273.8087023410181, "y": 1786.7035308900874}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-2386-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf, through the axis of the shaft, be supposed to pass twenty\u003cbr\u003evertical \u003cb\u003eplanes\u003c/b\u003e, making equal angles with each other, which\u003cbr\u003ewill cut the surface of the column in twenty places; and if the\u003cbr\u003esurface of the column be curved or hollowed between each two lines,\u003cbr\u003efrom the bottom to the top of the shaft, terminating immediately under\u003cbr\u003ethe lowest annulet; then the shaft will have twenty curved sides, and\u003cbr\u003eas many angles; and if nearly at the upper end of the shaft be cut one\u003cbr\u003eor more grooves of an equal depth, from the surface of the hollowing,\u003cbr\u003eeach groove being parallel to the annulets under the echinus, then a\u003cbr\u003ecolumn so is called Doric.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-2386-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 54.93259838903412, "y": 1535.7647326502881}, {"color": "#4daf4a", "date": "1853", "id": "nf_1853_747976.txt-1561-26", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere are other kinds of planes besides the above; as the\u003cbr\u003eplough, for sinking a groove to receive a projecting tongue; the bead\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e, for sticking beads; the snipe bill, for forming quirks;\u003cbr\u003ethe compass plane and the forkstaff plane,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-1561-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -744.941200553146, "y": 664.5130011277154}, {"color": "#4daf4a", "date": "1860", "id": "fic_1860_9165.txt-4809-11", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOn the contrary, she was advanced to a still higher\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e, where his dreams of possession did not venture to\u003cbr\u003eintrude.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9165.txt-4809-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -599.1653360585116, "y": 937.2708471988038}, {"color": "#4daf4a", "date": "1836", "id": "nf_1836_748113.txt-1782-8", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf a plane be parallel to the horizontal \u003cb\u003eplane\u003c/b\u003e, this\u003cbr\u003eplane will not have a horizontal trace, and its vertical trace will be\u003cbr\u003eparallel to the ground-line.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1782-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -648.2432183897224, "y": 1220.6093020190003}, {"color": "#4daf4a", "date": "1856", "id": "fic_1856_2655.txt-5061-58", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe were induced to rise in arms against Austria, (we mean, not\u003cbr\u003ethe people, but the government of Austria,) not only by the need of\u003cbr\u003eredeeming ourselves from the shame and grief of thirty-one years of\u003cbr\u003ethe most abject despotism, but by a deliberate resolve to take our\u003cbr\u003eplace upon the \u003cb\u003eplane\u003c/b\u003e of nations, to unite with our brothers of\u003cbr\u003ethe Peninsula, and take rank with them under the great banner raised\u003cbr\u003eby Pius IX.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_2655.txt-5061-58\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -947.387027806102, "y": 1039.9586388937942}, {"color": "#a65628", "date": "1846", "id": "fic_1846_7036.txt-323-21", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe old slave, being questioned, fell on his knees and\u003cbr\u003econfessed that he had left the babe under a \u003cb\u003eplane\u003c/b\u003e tree, on\u003cbr\u003eMount Ida, and that he had afterward seen him in the hut of\u003cbr\u003eMygdomus.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1846\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1846_7036.txt-323-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -772.7662850379388, "y": -1812.4412136421167}, {"color": "#a65628", "date": "1827", "id": "nf_1827_748059.txt-314-33", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOak, old English, young tree, 363 \" old ship timber, \" from old\u003cbr\u003etree, \" medium qualities, \" green, Beech, medium quality, Alder,\u003cbr\u003e\u003cb\u003ePlane\u003c/b\u003e tree.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1827_748059.txt-314-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -771.4203371680351, "y": -2000.0}, {"color": "#a65628", "date": "1844", "id": "mag_1844_555220.txt-284-1", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003ePlane\u003c/b\u003e or Buttonwood tree, so common in our streets\u003cbr\u003eand environs, has hitherto\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1844_555220.txt-284-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -679.1421995651057, "y": -1927.3431018888386}, {"color": "#a65628", "date": "1841", "id": "nf_1841_747926.txt-1307-12", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere is but a trifling difference in general effect between\u003cbr\u003e/z/ our \u003cb\u003eplane\u003c/b\u003e or buttonwood and the Oriental plane.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1841\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1841_747926.txt-1307-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -846.7267395264954, "y": -1814.836512257235}, {"color": "#984ea3", "date": "1836", "id": "nf_1836_748113.txt-1804-19", "label": "5", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf a line be situated in a given plane by its traces, this line\u003cbr\u003ecan only intersect the \u003cb\u003eplanes\u003c/b\u003e \" of projection upon the traces\u003cbr\u003eof the plane which contains it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1804-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 507.599755761191, "y": 875.9733696120845}, {"color": "#984ea3", "date": "1836", "id": "nf_1836_748113.txt-1704-26", "label": "5", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e6, where the parallelogram U V VV X, represents the horizontal\u003cbr\u003eplane, and the parallelogram U V Y Z, represents the vertical\u003cbr\u003e\u003cb\u003eplane\u003c/b\u003e, the projection a 6 of the line A A in space upon the\u003cbr\u003ehorizontal plane U V W X, is called the horizontal projection, and the\u003cbr\u003eprojection A B, of the same line upon the vertical plane U V Y Z, is\u003cbr\u003ecalled the vertical projection.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-1704-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 612.7148220222757, "y": 1074.3103331144741}, {"color": "#f781bf", "date": "1843", "id": "fic_1843_7039.txt-2100-37", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTheir busy, earnest twitterings led me at once to suspect that\u003cbr\u003ethey were looking out a building-spot; but as a carpenter\u0027s bench was\u003cbr\u003eunder the window, and frequent hammering, sawing, and \u003cb\u003eplaning\u003c/b\u003e\u003cbr\u003ewere going on, I had little hope they would choose a location under\u003cbr\u003eour roof.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7039.txt-2100-37\u003cbr\u003etype: usage\u003cbr\u003epos: nn1@_vvg_jj@\u003c/p\u003e", "x": -244.76786152151442, "y": 468.92469025700314}, {"color": "#f781bf", "date": "1853", "id": "nf_1853_747976.txt-1561-5", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere are other kinds of \u003cb\u003eplanes\u003c/b\u003e besides the above; as\u003cbr\u003ethe plough, for sinking a groove to receive a projecting tongue; the\u003cbr\u003ebead plane, for sticking beads; the snipe bill, for forming quirks;\u003cbr\u003ethe compass plane and the forkstaff plane,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-1561-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -687.4122842576846, "y": 813.8033273563072}, {"color": "#f781bf", "date": "1853", "id": "nf_1853_747976.txt-1786-34", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe plumber uses but few tools, and those are of a simple\u003cbr\u003echaracter; the greater number of them being similar to those used by\u003cbr\u003eother artificers, as hammers, mallets, \u003cb\u003eplanes\u003c/b\u003e, chisels, gouges,\u003cbr\u003eJUes, \u0026c.; The principal tool peculiar to the /z/ trade of the plumber\u003cbr\u003eis the bat, which is made of beech\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-1786-34\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -407.5427842636855, "y": 626.2614827732805}, {"color": "k", "date": "1853", "id": "nf_1853_747976.txt-1557-3", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAmongst the rebate \u003cb\u003eplanes\u003c/b\u003e may be mentioned IJiP * ne\u003cbr\u003eMoving fillister and the sash fillister, the uses of which will be\u003cbr\u003ebetter understood by inspection than from any description.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_747976.txt-1557-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -1690.296742459618, "y": -261.61111875880994}, {"color": "#e41a1c", "date": "1855", "id": "nf_1855_748018.txt-248-10", "label": "7", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/z/ In general, the division is by nearly parallel\u003cbr\u003e\u003cb\u003eplanes\u003c/b\u003e; but sometimes the masses are tortuous or\u003cbr\u003ewedgeshaped.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1855_748018.txt-248-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 960.6233623679514, "y": 890.3727469420969}, {"color": "#999999", "date": "1830", "id": "nf_1830_747561.txt-525-11", "label": "6", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe floor on which the four feet rest, is one \u003cb\u003eplane\u003c/b\u003e, the\u003cbr\u003eseat is another, parallel with the former.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747561.txt-525-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 268.5774341258979, "y": 1745.669796874093}, {"color": "#dede00", "date": "1853", "id": "mag_1853_575130.txt-230-34", "label": "8", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe obvious disqualification of the distribution in question\u003cbr\u003eis, that it makes the line of demarcation between subject and object,\u003cbr\u003eor between the me and the not-me, to fall within the \u003cb\u003eplane\u003c/b\u003e of\u003cbr\u003enature, or between fin\u0027ite and finite, instead of without that plane,\u003cbr\u003eor between infinite and finite.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_575130.txt-230-34\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -342.07226059389467, "y": 1741.3227156194978}]);
+        edges = new vis.DataSet([{"color": "black", "from": "nf_1836_748113.txt-1926-22", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1926-22", "label": 4, "to": "mag_1859_567139.txt-171-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1855-10", "label": 4, "to": "nf_1830_747561.txt-670-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1855-10", "label": 4, "to": "nf_1830_747561.txt-118-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2089-55", "label": 3.5, "to": "nf_1853_747976.txt-1558-16", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2089-55", "label": 4, "to": "nf_1830_747561.txt-544-31", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2089-55", "label": 3, "to": "nf_1853_747976.txt-1561-26", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2089-55", "label": 4, "to": "nf_1836_748113.txt-2088-121", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2089-55", "label": 3, "to": "nf_1830_747561.txt-368-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1853_747976.txt-1561-26", "label": 3, "to": "nf_1836_748113.txt-1782-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1853_747976.txt-1561-26", "label": 2.5, "to": "nf_1836_748113.txt-2002-42", "weight": 2.5, "width": 4}, {"color": "black", "from": "nf_1853_747976.txt-1561-26", "label": 3, "to": "fic_1860_9165.txt-4809-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1853_747976.txt-1561-26", "label": 4, "to": "nf_1836_748113.txt-2088-121", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1846_7036.txt-323-21", "label": 4, "to": "nf_1827_748059.txt-314-33", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1846_7036.txt-323-21", "label": 4, "to": "mag_1844_555220.txt-284-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1846_7036.txt-323-21", "label": 4, "to": "nf_1841_747926.txt-1307-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-281-20", "label": 4, "to": "nf_1836_748113.txt-2425-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1859_270.txt-3039-45", "label": 3, "to": "mag_1853_566255.txt-503-41", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1859_270.txt-3039-45", "label": 3, "to": "nf_1836_748113.txt-2425-21", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "nf_1836_748113.txt-452-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 3.5, "to": "nf_1836_748113.txt-1786-33", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 3.5, "to": "mag_1829_553985.txt-211-4", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "nf_1836_748113.txt-2098-72", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 3.5, "to": "nf_1830_747561.txt-303-45", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 3, "to": "nf_1827_748059.txt-1356-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "nf_1836_748113.txt-1808-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "nf_1836_748113.txt-1801-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 3.5, "to": "nf_1836_748113.txt-1787-11", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "nf_1836_748113.txt-1705-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2425-21", "label": 4, "to": "mag_1829_553985.txt-220-31", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2011-9", "label": 4, "to": "nf_1836_748113.txt-1705-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_747976.txt-544-27", "label": 3.5, "to": "nf_1836_748113.txt-1705-2", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1804-19", "label": 4, "to": "nf_1836_748113.txt-1787-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1804-19", "label": 4, "to": "nf_1836_748113.txt-1704-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_765349.txt-396-16", "label": 4, "to": "nf_1836_748113.txt-1787-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_765349.txt-396-16", "label": 3.5, "to": "nf_1836_748113.txt-1569-3", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1848_565759.txt-87-14", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1848_565759.txt-87-14", "label": 4, "to": "nf_1836_748113.txt-1737-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2098-31", "label": 3, "to": "nf_1830_747561.txt-670-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2098-31", "label": 4, "to": "nf_1830_747561.txt-644-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2098-31", "label": 4, "to": "nf_1853_747976.txt-1558-16", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2098-31", "label": 4, "to": "nf_1836_748113.txt-2098-72", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2098-31", "label": 4, "to": "nf_1836_748113.txt-1726-50", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9165.txt-4809-11", "label": 3, "to": "nf_1836_748113.txt-1782-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1860_9165.txt-4809-11", "label": 3.5, "to": "fic_1856_2655.txt-5061-58", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1860_9165.txt-4809-11", "label": 3, "to": "nf_1827_747521.txt-56-0", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1860_9165.txt-4809-11", "label": 4, "to": "nf_1830_747561.txt-330-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1786-33", "label": 4, "to": "mag_1853_566255.txt-503-41", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1786-33", "label": 4, "to": "nf_1836_748113.txt-1797-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-644-9", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-644-9", "label": 4, "to": "nf_1836_748113.txt-1801-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1787-22", "label": 4, "to": "nf_1830_747561.txt-45-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1787-22", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1779-34", "label": 3, "to": "nf_1836_748113.txt-1542-36", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1789-15", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1789-15", "label": 4, "to": "nf_1836_748113.txt-1845-73", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1852_748165.txt-661-17", "label": 3, "to": "nf_1830_747561.txt-670-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7039.txt-2100-37", "label": 3, "to": "nf_1836_748113.txt-1797-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7039.txt-2100-37", "label": 4, "to": "nf_1853_747976.txt-1786-34", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7039.txt-2100-37", "label": 3, "to": "nf_1830_747561.txt-544-31", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-45-9", "label": 4, "to": "nf_1836_748113.txt-1391-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1400-8", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1400-8", "label": 4, "to": "nf_1836_748113.txt-1801-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1400-8", "label": 3, "to": "mag_1851_555706.txt-293-28", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1827_747521.txt-191-66", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_747521.txt-191-66", "label": 4, "to": "nf_1836_748113.txt-2671-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-452-18", "label": 4, "to": "nf_1830_747561.txt-368-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 3, "to": "nf_1853_747976.txt-286-72", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 3, "to": "nf_1855_748018.txt-248-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 3, "to": "nf_1853_747976.txt-1543-29", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 4, "to": "nf_1836_748113.txt-1845-73", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 4, "to": "nf_1836_748113.txt-1959-34", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 4, "to": "mag_1851_555706.txt-293-28", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 4, "to": "nf_1827_748059.txt-1356-35", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 4, "to": "nf_1836_748113.txt-1787-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-670-18", "label": 4, "to": "nf_1830_747561.txt-737-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1330-69", "label": 3, "to": "nf_1836_748113.txt-2002-42", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1330-69", "label": 4, "to": "nf_1830_747561.txt-303-45", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1330-69", "label": 3.5, "to": "nf_1830_747561.txt-368-11", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1330-69", "label": 4, "to": "nf_1836_748113.txt-1801-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1859_567139.txt-171-15", "label": 3, "to": "nf_1827_748059.txt-1356-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2012-175", "label": 4, "to": "nf_1827_748059.txt-1356-35", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1391-9", "label": 3, "to": "mag_1858_556423.txt-70-46", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1726-50", "label": 4, "to": "nf_1836_748113.txt-1787-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1726-50", "label": 4, "to": "nf_1838_747585.txt-200-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1726-50", "label": 4, "to": "nf_1836_748113.txt-1808-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 3, "to": "nf_1827_747521.txt-56-0", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 4, "to": "nf_1836_748113.txt-1704-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 3.5, "to": "nf_1836_748113.txt-1542-36", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 3.5, "to": "nf_1836_748113.txt-1797-4", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 3.5, "to": "nf_1830_747561.txt-51-23", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 3.5, "to": "mag_1829_553985.txt-220-31", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 3.5, "to": "nf_1830_747561.txt-85-10", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 4, "to": "nf_1836_748113.txt-1737-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 4, "to": "nf_1830_747561.txt-779-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 4, "to": "nf_1830_747561.txt-118-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 4, "to": "nf_1836_748113.txt-1734-38", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 3, "to": "fic_1852_3671.txt-62-28", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-1356-35", "label": 4, "to": "nf_1836_748113.txt-1705-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-737-12", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-737-12", "label": 4, "to": "nf_1830_747561.txt-527-50", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1858_556423.txt-70-46", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-105-23", "label": 4, "to": "nf_1836_748113.txt-1787-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-105-23", "label": 4, "to": "nf_1836_748113.txt-1845-73", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1853_566255.txt-503-41", "label": 4, "to": "nf_1836_748113.txt-1787-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1853_566255.txt-503-41", "label": 4, "to": "nf_1830_747561.txt-330-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2101-61", "label": 4, "to": "nf_1836_748113.txt-1734-38", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2101-61", "label": 4, "to": "nf_1827_747521.txt-56-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2101-61", "label": 3, "to": "nf_1830_747561.txt-330-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2101-61", "label": 4, "to": "nf_1836_748113.txt-1569-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1851_555706.txt-293-28", "label": 3, "to": "nf_1830_747561.txt-51-23", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1851_555706.txt-293-28", "label": 4, "to": "nf_1830_747561.txt-368-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1850_565904.txt-183-13", "label": 4, "to": "nf_1836_748113.txt-1705-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-527-50", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-527-50", "label": 4, "to": "mag_1829_553976.txt-20-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_747521.txt-56-0", "label": 4, "to": "nf_1830_747561.txt-544-31", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_747521.txt-56-0", "label": 4, "to": "nf_1836_748113.txt-1787-29", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1838_747585.txt-200-30", "label": 3, "to": "nf_1830_747561.txt-579-21", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1838_747585.txt-200-30", "label": 3.5, "to": "nf_1830_747561.txt-330-8", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1787-11", "label": 4, "to": "nf_1836_748113.txt-1569-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1787-11", "label": 4, "to": "nf_1836_748113.txt-1760-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1787-11", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1787-11", "label": 4, "to": "nf_1836_748113.txt-1808-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7039.txt-2743-32", "label": 3.5, "to": "nf_1830_747561.txt-579-21", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1843_7039.txt-2743-32", "label": 3, "to": "nf_1830_747561.txt-384-48", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-314-33", "label": 4, "to": "mag_1844_555220.txt-284-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1827_748059.txt-314-33", "label": 4, "to": "nf_1841_747926.txt-1307-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-384-48", "label": 4, "to": "nf_1836_748113.txt-1705-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-598-17", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-598-17", "label": 3, "to": "nf_1836_748113.txt-1789-54", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1569-3", "label": 4, "to": "nf_1836_748113.txt-1959-34", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-544-31", "label": 4, "to": "nf_1830_747561.txt-330-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-544-31", "label": 4, "to": "mag_1829_553985.txt-211-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-544-31", "label": 3.5, "to": "nf_1830_747561.txt-368-11", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1787-29", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1829_553985.txt-220-31", "label": 3, "to": "nf_1836_748113.txt-1760-9", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1789-54", "label": 3.5, "to": "nf_1836_748113.txt-1705-2", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1789-54", "label": 4, "to": "nf_1836_748113.txt-1782-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1808-19", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-368-11", "label": 2.5, "to": "nf_1836_748113.txt-1705-2", "weight": 2.5, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-368-11", "label": 4, "to": "nf_1830_747561.txt-330-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-368-11", "label": 4, "to": "nf_1836_748113.txt-1959-34", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-304-23", "label": 3.5, "to": "nf_1836_748113.txt-1705-2", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1853_747976.txt-1561-5", "label": 4, "to": "nf_1836_748113.txt-2002-42", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1853_747976.txt-1561-5", "label": 4, "to": "nf_1853_747976.txt-1786-34", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7039.txt-2742-5", "label": 4, "to": "nf_1830_747561.txt-579-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1829_553976.txt-20-9", "label": 3, "to": "nf_1830_747561.txt-579-21", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-118-2", "label": 4, "to": "nf_1836_748113.txt-1926-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1926-9", "label": 4, "to": "nf_1836_748113.txt-1752-33", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1926-9", "label": 4, "to": "nf_1836_748113.txt-1454-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1926-9", "label": 4, "to": "nf_1830_747561.txt-525-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1926-9", "label": 4, "to": "nf_1836_748113.txt-2386-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-2088-121", "label": 4, "to": "nf_1830_747561.txt-330-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1852_3671.txt-62-28", "label": 4, "to": "nf_1836_748113.txt-2002-42", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-579-21", "label": 4, "to": "nf_1836_748113.txt-1959-34", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-579-21", "label": 4, "to": "nf_1836_748113.txt-2671-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-579-21", "label": 4, "to": "nf_1830_747561.txt-330-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1830_747561.txt-579-21", "label": 4, "to": "nf_1836_748113.txt-1705-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1705-2", "label": 3.5, "to": "fic_1845_7295.txt-4689-23", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1705-2", "label": 3.5, "to": "mag_1853_575130.txt-230-34", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-1705-2", "label": 4, "to": "mag_1857_556339.txt-42-19", "weight": 4.0, "width": 4}, {"color": "lightgray", "from": "nf_1836_748113.txt-1855-10", "label": 1, "to": "fic_1846_7036.txt-323-21", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-1855-10", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2089-55", "label": 2, "to": "fic_1843_7039.txt-2100-37", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2089-55", "label": 1, "to": "nf_1827_748059.txt-314-33", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2089-55", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2089-55", "label": 1, "to": "fic_1846_7036.txt-323-21", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 2, "to": "nf_1827_748059.txt-1330-69", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 2, "to": "nf_1836_748113.txt-1391-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 2, "to": "nf_1836_748113.txt-2425-21", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1836_748113.txt-2101-61", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1830_747561.txt-45-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "mag_1859_567139.txt-171-15", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 2, "to": "nf_1830_747561.txt-368-11", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1836_748113.txt-1779-34", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 2, "to": "fic_1846_7036.txt-323-21", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 2, "to": "nf_1830_747561.txt-544-31", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1827_748059.txt-314-33", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1827_747521.txt-56-0", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1836_748113.txt-1845-73", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-26", "label": 1, "to": "nf_1830_747561.txt-85-10", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1830_747561.txt-368-11", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1836_748113.txt-1391-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1853_747976.txt-1786-34", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1836_748113.txt-1926-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1853_747976.txt-1558-16", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1836_748113.txt-1782-8", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "mag_1858_556423.txt-70-46", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1855_748018.txt-248-10", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": 1, "to": "nf_1830_747561.txt-281-20", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-281-20", "label": 2, "to": "fic_1856_2655.txt-5061-58", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1859_270.txt-3039-45", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2425-21", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2425-21", "label": 2, "to": "nf_1853_765349.txt-396-16", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-544-27", "label": 1, "to": "nf_1830_747561.txt-525-11", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-1804-19", "label": 1, "to": "mag_1850_565904.txt-183-13", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2098-31", "label": 1, "to": "nf_1827_748059.txt-314-33", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1860_9165.txt-4809-11", "label": 2, "to": "nf_1830_747561.txt-737-12", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1860_9165.txt-4809-11", "label": 2, "to": "nf_1853_747976.txt-1786-34", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1860_9165.txt-4809-11", "label": 2, "to": "nf_1836_748113.txt-1726-50", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-1779-34", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": 1, "to": "nf_1836_748113.txt-1787-11", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": 2, "to": "nf_1830_747561.txt-368-11", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": 1, "to": "fic_1856_2655.txt-5061-58", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": 1, "to": "nf_1827_748059.txt-314-33", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": 2, "to": "nf_1841_747926.txt-1307-12", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": 1, "to": "nf_1853_747976.txt-1558-16", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1827_747521.txt-191-66", "label": 2, "to": "mag_1853_575130.txt-230-34", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-670-18", "label": 2, "to": "fic_1856_2655.txt-5061-58", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-670-18", "label": 2, "to": "nf_1853_747976.txt-1558-16", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1859_567139.txt-171-15", "label": 2, "to": "nf_1855_748018.txt-248-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1859_567139.txt-171-15", "label": 2, "to": "nf_1836_748113.txt-1704-26", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1557-3", "label": 2, "to": "nf_1836_748113.txt-1705-2", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1827_748059.txt-1356-35", "label": 1, "to": "nf_1827_748059.txt-314-33", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1850_565904.txt-183-13", "label": 2, "to": "nf_1836_748113.txt-1787-29", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-1734-38", "label": 2, "to": "mag_1853_575130.txt-230-34", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1838_747585.txt-200-30", "label": 2, "to": "fic_1856_2655.txt-5061-58", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-1787-11", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1827_748059.txt-314-33", "label": 1, "to": "nf_1830_747561.txt-368-11", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1827_748059.txt-314-33", "label": 1, "to": "nf_1830_747561.txt-330-8", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-544-31", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-544-31", "label": 1, "to": "nf_1836_748113.txt-1926-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-544-31", "label": 2, "to": "nf_1853_747976.txt-1786-34", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-544-31", "label": 2, "to": "fic_1856_2655.txt-5061-58", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1829_553985.txt-220-31", "label": 1, "to": "nf_1853_747976.txt-1561-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-1808-19", "label": 2, "to": "fic_1845_7295.txt-4689-23", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-368-11", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-368-11", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-368-11", "label": 1, "to": "nf_1853_747976.txt-1786-34", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-286-72", "label": 1, "to": "nf_1853_747976.txt-1561-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1561-5", "label": 2, "to": "nf_1830_747561.txt-579-21", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2098-72", "label": 1, "to": "fic_1856_2655.txt-5061-58", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7039.txt-2742-5", "label": 1.5, "to": "nf_1830_747561.txt-525-11", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1786-34", "label": 1, "to": "nf_1836_748113.txt-1926-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1786-34", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1786-34", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-118-2", "label": 2, "to": "nf_1853_747976.txt-1558-16", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1558-16", "label": 1, "to": "mag_1844_555220.txt-284-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1853_747976.txt-1558-16", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2088-121", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-2088-121", "label": 1, "to": "mag_1853_575130.txt-230-34", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1855_748018.txt-248-10", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1830_747561.txt-303-45", "label": 1, "to": "nf_1841_747926.txt-1307-12", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1844_555220.txt-284-1", "label": 1, "to": "fic_1856_2655.txt-5061-58", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1844_555220.txt-284-1", "label": 1, "to": "fic_1852_3671.txt-62-28", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1844_555220.txt-284-1", "label": 1, "to": "mag_1857_556339.txt-42-19", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1836_748113.txt-1782-8", "label": 2, "to": "mag_1857_556339.txt-42-19", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1841_747926.txt-1307-12", "label": 1, "to": "nf_1836_748113.txt-1705-2", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7036.txt-323-21", "label": NaN, "to": "nf_1836_748113.txt-1804-19", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1830_747561.txt-644-9", "label": NaN, "to": "nf_1836_748113.txt-1569-3", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1843_7039.txt-2100-37", "label": NaN, "to": "nf_1830_747561.txt-670-18", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1827_747521.txt-191-66", "label": NaN, "to": "nf_1836_748113.txt-1845-73", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1836_748113.txt-2101-61", "label": NaN, "to": "mag_1844_555220.txt-284-1", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

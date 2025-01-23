@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">chef_nn (2)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1973", "id": "fic_1973_10570.txt-3537-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI put some oysters back and got a frown from the Malay\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1973\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1973_10570.txt-3537-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 17.248985605056973, "y": -162.89165262222198}, {"color": "#377eb8", "date": "1981", "id": "news_1981_671027.txt-1-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen I get to a hotel that I \u0027 m going to be in for more than a\u003cbr\u003eday or two, I go to the kitchen and introduce myself to the\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e and then send him a bottle of Scotch or really fine\u003cbr\u003ebrandy, and I ask him what he \u0027 s got that \u0027 s especially good.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1981\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1981_671027.txt-1-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 113.47194018749263, "y": -90.43659326333649}, {"color": "#377eb8", "date": "1998", "id": "news_1998_632300.txt-65-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNow we have five sous \u003cb\u003echefs\u003c/b\u003e who all are responsible for\u003cbr\u003erunning chunks of the kitchen, and I work running the sous chefs and\u003cbr\u003epulling them together. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1998_632300.txt-65-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -130.52728511317548, "y": 134.76955500260738}, {"color": "#377eb8", "date": "1989", "id": "mag_1989_328766.txt-15-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTop honors went to the male \u003cb\u003echefs\u003c/b\u003e, who had undergone\u003cbr\u003elong classical training either as apprentices or in professional\u003cbr\u003eschools, and who were celebrated for their creativity and\u003cbr\u003einventiveness with new dishes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1989_328766.txt-15-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 278.5634097553328, "y": 111.68763658805749}, {"color": "#377eb8", "date": "2007", "id": "fic_2007_33461.txt-116-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBecause my next-door neighbor, Obax Geeddi Abtidoon, a rich and\u003cbr\u003ebeautiful Somalian who wanted to be a \u003cb\u003echef\u003c/b\u003e but was getting her\u003cbr\u003edegree in polar studies when she wasn\u0027t cooking curry and making\u003cbr\u003esliced carrot salad for everyone on the floor, had given me the ginger\u003cbr\u003ebeer starter and how could I be so rude as to throw it out?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2007_33461.txt-116-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 201.64825667465306, "y": 81.10440007867503}, {"color": "#377eb8", "date": "2009", "id": "mag_2009_405412.txt-17-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFat makes burgers juicy, \" says Jamie Purviance, author and\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e for Weber Grills. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2009\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2009_405412.txt-17-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 149.94965023550313, "y": 123.8203668815369}, {"color": "#377eb8", "date": "1977", "id": "nf_1977_774125.txt-1398-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNow, Bocuse knows all this, and he is one of the most brilliant\u003cbr\u003e\u003cb\u003echefs\u003c/b\u003e in France.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1977_774125.txt-1398-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -68.52554909644313, "y": 20.251854341558587}, {"color": "#377eb8", "date": "1994", "id": "news_1994_606769.txt-54-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eChef\u003c/b\u003e Andrew O\u0027Connell of The Trellis in Williamsburg,\u003cbr\u003eVa., says every single dessert on the restaurant\u0027s menu has some\u003cbr\u003echocolate in it, with the big killer best-seller the Death By\u003cbr\u003eChocolate seven-layer cake that is such a pain to make that if you\u003cbr\u003efollowed the recipe they cheerfully provide\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1994_606769.txt-54-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -50.75489610297647, "y": 166.2492862774841}, {"color": "#377eb8", "date": "2005", "id": "fic_2005_50340.txt-357-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eJean-Paul had thrown together the food, though he rarely cooked\u003cbr\u003eat home: he was a \u003cb\u003echef\u003c/b\u003e now, in his father\u0027s restaurant.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2005\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2005_50340.txt-357-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -45.31343081792077, "y": 116.10565418507764}, {"color": "#377eb8", "date": "1994", "id": "mag_1994_426049.txt-149-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSmart \u003cb\u003echefs\u003c/b\u003e will use chicken broth instead of butter,\u003cbr\u003ebut at Mom\u0027s table, smart doesn\u0027t always cut it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1994_426049.txt-149-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 38.82143570936923, "y": 37.305007944508425}, {"color": "#377eb8", "date": "1977", "id": "nf_1977_774125.txt-986-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ehe says, \" how many \u003cb\u003echefs\u003c/b\u003e say for their last great feast\u003cbr\u003ethey would like things on the order of tripe a la mode de Caen,\u003cbr\u003ecassoulet, and breaded pig\u0027s feet?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1977_774125.txt-986-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 241.19183509631557, "y": 123.69772343350886}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_25002.txt-9471-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003echefs\u003c/b\u003e, in their white hats and full-length aprons,\u003cbr\u003elooked up from their cauldrons.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_25002.txt-9471-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -62.90766492953829, "y": 263.76365664817774}, {"color": "#377eb8", "date": "1991", "id": "nf_1991_774072.txt-1394-40", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA traditional recipe is given in chapter 4, but, as noted\u003cbr\u003ethere, different herbs and vegetables can be used, depending on the\u003cbr\u003etype of fish being prepared, the region, and the whim of the\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1991\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1991_774072.txt-1394-40\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 83.114080735433, "y": 141.53026839792145}, {"color": "#377eb8", "date": "1977", "id": "nf_1977_774125.txt-767-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eChefs\u003c/b\u003e are exceedingly difficult to translate because\u003cbr\u003ethey are imprecise about amounts and, since they are speaking to\u003cbr\u003efellow professionals, they may leave out whole operations.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1977_774125.txt-767-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -4.0448539778678585, "y": 230.55786079272315}, {"color": "#377eb8", "date": "1989", "id": "fic_1989_14218.txt-1947-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut as long as you\u0027re checking with the \u003cb\u003echef\u003c/b\u003e MAITRE D \u0027\u003cbr\u003eI\u0027ll ask.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1989_14218.txt-1947-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 203.53068829376065, "y": -38.59774147579811}, {"color": "#377eb8", "date": "2002", "id": "news_2002_603927.txt-69-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, as long as they\u0027re nicely dressed, \" says Kelly, 29, a flame-\u003cbr\u003ehaired Brooklyn pastry \u003cb\u003echef\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2002_603927.txt-69-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 174.40208683145113, "y": 179.2931599828953}, {"color": "#377eb8", "date": "1999", "id": "mag_1999_407915.txt-20-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe following delectable recipes have been gathered mostly from\u003cbr\u003etop restaurant \u003cb\u003echefs\u003c/b\u003e and adapted for the home cook.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1999_407915.txt-20-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 154.55084237325565, "y": 258.1684437137742}, {"color": "#377eb8", "date": "1995", "id": "mag_1995_395507.txt-3-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCHEF JOHN MEYER John Meyer is \u003cb\u003echef\u003c/b\u003e and owner of the\u003cbr\u003eRetreat Restaurant in Chicago.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1995_395507.txt-3-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -126.90819774591539, "y": 229.02511334106342}, {"color": "#377eb8", "date": "1977", "id": "news_1977_732998.txt-23-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eChef\u003c/b\u003e Julia Child often brings along a roast lamb\u003cbr\u003esandwich from home.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1977_732998.txt-23-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -11.925694802878123, "y": 113.86281713891375}, {"color": "#377eb8", "date": "2002", "id": "mag_2002_385272.txt-92-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTrey Graham Plano, Texas BEST FEET FORWARD \" I \u0027m an executive\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e who works most weekends, and when I come\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2002_385272.txt-92-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 246.8305941239599, "y": 187.86927357199357}, {"color": "#377eb8", "date": "1997", "id": "news_1997_621043.txt-70-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWorkers at Wired magazine in San Francisco used to whip up tofu\u003cbr\u003edishes in a dingy pantry until \u003cb\u003echef\u003c/b\u003e Philip Ferrato was brought\u003cbr\u003ein to offer dishes such as gazpacho with organic heirloom\u003cbr\u003etomatoes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1997_621043.txt-70-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 17.333436900457983, "y": -106.35627906132368}, {"color": "#377eb8", "date": "1993", "id": "news_1993_655748.txt-41-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eby some of the best-known \u003cb\u003echefs\u003c/b\u003e in America. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1993_655748.txt-41-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -113.07436529660104, "y": 67.53901530783243}, {"color": "#377eb8", "date": "2005", "id": "fic_2005_32589.txt-87-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe had a closet full of expensive clothes, but right now he\u003cbr\u003ewore a pair of houndstooth check pants with frayed cuffs, a white\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e jacket, and a New Orleans Saints baseball cap.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2005\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2005_32589.txt-87-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -14.905134600424198, "y": -97.0649186288394}, {"color": "#377eb8", "date": "2004", "id": "fic_2004_32588.txt-86-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethe kitchen when \u003cb\u003echefs\u003c/b\u003e would let him get away with it.\u003cbr\u003e\"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2004_32588.txt-86-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 145.08025977085146, "y": 54.53162264317118}, {"color": "#377eb8", "date": "1977", "id": "nf_1977_774125.txt-1297-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe meaning was pretty clear, but Newsweek spelled it out,\u003cbr\u003esaying that the \u003cb\u003echef\u003c/b\u003e \" routinely expresses contempt for women\u003cbr\u003ein the kitchen.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1977_774125.txt-1297-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 115.84541236549508, "y": 121.48198839114508}, {"color": "#377eb8", "date": "1995", "id": "news_1995_638686.txt-13-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen \u003cb\u003echef\u003c/b\u003e Lydia Shire of Biba restaurant in Boston first\u003cbr\u003eworked in a French kitchen, she got a crash course in preparing\u003cbr\u003einternal organs. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1995_638686.txt-13-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 205.2760918866611, "y": 201.50272365008612}, {"color": "#377eb8", "date": "2004", "id": "mag_2004_410917.txt-95-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen there are the five maids, two live-in nannies, a\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e and two drivers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2004_410917.txt-95-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -46.08388201170533, "y": 135.96922739905776}, {"color": "#377eb8", "date": "1994", "id": "mag_1994_409087.txt-47-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThousands of \u003cb\u003echefs\u003c/b\u003e have already announced that they will\u003cbr\u003enot use any biotech foods that enter the marketplace, even though\u003cbr\u003ethey\u0027ve never tasted these foods or learned how they were\u003cbr\u003edeveloped.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1994_409087.txt-47-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 42.84511954406336, "y": 94.28939382205992}, {"color": "#377eb8", "date": "1988", "id": "mag_1988_327176.txt-25-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ehelicopter, the yacht with a crew of 14, the personal\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e, the Rolls-Royces, the thing Maxwell really values most is\u003cbr\u003etime.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1988\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1988_327176.txt-25-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 92.1903214669428, "y": 34.29707285408175}, {"color": "#377eb8", "date": "1995", "id": "mag_1995_395507.txt-45-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe is an executive \u003cb\u003echef\u003c/b\u003e, certified by the American\u003cbr\u003eCulinary Federation, and he serves on the board of trustees of the\u003cbr\u003eAmerican Culinary Federation Educational Institute.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1995_395507.txt-45-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 106.03310880549874, "y": 235.08830558964237}, {"color": "#377eb8", "date": "2004", "id": "news_2004_617203.txt-102-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe\u0027s a great \u003cb\u003echef\u003c/b\u003e, \" Emeric said.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2004_617203.txt-102-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 331.9365607985295, "y": 50.93986604111717}, {"color": "#377eb8", "date": "2003", "id": "mag_2003_407716.txt-5-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut no worries: Rocco DiSpirito, executive \u003cb\u003echef\u003c/b\u003e at Union\u003cbr\u003ePacific and star of NEC\u0027s The Restaurant, had a papparadelle\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2003\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2003_407716.txt-5-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 267.5655130352098, "y": 123.07618391866094}, {"color": "#377eb8", "date": "2001", "id": "fic_2001_27380.txt-81-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnyhow, the Crillon \u003cb\u003echef\u003c/b\u003e\u0027s nose is out of joint.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2001_27380.txt-81-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -112.71405033421384, "y": 99.23733482634977}, {"color": "#377eb8", "date": "1998", "id": "news_1998_610624.txt-51-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eElsewhere in the clean, spacious kitchen, \u003cb\u003echefs\u003c/b\u003e corked\u003cbr\u003ethe duck bottoms with long wooden stoppers, filled the birds with\u003cbr\u003eboiling water and leave them out to dry.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1998_610624.txt-51-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 194.90128921608766, "y": 316.4390551556935}, {"color": "#377eb8", "date": "1969", "id": "news_1969_727860.txt-19-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn Decatur, Ala.. Roy Bu \u003cb\u003echef\u003c/b\u003e closed his cash register\u003cbr\u003eat his restaurant on Saturday and discovered a $10 shortage.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1969\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1969_727860.txt-19-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 21.086209714250774, "y": -2.2219800482407366}, {"color": "#377eb8", "date": "1993", "id": "fic_1993_25016.txt-45-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe was getting pretty tired of the instant macaroni-and-cheese\u003cbr\u003esuppers she\u0027d been fixing herself, with an occasional chicken potpie\u003cbr\u003eor can of \u003cb\u003eChef\u003c/b\u003e Boyardee ravioli thrown in to break the\u003cbr\u003emonotony.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1993_25016.txt-45-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 254.11331843522166, "y": 67.63471517982033}, {"color": "#377eb8", "date": "2004", "id": "fic_2004_49470.txt-126-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf you had lived here as long as I have, you would know that\u003cbr\u003ethe Chinese and Malaysian \u003cb\u003echefs\u003c/b\u003e at this place can not cook\u003cbr\u003eanything that is not Chinese or Malaysian.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2004_49470.txt-126-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 30.934729876150605, "y": 231.96370099117337}, {"color": "#377eb8", "date": "1963", "id": "fic_1963_780073.txt-930-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen a swinging door slammed open in the adjacent dining room\u003cbr\u003eand a tall, villainous looking Italian in a soiled \u003cb\u003echef\u003c/b\u003e\u0027s cap\u003cbr\u003ebarged in. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1963\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1963_780073.txt-930-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 52.889853014385615, "y": 4.134121935662453}, {"color": "#377eb8", "date": "1991", "id": "nf_1991_774072.txt-1176-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eInitial browning also offers the \u003cb\u003echef\u003c/b\u003e the opportunity to\u003cbr\u003eflour the meat, which will help bind the finished liquid without\u003cbr\u003egiving it a floury taste.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1991\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1991_774072.txt-1176-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -20.401369788171124, "y": -159.94682549876907}, {"color": "#377eb8", "date": "2004", "id": "news_2004_640280.txt-14-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHer \u003cb\u003echef\u003c/b\u003e, Huy Tran, was born in Vietnam.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2004_640280.txt-14-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 55.076893881376876, "y": -65.5260526942609}, {"color": "#377eb8", "date": "2003", "id": "fic_2003_27409.txt-227-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOn the other hand, you never know what\u0027s in a chef\u0027s salad when\u003cbr\u003eyou deal with this \u003cb\u003echef\u003c/b\u003e. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2003\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2003_27409.txt-227-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 7.538817886782348, "y": 199.08003208803302}, {"color": "#377eb8", "date": "1998", "id": "news_1998_652869.txt-1-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMr. Bouterin, the \u003cb\u003echef\u003c/b\u003e and owner of Bouterin restaurant\u003cbr\u003eon East 59th Street, puts a boned shoulder of lamb with vegetables,\u003cbr\u003ewine and stock in the oven, hangs a DO NOT DISTURB sign on the oven\u003cbr\u003edoor and leaves the lamb alone for seven hours.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1998_652869.txt-1-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 394.46595762615954, "y": 61.471470736934855}, {"color": "#377eb8", "date": "2004", "id": "mag_2004_415399.txt-38-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAccording to executive \u003cb\u003echef\u003c/b\u003e David Berry, Britain\u0027s best\u003cbr\u003eorganic suppliers are found in Devon, so the menu is based on local\u003cbr\u003eproduce and includes dishes like a tian of Teignmouth lobster with\u003cbr\u003ecaviar crme frache, moorland game terrine with tomato compote and a\u003cbr\u003ecomforting \" adult nursery dish of the day \" (cottage pic, for\u003cbr\u003eexample).\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2004_415399.txt-38-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 220.49099205266924, "y": 303.52619474295886}, {"color": "#377eb8", "date": "1997", "id": "fic_1997_42337.txt-598-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe read and waited for lunch, delicate pasta dishes and\u003cbr\u003erisotti, salads and souffles the \u003cb\u003echefs\u003c/b\u003e rustled up for the\u003cbr\u003escholars, their spouses, and lovers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1997_42337.txt-598-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 49.01100840483829, "y": 251.55016732423212}, {"color": "#377eb8", "date": "1999", "id": "mag_1999_407915.txt-274-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewild mushroom is much sought after by \u003cb\u003echefs\u003c/b\u003e for its\u003cbr\u003esmoky, earthy flavor.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1999_407915.txt-274-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -13.696525467424523, "y": 63.99621444279047}, {"color": "#377eb8", "date": "1995", "id": "news_1995_631301.txt-29-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe\u0027ll even bet that the upcoming arrival of new head\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e won\u0027t disrupt a detail at Jilly\u0027s.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1995_631301.txt-29-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 50.10756510726726, "y": 71.4771700786278}, {"color": "#377eb8", "date": "2004", "id": "mag_2004_414078.txt-72-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere\u0027s even a formal dining room with waiters and \u003cb\u003echefs\u003c/b\u003e\u003cbr\u003eon hand for executive banquets, just like in Dallas.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2004_414078.txt-72-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -143.743457130771, "y": 247.88971017518986}, {"color": "#377eb8", "date": "2006", "id": "news_2006_604835.txt-57-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt the end of the cooking lesson, Jones says to the\u003cbr\u003e\u003cb\u003echef\u003c/b\u003e: \" The most important question for you, Dave, is this:\u003cbr\u003eWhat are you doing for the next six months?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2006_604835.txt-57-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 39.805102472118264, "y": -136.5614620557194}, {"color": "#377eb8", "date": "2006", "id": "news_2006_636092.txt-61-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eChef\u003c/b\u003e John Coletta has gone all out and fashioned a very\u003cbr\u003eenjoyable menu of Italian dishes that delight and at times\u003cbr\u003edazzle.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2006_636092.txt-61-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 91.91800058872138, "y": 273.55279642857215}, {"color": "#377eb8", "date": "1996", "id": "news_1996_658409.txt-1-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYet while everyone around builds higher, pastry \u003cb\u003echef\u003c/b\u003e\u003cbr\u003eMaury Rubin\u0027s signature desserts remain decidedly flat.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1996\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1996_658409.txt-1-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 71.5716063268606, "y": 9.89149114068746}, {"color": "#377eb8", "date": "1992", "id": "news_1992_619168.txt-32-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhile the southwestern flavors behind the cooking at this very\u003cbr\u003estylish, folk-art filled restaurant were being explored by a handful\u003cbr\u003eof other \u003cb\u003echefs\u003c/b\u003e, most notably Stephen Pyles of the Routh Street\u003cbr\u003eCafe in Dallas and Robert del Grande of Cafe Annie in Houston.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1992_619168.txt-32-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 100.13641701781611, "y": 123.61882191650952}, {"color": "#377eb8", "date": "1997", "id": "news_1997_610573.txt-66-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd signs of the celebrityhood that has overtaken great\u003cbr\u003e\u003cb\u003echefs\u003c/b\u003e in the last 20 years (at Bocuse, outside Lyons,\u003cbr\u003eflashbulbs went off every few minutes \" as the crowd scrambled to\u003cbr\u003edocument their presence at Bocuse \").\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1997_610573.txt-66-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 34.37956433389159, "y": 118.10068179864064}, {"color": "#377eb8", "date": "1994", "id": "news_1994_606768.txt-26-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhat about those charming photos of pretty young \u003cb\u003echefs\u003c/b\u003e\u003cbr\u003echoosing fresh strawberries and placing them in a wicker basket at the\u003cbr\u003eopen-air farmers \u0027 market?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1994_606768.txt-26-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 156.40723857271328, "y": 157.81815723933772}, {"color": "#377eb8", "date": "2005", "id": "news_2005_623919.txt-25-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eKeith Jeanminette, pastry \u003cb\u003echef\u003c/b\u003e at Masa\u0027s, San Francisco,\u003cbr\u003esays many of his pear and apple desserts pair well with the honied\u003cbr\u003echaracter of Muscat Beaumes-de-Venise, as do desserts with oranges,\u003cbr\u003etangerines and apricots.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2005\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2005_623919.txt-25-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 9.43908198285681, "y": 143.72314755401217}, {"color": "#377eb8", "date": "1992", "id": "fic_1992_40323.txt-77-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSherry Tualaulelei was instrumental in the conviction and\u003cbr\u003ethirty-three year imprisonment of the pastry \u003cb\u003echef\u003c/b\u003e\u0027s boss, Sinio\u003cbr\u003e\" Sally Comfort \" Conforte, who had \" borrowed \" a car to sneak out\u003cbr\u003efor a visit to his mistress.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1992\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1992_40323.txt-77-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 27.779062290885943, "y": 89.09508491095266}, {"color": "#377eb8", "date": "1996", "id": "news_1996_625831.txt-58-40", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA super invitation - Congratulations are in order for Bruce\u003cbr\u003eMolzan, the Ruggles Grill chef and owner who has been invited back to\u003cbr\u003ethe Super Bowl for Taste of the NFL V. Coca-Cola and the NFL invite a\u003cbr\u003etop \u003cb\u003echef\u003c/b\u003e and former NFL player to help tackle hunger.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1996\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1996_625831.txt-58-40\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 65.35894659659647, "y": 166.76926656714286}, {"color": "#377eb8", "date": "2008", "id": "fic_2008_36299.txt-94-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003echef\u003c/b\u003e at the Four Seasons required a week\u0027s\u003cbr\u003enotice.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2008\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2008_36299.txt-94-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 41.72503110954529, "y": -219.9015215382366}, {"color": "#377eb8", "date": "1998", "id": "fic_1998_43248.txt-105-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMy uncle had often intimated that everyone who worked at The\u003cbr\u003eLord Nelson Hotel, bellhops, waiters, laundresses, \u003cb\u003echefs\u003c/b\u003e, desk\u003cbr\u003eclerks, cleaning ladies, were one big family.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1998_43248.txt-105-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -164.7019752965147, "y": 112.2723116308971}, {"color": "#377eb8", "date": "1995", "id": "news_1995_631270.txt-48-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eEver the practical \u003cb\u003echef\u003c/b\u003e, she pulls out store-bought\u003cbr\u003epumpkin seeds to make pesto for the frittata when the zucchini she\u003cbr\u003eopens do not yield mature-enough seeds to roast.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1995_631270.txt-48-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 69.9594538734217, "y": 89.73650692956757}, {"color": "#377eb8", "date": "2002", "id": "mag_2002_397228.txt-0-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e@@397228 // Hurtling toward American Idol\u0027s hotly anticipated\u003cbr\u003eclimax, finalists Kelly Clarkson, Nikki McKibbin and Justin Guarini\u003cbr\u003esavor living large in a mansion equipped with a personal \u003cb\u003echef\u003c/b\u003e\u003cbr\u003e(and an on-call shrink) Sunup on L.A.\u0027s Mulholland Drive and the only\u003cbr\u003eevidence Tamyra Gray ever dwelled here with the other American Idol\u003cbr\u003efinalists is a note she left behind, like some message from a reality-\u003cbr\u003eTV ghost.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2002\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2002_397228.txt-0-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -37.59890021763602, "y": 72.28670824748586}, {"color": "#377eb8", "date": "1983", "id": "news_1983_671296.txt-46-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e// Remo Raicovich, the \u003cb\u003echef\u003c/b\u003e, cooks the maccaruni\u003cbr\u003eperfectly; they are resilient yet tender.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1983\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1983_671296.txt-46-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 171.57257864468443, "y": 90.49043005200728}, {"color": "#377eb8", "date": "2006", "id": "news_2006_623955.txt-26-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003echef\u003c/b\u003e makes \" noodles \" out of long chewy strips of\u003cbr\u003ecuttlefish and mounds them in the center of a burnished origami-like\u003cbr\u003ebowl with a julienne of daikon, burdock root stained orange to look\u003cbr\u003elike carrots, precise rounds of sliced okra, orange salmon eggs and\u003cbr\u003esea urchin.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2006_623955.txt-26-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 123.32209400969323, "y": -50.34264092213454}, {"color": "#377eb8", "date": "1997", "id": "news_1997_610552.txt-22-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLitwin believes we\u0027ve only seen the tip of the iceberg in beer\u003cbr\u003ecookery: \" It\u0027s a matter of giving \u003cb\u003echefs\u003c/b\u003e the time with the\u003cbr\u003eingredients.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1997_610552.txt-22-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 282.97293182964785, "y": 53.73711341571527}, {"color": "#377eb8", "date": "1977", "id": "fic_1977_10626.txt-73-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMy congratulations to your \u003cb\u003echef\u003c/b\u003e, Sir Richard, \" Muller\u003cbr\u003esaid, patting his great midriff affectionately like a pet dog.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1977_10626.txt-73-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -66.90948419882551, "y": 234.555081794881}, {"color": "#377eb8", "date": "2008", "id": "fic_2008_36144.txt-580-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOh, and there was that small incident with the visiting\u003cbr\u003eMichelin-starred \u003cb\u003echef\u003c/b\u003e that had circulated in less time than it\u003cbr\u003etook to make a croque-monsieur.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2008\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2008_36144.txt-580-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 43.44350846493071, "y": 297.86738222664644}, {"color": "#377eb8", "date": "1998", "id": "fic_1998_43729.txt-862-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe thought about the \u003cb\u003echef\u003c/b\u003e, the rest of them that had\u003cbr\u003efled through the back door.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1998_43729.txt-862-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 212.73615288401373, "y": -80.04778645505196}, {"color": "#377eb8", "date": "2007", "id": "news_2007_637889.txt-36-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFrench-trained \u003cb\u003echef\u003c/b\u003e Hisayuki \" Max \" Muramatsu, formerly\u003cbr\u003ewith Maxim\u0027s of Paris in Tokyo and Anton \u0026; Michel\u0027s in Carmel,\u003cbr\u003eprepares French, Japanese and California fusion dishes -- not to\u003cbr\u003emention\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2007_637889.txt-36-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -35.265060507027464, "y": -43.74197145108974}, {"color": "#377eb8", "date": "2009", "id": "nf_2009_774617.txt-77-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor instance, \u003cb\u003echef\u003c/b\u003e Anita Lo\u0027s Barbecued Breast of\u003cbr\u003eChicken, Suzanne Goin\u0027s Succotash Salad, and Nobu Matsuhisa\u0027s Parmesan\u003cbr\u003eBaked Small Scallops are unique yet accessible.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2009\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_2009_774617.txt-77-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -16.76735986872934, "y": -14.435007190767797}, {"color": "#377eb8", "date": "1963", "id": "fic_1963_780073.txt-1843-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ea usually friendly duty marred by the \u003cb\u003echef\u003c/b\u003e, who got into\u003cbr\u003ean argument with him and stamped out of the kitchen on Wednesday,\u003cbr\u003eleaving everybody in the lurch.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1963\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1963_780073.txt-1843-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -81.85315692693115, "y": 28.996846011470073}, {"color": "#377eb8", "date": "1982", "id": "news_1982_668379.txt-54-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlbert Oswald, a renown European \u003cb\u003echef\u003c/b\u003e with numerous\u003cbr\u003eParisian culinary awards, exemplifies the boisterous lifestyle of the\u003cbr\u003eAlps, which derives mischievous enjoyment in temporarily converting\u003cbr\u003erather staid visitors.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1982\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1982_668379.txt-54-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 83.95767475099237, "y": 251.81286103042626}, {"color": "#377eb8", "date": "2001", "id": "mag_2001_415832.txt-315-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eChef\u003c/b\u003e Anthony and his staff work in an open kitchen so\u003cbr\u003ediners at The Inn \u0026; Spa at Cedar Falls can order their meals and then\u003cbr\u003ewatch the preparation.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2001\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2001_415832.txt-315-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 241.22565989145573, "y": 284.9413414172189}, {"color": "#377eb8", "date": "1986", "id": "mag_1986_432289.txt-29-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSeppi Renggli, \u003cb\u003echef\u003c/b\u003e of The Four Seasons restaurant in\u003cbr\u003eNew York, created his own spa cuisine in conjunction with a\u003cbr\u003enutritionist.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1986\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1986_432289.txt-29-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 144.333732808081, "y": 187.45155593856097}, {"color": "#377eb8", "date": "1991", "id": "nf_1991_774072.txt-1191-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe Bouquet Garni The bouquet garni has become so standardized\u003cbr\u003ethat \u003cb\u003echefs\u003c/b\u003e often add it to a stew with little thought as to how\u003cbr\u003ethe herbs meld with the stew\u0027s other components.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1991\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1991_774072.txt-1191-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 119.30256880757986, "y": 210.16243056878932}, {"color": "#377eb8", "date": "1982", "id": "mag_1982_432096.txt-101-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAlong the back roads white-hatted \u003cb\u003echefs\u003c/b\u003e follow in\u003cbr\u003eminibuses, stopping to prepare impromptu picnics wherever the\u003cbr\u003ehighflying drifters happen to land.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1982\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1982_432096.txt-101-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 109.05548234186602, "y": 159.80970083669433}, {"color": "#377eb8", "date": "1965", "id": "nf_1965_773962.txt-441-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eManager told me, explaining that she had two first-class men\u003cbr\u003e\u003cb\u003echefs\u003c/b\u003e, one a general chef and one a pastry chef, to manage her\u003cbr\u003emain restaurant kitchens, and a very capable woman head cook for the\u003cbr\u003estaff restaurant.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1965\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1965_773962.txt-441-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 81.32434598449335, "y": 98.10712413098344}, {"color": "#377eb8", "date": "1995", "id": "mag_1995_395507.txt-44-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eCHEF\u003c/b\u003e CLAYTON SHERROD Clayton Sherrod is owner and\u003cbr\u003eoperator of Chef Clayton\u0027s Food Systems, Inc., an extensive catering\u003cbr\u003eand food service operation founded in 1977 and based in Birmingham,\u003cbr\u003eAla.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1995_395507.txt-44-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -82.95518027035696, "y": 168.36995505829847}, {"color": "#377eb8", "date": "1996", "id": "mag_1996_427510.txt-24-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey\u0027ve been told that a guest who craves a dish not featured\u003cbr\u003eon the menu can order it anyway, and the \u003cb\u003echef\u003c/b\u003e will do his best\u003cbr\u003eto accommodate the request.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1996\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1996_427510.txt-24-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 202.00954696803575, "y": 168.31294688251552}, {"color": "#377eb8", "date": "2006", "id": "news_2006_623954.txt-164-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey had three children -- Meredith, 26, a preschool teacher;\u003cbr\u003eLauren, 24, a pastry \u003cb\u003echef\u003c/b\u003e; and Adam, 18, a high school senior\u003cbr\u003e-- and Gockley remains a devoted family man, speaking of all three\u003cbr\u003ewith obvious pride and affection.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2006_623954.txt-164-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 9.096082347356598, "y": 170.22668101037067}, {"color": "#377eb8", "date": "2004", "id": "mag_2004_416263.txt-0-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e@@416263 A pastry \u003cb\u003echef\u003c/b\u003e shows that decorating is child\u0027s\u003cbr\u003eplay Photograph Pastry chef Emily Luchetti shows how to pipe icing\u003cbr\u003efrom the corner of a plastic bag.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2004\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2004_416263.txt-0-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 258.08291677704347, "y": 170.43681411330166}, {"color": "#377eb8", "date": "1999", "id": "fic_1999_16036.txt-585-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCAMERA FINDS PREACHER, wearing a starched \u003cb\u003echef\u003c/b\u003e\u0027s\u003cbr\u003eoutfit.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1999_16036.txt-585-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 179.2015020553373, "y": 261.26374883307136}, {"color": "#377eb8", "date": "2000", "id": "fic_2000_28758.txt-105-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs the entire group follows me downstairs toward the third\u003cbr\u003efloor, the \u003cb\u003echef\u003c/b\u003e -- Bongo from Venezuela via Vunderbahr,\u003cbr\u003eMoonclub, Paddy-O and MasaMasa -- lights a cigarette and lowers his\u003cbr\u003esunglasses while trying to keep up with me. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2000\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_2000_28758.txt-105-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_\u003csub\u003e\u003c/p\u003e", "x": -28.344591530432442, "y": -30.203593550660322}, {"color": "#377eb8", "date": "1995", "id": "mag_1995_395507.txt-21-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe graduated with honors in April 1991 with an associate\u003cbr\u003edegree in food and hospitality and a \u003cb\u003echef\u003c/b\u003e apprenticeship\u003cbr\u003ecertification.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1995_395507.txt-21-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 190.0305167937146, "y": 8.21377397455588}, {"color": "#377eb8", "date": "1994", "id": "news_1994_620115.txt-16-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLoretta Keller, \u003cb\u003echef\u003c/b\u003e at Bizou, is not generally a\u003cbr\u003edevotee of fruit in savory dishes -- except in the fall.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1994_620115.txt-16-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 75.92311837269143, "y": 227.40245639779886}, {"color": "#377eb8", "date": "1977", "id": "nf_1977_774125.txt-1317-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIf the \u003cb\u003echef\u003c/b\u003e is a gifted cook, you will dine well; if he\u003cbr\u003ehas a touch of genius, you will dine memorably.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1977\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1977_774125.txt-1317-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -127.69584098977049, "y": 84.66264736965829}, {"color": "#377eb8", "date": "1994", "id": "news_1994_641063.txt-27-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eChefs\u003c/b\u003e throughout the country favor merlot in their brown\u003cbr\u003esauces for its appropriately soft texture - velvet wine in a satin\u003cbr\u003esauce.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1994\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1994_641063.txt-27-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 183.0410370872936, "y": 137.1989759245218}, {"color": "#377eb8", "date": "1999", "id": "nf_1999_774962.txt-306-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e// What sets these apart from most other local restaurants, and\u003cbr\u003eindeed from most other restaurants in France, is that in both cases\u003cbr\u003ethe \u003cb\u003echefs\u003c/b\u003e are women.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1999\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: nf_1999_774962.txt-306-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -85.36240365036655, "y": 68.9632589675426}, {"color": "#377eb8", "date": "1997", "id": "news_1997_610581.txt-97-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eORECCHIETTE AND FAVA BEAN SUMMER SALAD (6 servings) From Yann\u003cbr\u003eHenrotte, corporate \u003cb\u003echef\u003c/b\u003e at B \u0026B; Washington\u0027s Caterers\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1997_610581.txt-97-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 37.72693849453652, "y": 193.42572412341514}, {"color": "#377eb8", "date": "1970", "id": "mag_1970_490700.txt-1377-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWe think he\u0027s the best \u003cb\u003echef\u003c/b\u003e in the world.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1970\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1970_490700.txt-1377-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -72.04259366301918, "y": 100.7678099253487}, {"color": "#377eb8", "date": "1995", "id": "fic_1995_39282.txt-307-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003echef\u003c/b\u003e had cooked the tongue to perfection -- tender\u003cbr\u003eand not too done, just shy of bloody.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1995_39282.txt-307-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 218.1783552743075, "y": 18.13704379481922}, {"color": "#377eb8", "date": "2006", "id": "news_2006_629441.txt-92-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhile they were dating, executive \u003cb\u003echef\u003c/b\u003e Jonathan Jones of\u003cbr\u003ethe Tasting Room took his wife to Empress\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2006_629441.txt-92-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 138.14286880269236, "y": 36.865567305902196}, {"color": "#377eb8", "date": "2009", "id": "mag_2009_406412.txt-9-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTribeca and True Trained as a pastry \u003cb\u003echef\u003c/b\u003e, Rachel\u003cbr\u003eThebault opened New York\u0027s Tribeca Treats -- a neighborhood (and\u003cbr\u003ecitywide) destination for truffles, bonbons and customized birthday\u003cbr\u003eand wedding cakes -- in 2007.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2009\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2009_406412.txt-9-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 218.79776187210402, "y": -6.182322247784637}, {"color": "#377eb8", "date": "1993", "id": "news_1993_600214.txt-63-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e- What makes the place special: \" The restaurant is nothing\u003cbr\u003especial, but the hospitality of the \u003cb\u003echef\u003c/b\u003e was incredible.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1993\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_1993_600214.txt-63-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 50.45064597760437, "y": 153.12899226846588}, {"color": "#377eb8", "date": "1989", "id": "mag_1989_328766.txt-22-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe European \u003cb\u003echef\u003c/b\u003e there was miserable and kept saying\u003cbr\u003ethat women had no strength, no stamina and no concentration, \" says\u003cbr\u003eRosenzweig, who went on to become the controversial vice chairman at\u003cbr\u003eManhattan\u0027s exclusive \" 21 \" Club, as well as chef-partner at her own\u003cbr\u003eNew York City restaurant, Arcadia.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1989\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1989_328766.txt-22-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 315.60654800996497, "y": 107.10170007364087}, {"color": "#377eb8", "date": "1998", "id": "mag_1998_400332.txt-12-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut last January, marine researchers joined a group ranging\u003cbr\u003efrom top \u003cb\u003echefs\u003c/b\u003e to food critics and journalists to celebrate the\u003cbr\u003eswordfish by not including it on the menu.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1998\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1998_400332.txt-12-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -55.78080246481819, "y": 199.75295067851718}, {"color": "#377eb8", "date": "2006", "id": "mag_2006_428641.txt-119-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMy 23-year-old nephew had been a \u003cb\u003echef\u003c/b\u003e and loved\u003cbr\u003ethe\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2006\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2006_428641.txt-119-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -87.48207690801891, "y": 115.72942002759477}, {"color": "#377eb8", "date": "2007", "id": "mag_2007_389533.txt-69-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis refreshing appetizer, inspired by a redpefrom \u003cb\u003echef\u003c/b\u003e\u003cbr\u003eRobert St. John\u0027s book A Southern Palate, showcases Gulf Coast\u003cbr\u003eshrimp.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_2007_389533.txt-69-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 246.19850872217137, "y": 24.23099109184653}, {"color": "#377eb8", "date": "2007", "id": "news_2007_637870.txt-20-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBarber is no ordinary \u0027 cue \u003cb\u003echef\u003c/b\u003e, either.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 2007\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: news_2007_637870.txt-20-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 33.4743091940302, "y": -36.00743490363165}, {"color": "#f781bf", "date": "1995", "id": "fic_1995_39408.txt-349-5", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" So, \" the \u003cb\u003eChef\u003c/b\u003e du Village says with a shrug, already\u003cbr\u003escanning down the line. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1995\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: fic_1995_39408.txt-349-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -297.3669732734411, "y": -113.83028944164528}, {"color": "k", "date": "1997", "id": "mag_1997_428061.txt-153-6", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e13 Admiral LATA300AA $440 16 Magic \u003cb\u003eChef\u003c/b\u003e W227L $460 *\u003cbr\u003e44x27x27 in.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1997_428061.txt-153-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 803.6239915635774, "y": 40.670839970894896}, {"color": "k", "date": "1997", "id": "mag_1997_428061.txt-162-1", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMagic \u003cb\u003eChef\u003c/b\u003e has been among the less reliable brands of\u003cbr\u003etop-loading machines.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1997\u003cbr\u003egrouping: 2\u003cbr\u003eidentifier: mag_1997_428061.txt-162-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -645.014840531062, "y": 1991.6017509053156}]);
+        edges = new vis.DataSet([{"color": "black", "from": "fic_1973_10570.txt-3537-12", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1981_671027.txt-1-32", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1981_671027.txt-1-32", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1997_621043.txt-70-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1998_632300.txt-65-5", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1998_632300.txt-65-5", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_2004_410917.txt-95-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1998_632300.txt-65-5", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1998_43248.txt-105-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1989_328766.txt-15-6", "label": "-/-/-/-/-/4/-/-/3/-/-/-/-", "to": "nf_1991_774072.txt-1394-40", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1989_328766.txt-15-6", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1977_774125.txt-986-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1989_328766.txt-15-6", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1997_610552.txt-22-22", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1995_39282.txt-307-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "4/-/-/-/-/4/-/4/4/-/-/-/-", "to": "mag_1994_409087.txt-47-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "4/-/-/-/-/4/-/4/-/-/-/-/-", "to": "mag_1995_395507.txt-21-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "-/-/-/-/-/4/-/-/3/-/-/-/-", "to": "news_1998_652869.txt-1-4", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "-/-/-/-/-/4/-/-/3/-/-/-/-", "to": "news_1993_600214.txt-63-19", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "-/-/-/-/-/4/-/4/-/-/-/-/-", "to": "news_1996_658409.txt-1-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_2007_389533.txt-69-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "nf_1965_773962.txt-441-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_1997_610552.txt-22-22", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_2004_617203.txt-102-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_2002_603927.txt-69-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2007_33461.txt-116-19", "label": "4/3/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1992_40323.txt-77-14", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_2009_405412.txt-17-12", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2009_405412.txt-17-12", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_1997_610573.txt-66-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2009_405412.txt-17-12", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_1996_427510.txt-24-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2009_405412.txt-17-12", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "news_1994_641063.txt-27-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_2000_28758.txt-105-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "4/-/-/-/-/4/-/-/4/-/-/-/-", "to": "nf_1977_774125.txt-1317-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_1993_655748.txt-41-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "4/-/-/-/-/4/-/4/4/-/-/-/-", "to": "news_2007_637889.txt-36-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "fic_1993_25002.txt-9471-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "news_2006_636092.txt-61-0", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "4/-/-/-/-/-/-/-/4/-/-/-/-", "to": "fic_2001_27380.txt-81-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_2006_428641.txt-119-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "4/-/-/-/-/4/4/-/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "4/4/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_2005_50340.txt-357-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "4/-/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1992_40323.txt-77-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1997_621043.txt-70-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1999_407915.txt-274-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1994_426049.txt-149-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_606769.txt-54-0", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_2003_27409.txt-227-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_606769.txt-54-0", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_606769.txt-54-0", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1965_773962.txt-441-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_606769.txt-54-0", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_2004_414078.txt-72-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_2003_27409.txt-227-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "4/-/-/-/-/4/-/-/3/-/-/-/-", "to": "news_2005_623919.txt-25-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "4/-/-/-/-/4/-/4/-/-/-/-/-", "to": "mag_1970_490700.txt-1377-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "4/-/-/-/-/4/-/4/3/-/-/-/-", "to": "nf_1999_774962.txt-306-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1977_10626.txt-73-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "mag_2004_414078.txt-72-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "-/-/-/-/-/-/-/4/3/-/-/-/-", "to": "nf_1991_774072.txt-1191-11", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "fic_1963_780073.txt-1843-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_1995_395507.txt-3-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1991_774072.txt-1394-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_50340.txt-357-17", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1994_426049.txt-149-1", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-986-6", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1977_774125.txt-1297-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-986-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "mag_2009_406412.txt-9-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-986-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1996_427510.txt-24-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-986-6", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_1983_671296.txt-46-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25002.txt-9471-1", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_1998_400332.txt-12-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25002.txt-9471-1", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_2008_36144.txt-580-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "4/-/-/-/-/4/-/4/3/-/-/-/-", "to": "fic_2004_49470.txt-126-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_2003_27409.txt-227-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_1994_606768.txt-26-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "-/-/-/-/-/4/-/4/3/-/-/-/-", "to": "mag_1988_327176.txt-25-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_1995_638686.txt-13-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "4/-/-/-/-/-/-/-/4/-/-/-/-", "to": "news_1994_641063.txt-27-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "nf_1977_774125.txt-767-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_1995_631270.txt-48-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1977_774125.txt-1297-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1394-40", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_1977_732998.txt-23-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-767-0", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "news_1993_600214.txt-63-19", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-767-0", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1997_42337.txt-598-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1989_14218.txt-1947-9", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "fic_2004_32588.txt-86-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1989_14218.txt-1947-9", "label": "1/-/-/-/-/-/-/-/-/-/-/4/-", "to": "news_1996_625831.txt-58-40", "weight": 2.5, "width": 4}, {"color": "black", "from": "news_2002_603927.txt-69-19", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_1995_638686.txt-13-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2002_603927.txt-69-19", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1999_16036.txt-585-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2002_603927.txt-69-19", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "mag_2006_428641.txt-119-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1999_407915.txt-20-11", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1999_407915.txt-20-11", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1982_432096.txt-101-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1977_732998.txt-23-0", "label": "4/-/-/-/-/4/-/-/2/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1977_732998.txt-23-0", "label": "4/-/-/-/-/-/-/4/3/-/-/-/-", "to": "news_1993_655748.txt-41-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1977_732998.txt-23-0", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "news_1997_610573.txt-66-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1977_732998.txt-23-0", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "mag_1982_432096.txt-101-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1977_732998.txt-23-0", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1995_631301.txt-29-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1977_732998.txt-23-0", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_2001_27380.txt-81-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2002_385272.txt-92-13", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1995_638686.txt-13-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1997_621043.txt-70-18", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1997_621043.txt-70-18", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_2008_36299.txt-94-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2005_32589.txt-87-26", "label": "-/-/-/-/-/-/-/4/3/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_2005_32589.txt-87-26", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_1969_727860.txt-19-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_32588.txt-86-3", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_1969_727860.txt-19-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_32588.txt-86-3", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_1995_631270.txt-48-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_32588.txt-86-3", "label": "-/4/-/-/-/-/4/-/-/-/-/-/-", "to": "nf_1977_774125.txt-1297-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_32588.txt-86-3", "label": "-/4/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1995_39282.txt-307-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_32588.txt-86-3", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_32588.txt-86-3", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_2007_389533.txt-69-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_32588.txt-86-3", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "mag_1995_395507.txt-45-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1297-15", "label": "4/-/-/-/-/-/-/4/4/-/-/-/-", "to": "mag_2004_410917.txt-95-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1297-15", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "news_1995_631270.txt-48-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1297-15", "label": "4/-/-/-/-/-/4/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1297-15", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1995_638686.txt-13-1", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_2004_416263.txt-0-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2004_410917.txt-95-12", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1977_774125.txt-1317-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1994_409087.txt-47-2", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_2005_623919.txt-25-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1994_409087.txt-47-2", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1970_490700.txt-1377-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1994_409087.txt-47-2", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1988_327176.txt-25-12", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_2006_623955.txt-26-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1988_327176.txt-25-12", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1992_40323.txt-77-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1995_395507.txt-45-4", "label": "4/-/-/-/-/-/-/-/2/4/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1995_395507.txt-45-4", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1991_774072.txt-1191-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1995_395507.txt-45-4", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1993_600214.txt-63-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2003_407716.txt-5-8", "label": "4/-/-/-/-/4/-/4/4/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2001_27380.txt-81-4", "label": "-/-/-/-/-/-/-/-/-/-/-/4/-", "to": "mag_2006_428641.txt-119-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1998_610624.txt-51-8", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1969_727860.txt-19-7", "label": "-/-/-/-/-/-/-/-/-/4/-/-/-", "to": "fic_1963_780073.txt-1843-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1969_727860.txt-19-7", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_1995_631301.txt-29-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25016.txt-45-24", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_1983_671296.txt-46-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1993_25016.txt-45-24", "label": "-/-/-/-/-/-/-/-/-/-/-/3/-", "to": "news_2006_629441.txt-92-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_2004_49470.txt-126-19", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "news_2006_623954.txt-164-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2004_49470.txt-126-19", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_1997_610581.txt-97-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1963_780073.txt-930-21", "label": "-/-/-/-/-/4/-/4/2/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1963_780073.txt-930-21", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_2000_28758.txt-105-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1963_780073.txt-930-21", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1963_780073.txt-930-21", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "news_1997_610552.txt-22-22", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1963_780073.txt-930-21", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1996_658409.txt-1-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1176-5", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1176-5", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_2006_604835.txt-57-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2004_640280.txt-14-1", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_2006_623955.txt-26-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2004_640280.txt-14-1", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_2006_604835.txt-57-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2004_640280.txt-14-1", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "news_1995_631301.txt-29-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2003_27409.txt-227-20", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_1994_620115.txt-16-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2003_27409.txt-227-20", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "fic_1999_16036.txt-585-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_2004_415399.txt-38-3", "label": "4/-/-/-/-/4/-/-/2/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_42337.txt-598-17", "label": "-/-/-/-/-/4/-/-/3/-/-/-/-", "to": "news_1995_631270.txt-48-3", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1997_42337.txt-598-17", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "news_1982_668379.txt-54-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1997_42337.txt-598-17", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_1996_625831.txt-58-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1999_407915.txt-274-7", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_1995_631270.txt-48-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1999_407915.txt-274-7", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "news_1997_610573.txt-66-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1995_631301.txt-29-11", "label": "-/-/-/-/-/-/-/-/-/4/-/-/-", "to": "news_2006_623954.txt-164-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1995_631301.txt-29-11", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1995_631301.txt-29-11", "label": "4/-/-/-/-/-/-/-/-/-/4/4/-", "to": "news_1992_619168.txt-32-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1995_631301.txt-29-11", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_1996_625831.txt-58-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2006_604835.txt-57-12", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2006_636092.txt-61-0", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1996_658409.txt-1-8", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1965_773962.txt-441-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1996_658409.txt-1-8", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_2000_28758.txt-105-13", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1996_658409.txt-1-8", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_2007_637889.txt-36-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1992_619168.txt-32-23", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1997_610573.txt-66-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1997_610573.txt-66-9", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1997_610573.txt-66-9", "label": "4/-/-/-/-/-/-/-/-/-/4/4/-", "to": "news_1997_610581.txt-97-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1997_610573.txt-66-9", "label": "-/-/-/-/-/-/-/-/-/-/-/4/-", "to": "news_1993_600214.txt-63-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_606768.txt-26-8", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "news_2005_623919.txt-25-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1994_606768.txt-26-8", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_1983_671296.txt-46-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_40323.txt-77-14", "label": "-/-/-/-/-/4/-/4/-/-/-/-/-", "to": "mag_1995_395507.txt-44-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_40323.txt-77-14", "label": "-/-/-/-/-/4/-/4/-/-/-/-/-", "to": "mag_1998_400332.txt-12-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_40323.txt-77-14", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "nf_2009_774617.txt-77-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_40323.txt-77-14", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_1983_671296.txt-46-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_40323.txt-77-14", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1992_40323.txt-77-14", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_1995_631270.txt-48-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1996_625831.txt-58-40", "label": "-/-/-/-/-/4/-/4/-/-/-/-/-", "to": "news_1995_631270.txt-48-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1996_625831.txt-58-40", "label": "-/-/-/-/-/-/-/-/-/-/4/-/3", "to": "news_1993_600214.txt-63-19", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1998_43248.txt-105-21", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_2002_397228.txt-0-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1995_631270.txt-48-3", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "fic_1999_16036.txt-585-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "news_1995_631270.txt-48-3", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_1997_610581.txt-97-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2002_397228.txt-0-30", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_2006_623954.txt-164-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2002_397228.txt-0-30", "label": "-/-/-/-/-/4/4/-/-/-/-/-/-", "to": "news_2007_637870.txt-20-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2002_397228.txt-0-30", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "news_1993_600214.txt-63-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1983_671296.txt-46-5", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "news_1994_641063.txt-27-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1983_671296.txt-46-5", "label": "-/-/-/-/-/-/-/-/-/-/4/4/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2006_623955.txt-26-1", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "mag_1995_395507.txt-21-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_2008_36144.txt-580-12", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1998_43729.txt-862-4", "label": "4/-/-/-/-/-/-/4/2/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1982_668379.txt-54-6", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1982_668379.txt-54-6", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "news_2006_623954.txt-164-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_2001_415832.txt-315-0", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1986_432289.txt-29-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1986_432289.txt-29-3", "label": "-/-/-/-/-/4/-/-/3/-/-/-/-", "to": "mag_1989_328766.txt-22-2", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1986_432289.txt-29-3", "label": "-/-/-/4/-/-/-/-/4/-/-/-/-", "to": "news_1994_620115.txt-16-3", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1986_432289.txt-29-3", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1191-11", "label": "-/-/-/-/-/-/-/-/-/-/4/4/-", "to": "mag_1982_432096.txt-101-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1991_774072.txt-1191-11", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1996_427510.txt-24-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1982_432096.txt-101-5", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "news_2006_629441.txt-92-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_1994_620115.txt-16-3", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "news_1997_610581.txt-97-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1317-2", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1999_774962.txt-306-26", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1977_774125.txt-1317-2", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1970_490700.txt-1377-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "news_2006_629441.txt-92-6", "label": "4/-/-/-/-/4/-/-/2/4/-/-/-", "to": "mag_2009_406412.txt-9-7", "weight": 4.0, "width": 4}, {"color": "lightgray", "from": "nf_1977_774125.txt-1398-15", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "news_2004_640280.txt-14-1", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1991_774072.txt-1394-40", "label": "-/-/-/-/1/-/-/-/-/-/-/-/-", "to": "fic_1995_39408.txt-349-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1997_428061.txt-153-6", "label": "-/-/-/-/-/0/-/-/2/-/-/-/-", "to": "nf_1977_774125.txt-1297-15", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1977_774125.txt-1297-15", "label": "-/-/-/-/-/4/-/2/2/-/-/-/-", "to": "fic_1995_39408.txt-349-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1989_328766.txt-15-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/0", "to": "mag_1997_428061.txt-153-6", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_2009_405412.txt-17-12", "label": "-/-/-/-/-/-/-/-/-/-/-/-/0", "to": "news_1994_606769.txt-54-0", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1977_774125.txt-1398-15", "label": "0/-/-/-/-/-/-/-/0/-/-/-/-", "to": "mag_1997_428061.txt-162-1", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1977_774125.txt-986-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/0", "to": "fic_1995_39408.txt-349-5", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1999_407915.txt-20-11", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "fic_1998_43729.txt-862-4", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "news_1977_732998.txt-23-0", "label": "-/-/-/-/-/-/-/-/-/-/-/-/0", "to": "mag_1995_395507.txt-45-4", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "news_1977_732998.txt-23-0", "label": "-/-/-/-/-/-/-/-/-/-/-/-/0", "to": "nf_1977_774125.txt-1317-2", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1997_428061.txt-153-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/0", "to": "news_1996_625831.txt-58-40", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1997_428061.txt-162-1", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "fic_2003_27409.txt-227-20", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

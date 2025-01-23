@@ -1,3 +1,6 @@
 [submodule "dices-dataset"]
 	path = dices-dataset
 	url = git@github.com:google-research-datasets/dices-dataset.git
+[submodule "rdfgraph"]
+	path = rdfgraph
+	url = https://github.com/mrihtar/rdfgraph.git

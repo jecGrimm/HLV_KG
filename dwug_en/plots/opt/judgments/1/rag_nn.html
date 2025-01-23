@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">rag_nn (1)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1845", "id": "mag_1845_587427.txt-128-16", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhole families of men, women, and children, half naked,\u003cbr\u003ebarefoot, in \u003cb\u003erags\u003c/b\u003e, shivering in the cold, lean and gaunt from\u003cbr\u003ehunger, without a hut to shelter them from the storm, or a pillow of\u003cbr\u003estraw whereon to lay their heads.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1845_587427.txt-128-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 259.77898108325235, "y": -86.63695819653007}, {"color": "#377eb8", "date": "1849", "id": "fic_1849_7216.txt-200-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNow, the next pilgrim was a very old and miserable man; stone-\u003cbr\u003eblind, covered with \u003cb\u003erags\u003c/b\u003e; and supporting his steps with a\u003cbr\u003estaff. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1849_7216.txt-200-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -60.22571699832785, "y": 27.14293952361706}, {"color": "#377eb8", "date": "1847", "id": "nf_1847_747595.txt-241-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis ornament is considered indispensable, and those who can\u003cbr\u003enot afford it, supply its place with a bit of red \u003cb\u003erag\u003c/b\u003e, which\u003cbr\u003eequally well answers the intended purpose of pointing them out as\u003cbr\u003edisciples of Buddha.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1847_747595.txt-241-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 216.60407953974556, "y": 28.2857690222298}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_1281.txt-1360-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003esaid Mrs. McCarty, begging them to sit down, and excuse the\u003cbr\u003edisordered state of her few \u003cb\u003erags\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_1281.txt-1360-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 135.47282117982527, "y": 164.0216934460261}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-10511-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e; and having drilled a small company of young vagabonds, he\u003cbr\u003emade a circuit of the market-places on Saturday nights with these --\u003cbr\u003etheir \u003cb\u003erags\u003c/b\u003e flying to the wind, and an expression of doleful\u003cbr\u003egratitude in their faces -- running at his heels; Puffer keeping in\u003cbr\u003ethe advance, and from time to time ordering a cutlet, or steak, or\u003cbr\u003etender-loin, to be cast in.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-10511-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 235.6662858540232, "y": 208.14388997435188}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-4905-33", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn return, gentlemen, for this flattering toast, let me offer\u003cbr\u003eyou, \" The regamuffins and paupers of the ward: they conceal more\u003cbr\u003egenuine honor and virtue beneath their \u003cb\u003erags\u003c/b\u003e, than King Solomon\u003cbr\u003ein his Sunday clothes, or a Fourth-of-July orator in his new-bought\u003cbr\u003eruffle and wristbands! \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-4905-33\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -192.581340434792, "y": 59.83256748847758}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747502.txt-339-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe windows were glazed principally with paper, to say nothing\u003cbr\u003eof old hats, \u003cb\u003erags\u003c/b\u003e, \u0026c.; The head of this honored house fished\u003cbr\u003ein the trout season; and he would have put Izaac Walton to the blush,\u003cbr\u003eif that illustrious gentleman\u0027s angling virtues had been brought to so\u003cbr\u003esevere a proof.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747502.txt-339-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -28.420048291068298, "y": 304.84372475866263}, {"color": "#377eb8", "date": "1853", "id": "fic_1853_9040.txt-627-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePorch above porch, opening out on the alley, served as\u003cbr\u003edooryards to the different apartments -- places for the drying of\u003cbr\u003emiserable \u003cb\u003erags\u003c/b\u003e -- play-grounds for the children -- and look-\u003cbr\u003eouts, for the decrepit old women, on sunny afternoons.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1853_9040.txt-627-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -55.43823555273345, "y": -3.0826480312969027}, {"color": "#377eb8", "date": "1835", "id": "mag_1835_554357.txt-300-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eChemistry has supplied its bleaching inventions and its\u003cbr\u003emedicines, not to speak of the more questionable blessings of dry bone\u003cbr\u003esoup, linen \u003cb\u003erag\u003c/b\u003e sugar, and sawdust bread.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1835_554357.txt-300-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 171.98731703141678, "y": -20.16331278527564}, {"color": "#377eb8", "date": "1852", "id": "mag_1852_555751.txt-173-80", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn the first particular, while the standard of intelligence and\u003cbr\u003erefinement among our native population is perhaps higher than among\u003cbr\u003eour neighbors under the British crown, they are rapidly following our\u003cbr\u003esteps as to popular education, and they receive much smaller\u003cbr\u003eproportional accessions than we do of a degraded foreign population,\u003cbr\u003ewhose brutish habits of living have a direct tendency to reduce the\u003cbr\u003eprice of labor to what will furnish the discomfort, smoke, and\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e of a shanty.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1852_555751.txt-173-80\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -4.020251817508647, "y": 70.15245068471071}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7906.txt-111-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHumbly the stranger took the offered crumb Yet ate not of it,\u003cbr\u003estanding meek and dumb: Then lifts his eyes, -- the wondering Ahab saw\u003cbr\u003eHis \u003cb\u003erags\u003c/b\u003e fall from him as the snow in thaw.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7906.txt-111-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 86.51337760335835, "y": 149.1846961516449}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_5515.txt-1284-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIsn\u0027t your mother in the house, and haven\u0027t you a dry\u003cbr\u003e\u003cb\u003erag\u003c/b\u003e to put upon that poor child? \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_5515.txt-1284-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -122.18066877180388, "y": 121.43805006956923}, {"color": "#377eb8", "date": "1823", "id": "mag_1823_553494.txt-190-75", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt midday, when the streets seem to run with liquid fire, when\u003cbr\u003escarcely any pedestrian is abroad, and even the policeman has retired\u003cbr\u003eto enjoy the luxury of shade, you may see the droshky driver clinging\u003cbr\u003eto his post of duty, the carter urging on his dirt-besmeared equipage,\u003cbr\u003ethe vender offering his wares with the cry which is a shriek, and the\u003cbr\u003ebeggars, sexless by plenitude of \u003cb\u003erags\u003c/b\u003e, awaiting their copek at\u003cbr\u003ethe blazing doors of church and catlle (lral.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1823\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1823_553494.txt-190-75\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 44.42298434180055, "y": -71.71689887995811}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_1281.txt-4096-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eLike revelling witches in \u003cb\u003erags\u003c/b\u003e, and seen through the\u003cbr\u003ebedimmed atmosphere at the further end of the den, are half-frantic\u003cbr\u003emen, women, and girls\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_1281.txt-4096-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -11.645544809022374, "y": 290.3744522740777}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_5515.txt-1149-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere was a time when she did not care if the floor was all\u003cbr\u003ecovered with heaps of dirt, and she would go out into the street with\u003cbr\u003ethe \u003cb\u003erags\u003c/b\u003e flying all about her, and her hair in masses of thick\u003cbr\u003etangles, and her face quite black and ugly.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_5515.txt-1149-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -218.60018428892704, "y": 126.75253106365736}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_1279.txt-222-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe chords of tender sympathy were at once touched and Bettina\u003cbr\u003efollowed the old woman outside the walls, and beyond an angle of the\u003cbr\u003eruins a few rods, when the person who had so excited her commiseration\u003cbr\u003esuddenly stopped, and tossing off the wretched \u003cb\u003erags\u003c/b\u003e he wore, he\u003cbr\u003estood before her the athletic leader of banditti, Petard! \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_1279.txt-222-47\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -27.210041476466788, "y": 176.13433245147033}, {"color": "#377eb8", "date": "1839", "id": "fic_1839_8877.txt-142-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eupon The farnish\u0027d wretch before you, poor in all things Save\u003cbr\u003ehonor; -- on these tatter\u0027d \u003cb\u003erags\u003c/b\u003e you gazed; You thought he\u003cbr\u003emight be bought.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1839_8877.txt-142-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -158.75356133556042, "y": -71.86482171171929}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_5515.txt-1683-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe did not remember how beautiful the contrast must be to Pat\u003cbr\u003eas he came from his mother\u0027s den of infamy, where \u003cb\u003erags\u003c/b\u003e and dirt\u003cbr\u003eprevailed, to the neat and cleanly dwelling, and the pure, bright,\u003cbr\u003ehappy faces of Mrs. Bates and her two children.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_5515.txt-1683-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 237.30995296617692, "y": 91.70506290443352}, {"color": "#377eb8", "date": "1853", "id": "fic_1853_3465.txt-1089-43", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHowever, it\u0027s my motto never to give up; so, of course I gained\u003cbr\u003ethe top at last, and, opening a door, found myself in a garret, piled\u003cbr\u003eup as high as my waist with old \u003cb\u003erags\u003c/b\u003e, and old papers, and old\u003cbr\u003ebits of bones. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1853_3465.txt-1089-43\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -53.69414863250466, "y": 114.22671176628963}, {"color": "#377eb8", "date": "1854", "id": "fic_1854_8328.txt-3033-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhence then thy right to rack my limbs with toil, And bear away\u003cbr\u003ethe produce of the soil; Leave my poor babes in \u003cb\u003erags\u003c/b\u003e the blast\u003cbr\u003eto feel, Wet with hot tears their scant, unwholesome meal, And\u003cbr\u003eearthward, like the beasts that perish, gaze From springtime to\u003cbr\u003ethe\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1854_8328.txt-3033-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 1.9391236111600647, "y": 161.73586930488392}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-513-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCome, fork over the solid, Old \u003cb\u003eRags\u003c/b\u003e, \" said the boatman,\u003cbr\u003ewith a loud laugh, and turning with a quizzical leer to a group of\u003cbr\u003ecaptains, and sloop-boys that had gathered to see the fun. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-513-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -126.93273893464865, "y": 158.72594871335494}, {"color": "#377eb8", "date": "1845", "id": "fic_1845_7103.txt-365-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ePeirce eyed him as he stood there in his shirt sleeyes, with a\u003cbr\u003eshaving ringlet lodged over his right ear and a \u003cb\u003erag\u003c/b\u003e wound about\u003cbr\u003ea wounded thumb, to see what he had to expect from his new master, for\u003cbr\u003esuch he instinctively knew him to be.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1845_7103.txt-365-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 198.78034848952754, "y": -127.4713402459837}, {"color": "#377eb8", "date": "1840", "id": "mag_1840_586584.txt-140-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThere is a higher pleasure in his view in preachiiig to the\u003cbr\u003esavages, than in sharing the luxuries of refined society; and in\u003cbr\u003epreferring the former he acts upon the same principle of self-love, as\u003cbr\u003ethe chimney sweeper would in giving up his sooty \u003cb\u003erags\u003c/b\u003e for the\u003cbr\u003epurple linen of a prince.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1840\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1840_586584.txt-140-47\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -133.01568117558432, "y": 56.269547977215176}, {"color": "#377eb8", "date": "1833", "id": "fic_1833_7321.txt-3317-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003elimpsy as a \u003cb\u003erag\u003c/b\u003e, so that the doctors would think he was\u003cbr\u003ejest ready to fly off the handle, and let him go down to the Rip Raps\u003cbr\u003eand stay there a fortnight, and he\u0027d come up again as smart as a\u003cbr\u003esteel-trap.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1833_7321.txt-3317-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -291.788770496033, "y": 231.3762971012608}, {"color": "#377eb8", "date": "1851", "id": "fic_1851_746.txt-1956-13", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe was but shabbily apparelled in faded jacket and patched\u003cbr\u003etrowsers; a \u003cb\u003erag\u003c/b\u003e of a black handkerchief investing his\u003cbr\u003eneck.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1851_746.txt-1956-13\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -62.33094195930279, "y": -253.92284688723106}, {"color": "#377eb8", "date": "1840", "id": "mag_1840_554848.txt-170-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhatever may be the determination of the poor cultivator in\u003cbr\u003ebearing hunger, that he may face his other xvarits, he is in general\u003cbr\u003enaked, or covered with \u003cb\u003erags\u003c/b\u003e, transmitted in the family from\u003cbr\u003egeneration to generation.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1840\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1840_554848.txt-170-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -152.93165463830178, "y": 51.82835369667171}, {"color": "#377eb8", "date": "1848", "id": "nf_1848_747893.txt-2275-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOf this description are bones, horns and hoofs of cattle, bone\u003cbr\u003edust, the entire carcasses of animals, cuttings of leather, woolen\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e, feathers, and hair.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1848_747893.txt-2275-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 40.481685019849834, "y": -97.11209541442086}, {"color": "#377eb8", "date": "1849", "id": "fic_1849_5168.txt-697-54", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u0027 Doctor, \u0027 a large, dark man, very showily dressed,\u003cbr\u003ecomplied, and spoke as follows: -- \u0027 As I was saying, gentlemen, I had\u003cbr\u003ebecome awfully reduced -- not a cent in my possession, not a friend in\u003cbr\u003ethe world, and clothed in \u003cb\u003erags\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1849_5168.txt-697-54\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 95.23462432795895, "y": 90.39606166772933}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747502.txt-359-46", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAll was confusion for a few moments within, when a light was\u003cbr\u003estruck and the muzzle of Leat\u0027s fowling piece came poking through\u003cbr\u003eanother pane; but it was soon withdrawn, and Mr. Leat himself, in\u003cbr\u003eproprid persond but robed in fewer \u003cb\u003erags\u003c/b\u003e than he had generally\u003cbr\u003eoflFered to the gaze of the public, came rushing out of the\u003cbr\u003edoor.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747502.txt-359-46\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -113.02107081249687, "y": 166.8839926013709}, {"color": "#377eb8", "date": "1812", "id": "fic_1812_8649.txt-18-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSailor -- Strut in \u003cb\u003erags\u003c/b\u003e -- But whither bound,\u003cbr\u003efriend?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1812\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1812_8649.txt-18-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -187.7823559275477, "y": 1.12762097558651}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7039.txt-4238-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOne of them had \u003cb\u003erags\u003c/b\u003e bound round her feet, and a pair of\u003cbr\u003ebroken shoes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7039.txt-4238-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -216.6997028338818, "y": 49.63632405570835}, {"color": "#377eb8", "date": "1851", "id": "fic_1851_746.txt-9213-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen darkness came on, sky and sea roared and split with the\u003cbr\u003ethunder, and blazed with the lightning, that showed the disabled masts\u003cbr\u003efluttering here and there with the \u003cb\u003erags\u003c/b\u003e which the first fury of\u003cbr\u003ethe\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1851_746.txt-9213-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 53.067433848746084, "y": -53.17629837004899}, {"color": "#377eb8", "date": "1854", "id": "fic_1854_9826.txt-2995-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAfter the house was all blown to pieces, the giant began to\u003cbr\u003eblow at you; and your scarlet robes all went into \u003cb\u003erags\u003c/b\u003e, and you\u003cbr\u003eyourself came near going off a precipice. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1854_9826.txt-2995-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -5.109972017744664, "y": 131.4409153899147}, {"color": "#377eb8", "date": "1855", "id": "fic_1855_9098.txt-4674-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe floor is covered with litter and filthy \u003cb\u003erags\u003c/b\u003e, and\u003cbr\u003enone of the vessels are clean.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_9098.txt-4674-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -57.01245362574138, "y": 91.03691671396514}, {"color": "#377eb8", "date": "1855", "id": "fic_1855_9053.txt-162-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs the girl set down her burden, the door re-opened behind her,\u003cbr\u003eand a little boy, whose clothing was one consolidated \u003cb\u003erag\u003c/b\u003e from\u003cbr\u003etop to toe, made his appearance.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_9053.txt-162-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -245.37156231727968, "y": 12.546664790355068}, {"color": "#377eb8", "date": "1828", "id": "fic_1828_7259.txt-660-46", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYou say the children were ragged and dirty; I shall see that\u003cbr\u003ethey are comfortably clothed, and, if I find that the clothes are kept\u003cbr\u003ewhole and clean, I will befriend the family farther, but if they are\u003cbr\u003elet run to \u003cb\u003erags\u003c/b\u003e, without washing or mending, I shall do no\u003cbr\u003emore. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1828\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1828_7259.txt-660-46\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 76.6186143575901, "y": -158.60448940663295}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7341.txt-1681-50", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTher was sum ten or a dozen families livin in the house, and\u003cbr\u003eall of \u0027 em was frightened almost to deth, and turned out of ther beds\u003cbr\u003einto the street, jest because the family in the roof had gone to sleep\u003cbr\u003eleavin a pile of old \u003cb\u003erags\u003c/b\u003e afire to drive off the\u003cbr\u003emusketers.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7341.txt-1681-50\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 78.33436351517268, "y": -22.773944542056437}, {"color": "#377eb8", "date": "1844", "id": "fic_1844_7189.txt-3024-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe came to this castle in his Palmer\u0027s \u003cb\u003erags\u003c/b\u003e and perilled\u003cbr\u003ehis life to rescue his Ladye love.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1844_7189.txt-3024-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 12.772272942277747, "y": -202.37158964832807}, {"color": "#377eb8", "date": "1821", "id": "nf_1821_747955.txt-233-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003erags\u003c/b\u003e into the wasps holes, where the nest lies, and\u003cbr\u003epresently fling a spade full of earth over the holes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1821_747955.txt-233-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -163.5313677766325, "y": 109.62478050000952}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-1235-45", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI don\u0027t see how a dinner is to come out of this, \" said\u003cbr\u003eHabbakkuk Viol, after gazing upon the apparel a reasonable length of\u003cbr\u003etime, \" unless, Bob, you propose to feed us, like ostriches, on\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e and iron.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-1235-45\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 41.77889756559709, "y": 76.94187222841246}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9168.txt-1744-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Oh, bless you, not a scar, \" answered John, \" for don\u0027t you\u003cbr\u003emind how he kep \u0027 the iled silk and wet \u003cb\u003erags\u003c/b\u003e on yer face, and\u003cbr\u003ehow that night when you was sickest, he held yer hands so you couldn\u0027t\u003cbr\u003etache that little feller between yer eyes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9168.txt-1744-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 70.71885462307353, "y": -185.97149168828685}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_1281.txt-1296-54", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSo we used to lodge here and there, in the cellars about the\u003cbr\u003ePoints, in \u0027 Cut Throat Alley, \u0027 or \u0027 Cow Bay, \u0027 or \u0027 Murderer\u0027s\u003cbr\u003eAlley, \u0027 or in \u0027 The House of the Nine Nations, \u0027 or wherever we could\u003cbr\u003eget a sixpenny \u003cb\u003erag\u003c/b\u003e to lay down upon.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_1281.txt-1296-54\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -216.62986661888286, "y": 205.66294289395512}, {"color": "#377eb8", "date": "1843", "id": "mag_1843_555104.txt-700-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e* Esquirol says, of the insane in France, \" I have seen them\u003cbr\u003enaked or covered with \u003cb\u003erags\u003c/b\u003e, with nothing but a layer of straw\u003cbr\u003eto protect them from the cold dampness of the ground upon which they\u003cbr\u003elay.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1843_555104.txt-700-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 246.57487674368812, "y": -74.54505614904298}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7193.txt-9888-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003estaff in hand, the gaunt old man, clad in \u003cb\u003erags\u003c/b\u003e that a\u003cbr\u003ebeggar might have been ashamed to wear, stood between the gazers and\u003cbr\u003ethe light of the western sky, his silvery hair reddened at the edges\u003cbr\u003eby the rays of the declining sun.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7193.txt-9888-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -23.30459399953677, "y": -109.23774588448366}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-12969-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIs it our wish that honest-hearted manhood, apparelled, it may\u003cbr\u003ebe, in \u003cb\u003erags\u003c/b\u003e, and held low and cheap in the world\u0027s esteem,\u003cbr\u003eshould, for any reason whatever, be robbed of its suffrage, and made\u003cbr\u003eto keep its peace in the presence of power, or wealth, or hereditary\u003cbr\u003escorn?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-12969-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -67.27077099564276, "y": 238.1086212104006}, {"color": "#377eb8", "date": "1851", "id": "fic_1851_746.txt-341-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor to go as a passenger you must needs have a purse, and a\u003cbr\u003epurse is but a \u003cb\u003erag\u003c/b\u003e unless you have something in it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1851_746.txt-341-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 16.07620370487925, "y": -268.41295266064935}, {"color": "#377eb8", "date": "1821", "id": "mag_1821_553346.txt-34-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewas hemp and flax yesterday, and linen, and rags, and money\u003cbr\u003etoday, too often brings you down to \u003cb\u003erags\u003c/b\u003e tomorrow, and not\u003cbr\u003eperhaps quite so often as it might, to hemp again the day\u003cbr\u003eafter.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1821\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1821_553346.txt-34-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 22.61849760635325, "y": 224.2691950290182}, {"color": "#377eb8", "date": "1836", "id": "fic_1836_7052.txt-3737-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eis to exhibit -- a walking piece of paste-board or bundle of\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1836_7052.txt-3737-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 99.21260652414176, "y": -109.98546547642214}, {"color": "#377eb8", "date": "1844", "id": "nf_1844_748164.txt-1079-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn the savage state, and before cotton wrapped mankind, they\u003cbr\u003esuffered for clothing, and \u003cb\u003erags\u003c/b\u003e indicated poverty.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1844_748164.txt-1079-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 179.47011393003476, "y": 21.706069826322654}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7193.txt-11140-48", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA kind of genteel beggar, who is tolerated by the great on\u003cbr\u003eaccount of his lineage; a sort of poor relation \u0027 a gentleman Lazarus,\u003cbr\u003ein fact, who haunts the Royal Court, until his sores are dressed with\u003cbr\u003ea pension, and his \u003cb\u003erags\u003c/b\u003e made decent, with a little golden\u003cbr\u003etinsel.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7193.txt-11140-48\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 105.75840185594875, "y": -10.961536741498685}, {"color": "#377eb8", "date": "1845", "id": "fic_1845_622.txt-3293-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe floor was covered in the centre by a carpet made of\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e, a species of manufacture that was then, and yet continues\u003cbr\u003eto be, much in use in the interior; while its edges, that were exposed\u003cbr\u003eto view, were of unspotted cleanliness.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1845_622.txt-3293-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 219.7266206434268, "y": 68.84826951872867}, {"color": "#377eb8", "date": "1834", "id": "fic_1834_7047.txt-438-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003elook at your money-bags, for they tell the Gineral you han\u0027t\u003cbr\u003egot stuff enuff in the Bank to make him a pair of spectacles; none of\u003cbr\u003eyour \u003cb\u003erags\u003c/b\u003e, \u0027 says I, but the real grit: \u0027 and with that he\u003cbr\u003ecall\u0027d 2 or 3 chaps in Quaker coats, and they open\u0027d a large place\u003cbr\u003eabout as big as the east room; \u0027 and such a sight I never see --\u003cbr\u003eboxes, bags, and kegs, all full, and I should say nigh upon a hundred\u003cbr\u003ecord.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1834\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1834_7047.txt-438-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 59.9568575258953, "y": 101.45189876253968}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7193.txt-10390-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd the poor wretch, clad in \u003cb\u003erags\u003c/b\u003e, clutched the curtains\u003cbr\u003ewith trembling hands, and looked, -- while a ray of light shining upon\u003cbr\u003ehis eyeballs, showed that they flashed -- grew dim with tears -- and\u003cbr\u003eburned into life again.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7193.txt-10390-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -55.70057505159536, "y": -368.69364460209795}, {"color": "#377eb8", "date": "1853", "id": "fic_1853_9200.txt-4849-26", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e-- On some sunny day when Broadway is thronged with a current\u003cbr\u003eof fashion, youth and beauty, (and, for that matter, \u003cb\u003erags\u003c/b\u003e, old\u003cbr\u003eage and ugliness too,) when the sky is full of spring\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1853_9200.txt-4849-26\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -131.64923409681546, "y": 104.40926372586038}, {"color": "#377eb8", "date": "1859", "id": "nf_1859_748120.txt-2353-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI see the dirt and \u003cb\u003erags\u003c/b\u003e; I see the wrinkles and elf-\u003cbr\u003elocks, the wild eye and the shrivelled limbs; I hear the hoarse and\u003cbr\u003ebroken tones of age and passion, the convulsive laughter and\u003cbr\u003ethe\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1859_748120.txt-2353-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 188.83734649633, "y": -27.491767517122625}, {"color": "#377eb8", "date": "1845", "id": "mag_1845_587497.txt-188-37", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ecrossing the Niemen in presence of Napoleon, as he sat in his\u003cbr\u003etower and saw those glorious legions move in beautiful order and high\u003cbr\u003espirits before him; and the remnant of that scattered army in\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e, wan and ghastly, following their iron-hearted leader as\u003cbr\u003ehe strode on foot over the same river, always fills one with the\u003cbr\u003eprofoundest melancholy.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1845_587497.txt-188-37\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 67.18716258903764, "y": -114.06198384598852}, {"color": "#377eb8", "date": "1823", "id": "mag_1823_553448.txt-466-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ea base coin upon our community, shake public credit, poison\u003cbr\u003efaith between man and man, turn certificates of stock into\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e, and render it good husbandry-.. as it was twelve years\u003cbr\u003eago in the Dutch cities -- to pull down brick houses, for the sake of\u003cbr\u003esaving the tax?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1823\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1823_553448.txt-466-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -43.85609233179899, "y": 163.9034695764244}, {"color": "#377eb8", "date": "1853", "id": "nf_1853_771859.txt-2267-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e(They are made by dipping paper or \u003cb\u003erags\u003c/b\u003e in melted\u003cbr\u003esulphur.)\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1853_771859.txt-2267-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -20.96825413329168, "y": 136.41534901241204}, {"color": "#377eb8", "date": "1852", "id": "fic_1852_9031.txt-623-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe has shown them that vice may be wrapped in silks and\u003cbr\u003ebroadcloths, and virtue in \u003cb\u003erags\u003c/b\u003e; he has shown them that under\u003cbr\u003ethe poorest garments may beat hearts great and noble -- may\u003cbr\u003elive\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1852_9031.txt-623-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 151.66835767939403, "y": 15.67637369048553}, {"color": "#377eb8", "date": "1851", "id": "mag_1851_555704.txt-209-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe flour, leather, and \u003cb\u003erags\u003c/b\u003e have been manufactured into\u003cbr\u003ecorresponding articles, the bread has been eaten, the shoes are half\u003cbr\u003eworn out, and the paper is covered with writing or printing, so that a\u003cbr\u003enew supply of each is called for.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1851_555704.txt-209-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -19.595710716668442, "y": -151.98110815645026}, {"color": "#377eb8", "date": "1842", "id": "fic_1842_7206.txt-2048-60", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFor myself, ge\u0027mmen, if you ask my views of litter-a-toor, I\u003cbr\u003edon\u0027t hesitate to say, in vun sense o \u0027 the word, excuse the\u003cbr\u003eexpression, it\u0027s nothin \u0027 but a powerful combination o \u0027 rags and\u003cbr\u003ebrass: by which I means to say, it takes a uncommon quantity o \u0027\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e to make the paper out of, and it takes a uncommon sight o\u003cbr\u003e\u0027 brass and courage to make the paper full o \u0027 readin \u0027 matter.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1842\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1842_7206.txt-2048-60\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 127.9420495799278, "y": 57.36309616110666}, {"color": "#377eb8", "date": "1851", "id": "mag_1851_503986.txt-165-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ew could alone afford them \" She can make no head against this\u003cbr\u003esea, under that \u003cb\u003erag\u003c/b\u003e of canva55, \" said Barnstable\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1851_503986.txt-165-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -160.25949147203585, "y": 73.68723446781942}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7193.txt-9900-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Pay-As-I-Go, \" responded the old man, and at the word, from\u003cbr\u003esome obscure nook of his \u003cb\u003erags\u003c/b\u003e, he drew forth a crown of shining\u003cbr\u003esilver. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7193.txt-9900-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 95.2763171815167, "y": -40.362875999540556}, {"color": "#377eb8", "date": "1833", "id": "fic_1833_7239.txt-209-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003esnatching up a \u003cb\u003erag\u003c/b\u003e of tarred canvass and a bunch of\u003cbr\u003espun-yarn that somebody held near -- good for the lockjaw --\u003cbr\u003etried\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1833_7239.txt-209-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 34.50038712593645, "y": -44.51275828924545}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7186.txt-2335-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe porter bottle, which illuminates the room, is held by a\u003cbr\u003ehuge negro, who, with \u003cb\u003erags\u003c/b\u003e upon his chest, is playing cards\u003cbr\u003ewith a\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7186.txt-2335-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 177.09728635192417, "y": 207.53579112922645}, {"color": "#377eb8", "date": "1835", "id": "fic_1835_7309.txt-3124-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey are not the men to fight less earnestly on that account,\u003cbr\u003enor will their poverty and \u003cb\u003erags\u003c/b\u003e hinder them from striking a\u003cbr\u003egood blow, when occasion serves, against the invader to whom they owe\u003cbr\u003ethem. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1835_7309.txt-3124-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 164.29840785437162, "y": 167.09246602776554}, {"color": "#377eb8", "date": "1859", "id": "mag_1859_506520.txt-371-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhy that astonishing timorousness of Howe before Valley Forge;\u003cbr\u003ewhere the relics of a force starving, sickcuing, and in \u003cb\u003erags\u003c/b\u003e,\u003cbr\u003ecould scarcely man the lines, which they held before a great,\u003cbr\u003evictorious, and perfectly appointed army?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1859_506520.txt-371-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 64.11566693459739, "y": 331.07176292597154}, {"color": "#377eb8", "date": "1844", "id": "fic_1844_800.txt-2485-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis is a jewel amidst the \u003cb\u003erags\u003c/b\u003e of a beggar.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1844_800.txt-2485-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 64.09837119455814, "y": 195.9241845181279}, {"color": "#377eb8", "date": "1854", "id": "fic_1854_9826.txt-223-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003erags\u003c/b\u003e, and clinging to his side, \" don\u0027t cry!\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1854_9826.txt-223-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -201.84188329730682, "y": 160.2992852976502}, {"color": "#377eb8", "date": "1858", "id": "fic_1858_1282.txt-5496-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHalting at the door of a little house, the roof overgrown with\u003cbr\u003eblack moss, the windows filled with \u003cb\u003erags\u003c/b\u003e, and poverty written\u003cbr\u003eupon every shingle, he stood for several seconds hesitating and\u003cbr\u003eshivering.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1858_1282.txt-5496-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 67.67702633089569, "y": -65.55569721814241}, {"color": "#377eb8", "date": "1855", "id": "mag_1855_566557.txt-206-51", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNo one supposes it strange, if a man wastes his time and his\u003cbr\u003epatrimony in field sports, the dram shop, and at the gaming-table,\u003cbr\u003ethat he becomes poor, and that his wife and children are dwelling in a\u003cbr\u003ehovel, starved with hnnger and clothed in \u003cb\u003erags\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1855_566557.txt-206-51\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 227.94353771062865, "y": -94.15313091180742}, {"color": "#377eb8", "date": "1823", "id": "fic_1823_7246.txt-4692-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e-- \" To suckle fools and chronicle small beer \" -- kill\u003cbr\u003espiders, darn \u003cb\u003erags\u003c/b\u003e, and whip children -- O, there\u0027s nothing so\u003cbr\u003epleasant.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1823\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1823_7246.txt-4692-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 88.19682063447478, "y": 14.605387975267345}, {"color": "#377eb8", "date": "1839", "id": "fic_1839_7233.txt-3517-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ehardly a \u003cb\u003erag\u003c/b\u003e to my back, or a halfpenny in my pocket, I\u003cbr\u003ethought after all that they might as well have finished the\u003cbr\u003ematter.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1839_7233.txt-3517-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -241.33304970328385, "y": 111.55516202799214}, {"color": "#377eb8", "date": "1851", "id": "fic_1851_3336.txt-1179-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eRags, perhaps I had better say -- but the \u003cb\u003erags\u003c/b\u003e have been\u003cbr\u003eclothes, woven and sewn by man\u0027s hands -- so he must have lived among\u003cbr\u003emen -- civilized men -- and he has grown but little, as you may\u003cbr\u003eperceive, since those clothes were made -- therefore, he can not have\u003cbr\u003ebeen long on the island. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1851_3336.txt-1179-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -57.91328149899037, "y": -69.77351152642939}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_9077.txt-1344-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOr he was a piece of string, a \u003cb\u003erag\u003c/b\u003e, a willow-wand, and I\u003cbr\u003ehad a contemptuous pity.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_9077.txt-1344-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 100.17942521302395, "y": -69.75456481661946}, {"color": "#377eb8", "date": "1832", "id": "fic_1832_7177.txt-120-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs these grew apace, they were to be seen hanging about the\u003cbr\u003esmithy bare-footed, half covered with \u003cb\u003erags\u003c/b\u003e, and with smutty\u003cbr\u003efaces looking wildly out of mops of hair, that radiated like the beams\u003cbr\u003eof the sun in the image of that luminary on a country sign.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1832\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1832_7177.txt-120-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 79.16278945762969, "y": 112.82766977031622}, {"color": "#377eb8", "date": "1830", "id": "fic_1830_8660.txt-616-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eANSELMO They come From princes that are traffickers in\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1830_8660.txt-616-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -42.65423658072863, "y": 133.11658207732833}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_5515.txt-2828-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is so green and quiet all about the house -- no rude boys\u003cbr\u003eshouting in her ear as she steps without the door, or throwing mud-\u003cbr\u003eballs into the open windows; no brazen, neglected girls to call her\u003cbr\u003elow names, or pin dirty \u003cb\u003erags\u003c/b\u003e upon her gown as she walks\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_5515.txt-2828-47\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -204.17473646174324, "y": -201.2262738586795}, {"color": "#377eb8", "date": "1826", "id": "mag_1826_553698.txt-262-40", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eand then tell us it is nothing worth; what is it but to act\u003cbr\u003eover on a large national scale, that detestable villany of our\u003cbr\u003ebankrupt monied corporations, who buy up at a discount their own\u003cbr\u003eworthless \u003cb\u003erags\u003c/b\u003e?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1826\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1826_553698.txt-262-40\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 30.831795212190052, "y": 115.68969013178922}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7341.txt-1445-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThar they was, covered with \u003cb\u003erags\u003c/b\u003e and dirt, livin in\u003cbr\u003ehouses and cellars, without hardly any furniture; and sum of \u0027 em\u003cbr\u003ewithout dores or winders.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7341.txt-1445-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -48.51794787553698, "y": 268.84602251842034}, {"color": "#377eb8", "date": "1830", "id": "nf_1830_747487.txt-1879-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe has bundles of \u003cb\u003erags\u003c/b\u003e on his sled, which, perhaps, he\u003cbr\u003evalues, but which can be of no service to him.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1830_747487.txt-1879-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -37.50665598340099, "y": -60.864554170843896}, {"color": "#377eb8", "date": "1852", "id": "fic_1852_9832.txt-2005-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut if \u003cb\u003erags\u003c/b\u003e and mud claimed the whole of the body, the\u003cbr\u003eface belonged to nothing but fun; and the child and her fringed\u003cbr\u003ehabiliments took flying leaps over the rope, in a style that quite\u003cbr\u003edistanced the sports of Quilp\u0027s boy.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1852_9832.txt-2005-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 283.7561115693661, "y": 100.81615735909023}, {"color": "#377eb8", "date": "1845", "id": "nf_1845_747928.txt-1155-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt should be rubbed into the parts affected, by means of a\u003cbr\u003epiece of \u003cb\u003erag\u003c/b\u003e tied to a stick, the operator taking care not to\u003cbr\u003elet it touch his clothes.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1845_747928.txt-1155-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 144.35693014675996, "y": 65.97686818957746}, {"color": "#377eb8", "date": "1845", "id": "fic_1845_7183.txt-2911-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis basket contained a nest of \u003cb\u003erags\u003c/b\u003e and an\u003cbr\u003eindescribable baby; and in the ashes on the rough hearth played\u003cbr\u003eseveral dingy objects, which I suppose had once been babies. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1845_7183.txt-2911-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 14.893205131732422, "y": -73.56009305858106}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_1281.txt-4033-64", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eGutters running with seething matter; homeless outcasts\u003cbr\u003esitting, besotted, on crazy door-steps; the vicious, with savage\u003cbr\u003evisage, and keen, watchful eye, loitering at the doors of filthy \"\u003cbr\u003egroceries; \" the sickly and neglected child crawling upon the side-\u003cbr\u003epave, or seeking a crust to appease its hunger-all are found here,\u003cbr\u003egasping, in \u003cb\u003erags\u003c/b\u003e, a breath of air by day, or seeking a shelter,\u003cbr\u003eat night, in dens so abject that the world can furnish no\u003cbr\u003ecounterpart.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_1281.txt-4033-64\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -73.90875435992557, "y": 33.862201617340055}, {"color": "#a65628", "date": "1840", "id": "mag_1840_586512.txt-853-72", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt was able, as the end has shown, to set at defiance the very\u003cbr\u003eConstitution of the United States, the latter providing that only gold\u003cbr\u003eand silver shall be money; w * * ile this bank, by its career of law-\u003cbr\u003ebreaking, fraud, and despotism, has at length fairly got the better of\u003cbr\u003ethis Constitutional provision, ard we have seen through its means\u003cbr\u003eirredeemable \u003cb\u003erags\u003c/b\u003e legalized as mcney by the legislators og\u003cbr\u003eseveral of the States.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1840\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1840_586512.txt-853-72\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 185.36199801271187, "y": -232.78536978939496}, {"color": "#a65628", "date": "1839", "id": "mag_1839_586418.txt-113-40", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBy their joint operation the number of banks was more than\u003cbr\u003edoubled in the space of time we are now speaking of; and nearly nine\u003cbr\u003ehundred manufactories of paper money were set in motion,, pouring\u003cbr\u003eforth their \u003cb\u003erags\u003c/b\u003e\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1839_586418.txt-113-40\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 225.85280344054945, "y": -251.1844511989339}, {"color": "k", "date": "1855", "id": "fic_1855_602.txt-2752-15", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn groping my way around the prison, I could not fail to\u003cbr\u003eencounter this \u003cb\u003erag\u003c/b\u003e upon completing the circuit.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_602.txt-2752-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -385.8290011785875, "y": 65.50791397093855}, {"color": "k", "date": "1844", "id": "fic_1844_7081.txt-1082-14", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eDon\u0027t you know I am good for nothing -- just like a dem\u003cbr\u003e\u003cb\u003erag\u003c/b\u003e in the mornin \u0027, \u0027 till I get my gin-cock-tail?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1844_7081.txt-1082-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -274.96666035521247, "y": 414.07802298050245}, {"color": "#f781bf", "date": "1853", "id": "fic_1853_9069.txt-676-40", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe had a shining, bulbous forehead, rather scantily thatched\u003cbr\u003ewith blades of hair; his face, small, meagre, and yet vulgar, was\u003cbr\u003eadorned with a pair of short, rusty whiskers, and a \u003cb\u003erag\u003c/b\u003e of a\u003cbr\u003emoustache; in all respects not what one would call a face eminently\u003cbr\u003eprepossessing.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1853_9069.txt-676-40\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 92.00156149602746, "y": -97.55516336897848}, {"color": "#f781bf", "date": "1857", "id": "nf_1857_767292.txt-1611-8", "label": "3", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOne was decrying infant baptism as a \" \u003cb\u003erag\u003c/b\u003e of Popery, \"\u003cbr\u003e\" the last relic of Rome in Protestantism, \" \" a device of Satan to\u003cbr\u003efill up the church with unconverted members, \" and much more to that\u003cbr\u003eeffect.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1857_767292.txt-1611-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 110.80458357747672, "y": -81.77648543438974}, {"color": "#ff7f00", "date": "1843", "id": "fic_1843_7208.txt-9818-5", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003enext yard with scarcely a \u003cb\u003erag\u003c/b\u003e to their backs.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-9818-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -4.28491994739616, "y": -178.44978540584304}, {"color": "#ff7f00", "date": "1849", "id": "fic_1849_7192.txt-6161-4", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe\u0027s down on \u003cb\u003erags\u003c/b\u003e, I tell ye.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1849_7192.txt-6161-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 50.2534363822677, "y": -135.0996877337885}, {"color": "#ff7f00", "date": "1856", "id": "fic_1856_1281.txt-5311-18", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eits ruthless keepers have refused them bread, shut them into\u003cbr\u003ethe street, and left them in \u003cb\u003erags\u003c/b\u003e scarce sufficient to cover\u003cbr\u003etheir nakedness, to sleep upon the cold stones, a mute but terrible\u003cbr\u003erebuke to those hearts that bleed over the sorrows of Africa, but have\u003cbr\u003eno blood to give out when the object of pity is a poor, heart-sick\u003cbr\u003egirl, forced to make the cold pavement her bed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_1281.txt-5311-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 40.35473575753021, "y": -187.67975486652355}, {"color": "#ff7f00", "date": "1856", "id": "nf_1856_755595.txt-1836-22", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey all rush about -- the lethargic German keeps pace with the\u003cbr\u003eenergetic Yankee; and the Irishman, no longer in \u003cb\u003erags\u003c/b\u003e, \"\u003cbr\u003eguesses \" and \" spekilates \" in the brogue of Erin.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1856_755595.txt-1836-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -68.13881858473331, "y": -223.1393879146624}, {"color": "#ff7f00", "date": "1852", "id": "nf_1852_752548.txt-2578-9", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYou dirthy owld bit of a blackguard of a \u003cb\u003erag\u003c/b\u003e, \u0027 says I,\u003cbr\u003ein an exthremity of rage, \u0027 You\u0027re not fit for the back of a dacent\u003cbr\u003elad an \u0027 a jintleman.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1852_752548.txt-2578-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 61.97065529701634, "y": -210.84511964630252}, {"color": "#ff7f00", "date": "1856", "id": "fic_1856_1281.txt-1432-45", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNecessity had almost driven me to the sign of the \u0027 Three\u003cbr\u003eMartyrs, \u0027 to see what the man of the eagle face would give me on my\u003cbr\u003ecap, for they said the man at the \u0027 Three Martyrs \u0027 lent money on\u003cbr\u003e\u003cb\u003erags\u003c/b\u003e such as I had.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_1281.txt-1432-45\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 65.20285971674082, "y": -199.05520067721883}, {"color": "#ff7f00", "date": "1842", "id": "fic_1842_8882.txt-1086-8", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eClothe him with finest stuffs, yourselves in \u003cb\u003erags\u003c/b\u003e Which\u003cbr\u003escarcely cover ye: furnish for him costly couch, Yours the hard plank:\u003cbr\u003eyield to him the labor Of your youth, your life, and when useless\u003cbr\u003egrown, To be cast off, like superannuated Brutes, to die\u003cbr\u003eunsuccoured.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1842\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1842_8882.txt-1086-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -9.581199204555135, "y": -118.36165888377171}, {"color": "#4daf4a", "date": "1857", "id": "mag_1857_526498.txt-79-16", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHere he wrote some of his finest critical essays for the\u003cbr\u003ereviews, and that \" \u003cb\u003erag\u003c/b\u003e of a book, \" as he calls it, the \" Life\u003cbr\u003eof Schiller. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1857_526498.txt-79-16\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 53.19721341513554, "y": -402.5990518971367}, {"color": "#4daf4a", "date": "1839", "id": "mag_1839_586418.txt-95-5", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eof Runnymede agreement among the \u003cb\u003erag\u003c/b\u003e barons, that no one\u003cbr\u003eof the fraternity should be monarch over the others-n quarrel of the\u003cbr\u003erobbers against their brigand chief for assuming more authority than\u003cbr\u003eis justly due to him -- a quarrel which would soon be healed when the\u003cbr\u003ehand itself is endangered, or new spoils are to be obtained..\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1839_586418.txt-95-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -48.08364741446588, "y": -384.4244604108247}]);
+        edges = new vis.DataSet([{"color": "black", "from": "mag_1845_587427.txt-128-16", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1849_7192.txt-6161-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1849_7216.txt-200-17", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1845_7183.txt-2911-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1849_7216.txt-200-17", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1848_1279.txt-222-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_747595.txt-241-22", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1826_553698.txt-262-40", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1847_747595.txt-241-22", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1823_7246.txt-4692-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_747595.txt-241-22", "label": "-/-/-/-/-/-/-/-/-/3/-/-/-", "to": "mag_1855_566557.txt-206-51", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1856_1281.txt-1360-18", "label": "4/-/-/-/-/4/-/2/-/-/-/-/-", "to": "fic_1834_7047.txt-438-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_1281.txt-1360-18", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1845_747928.txt-1155-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-10511-25", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1856_5515.txt-1683-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-4905-33", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1856_1281.txt-1296-54", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-4905-33", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1840_586584.txt-140-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-4905-33", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1855_9053.txt-162-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-4905-33", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1856_1281.txt-4033-64", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1840_586512.txt-853-72", "label": "-/-/4/-/-/-/-/-/-/-/-/-/4", "to": "mag_1839_586418.txt-113-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747502.txt-339-15", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1854_8328.txt-3033-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "3/-/-/-/-/3/-/-/2/-/-/-/-", "to": "fic_1844_800.txt-2485-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "nf_1856_755595.txt-1836-22", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1823_553494.txt-190-75", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "3/-/-/-/-/-/-/4/2/-/-/-/-", "to": "fic_1845_622.txt-3293-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1854_9826.txt-2995-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1840_586584.txt-140-47", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1812_8649.txt-18-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_9040.txt-627-24", "label": "4/-/-/-/-/-/-/-/-/-/4/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_554357.txt-300-24", "label": "-/-/-/-/-/2/-/-/3/-/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.5, "width": 4}, {"color": "black", "from": "mag_1835_554357.txt-300-24", "label": "-/-/-/-/-/2/-/-/-/3/-/-/-", "to": "fic_1849_7192.txt-6161-4", "weight": 2.5, "width": 4}, {"color": "black", "from": "mag_1835_554357.txt-300-24", "label": "4/-/-/-/-/-/-/-/4/-/-/-/-", "to": "fic_1856_9077.txt-1344-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_554357.txt-300-24", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1856_5515.txt-1683-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1852_555751.txt-173-80", "label": "4/-/-/-/-/2/-/-/3/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1852_555751.txt-173-80", "label": "4/-/-/-/-/-/-/-/-/-/-/2/-", "to": "fic_1856_5515.txt-1284-14", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1852_555751.txt-173-80", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1842_7206.txt-2048-60", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1852_555751.txt-173-80", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1854_8328.txt-3033-25", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1855_602.txt-2752-15", "label": "-/-/-/-/-/-/-/3/-/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1848_7906.txt-111-29", "label": "4/-/-/-/-/4/-/4/-/-/-/-/-", "to": "fic_1848_1279.txt-222-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7906.txt-111-29", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1852_9031.txt-623-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1284-14", "label": "3/-/-/-/-/0/-/4/-/-/-/-/-", "to": "fic_1833_7321.txt-3317-3", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1284-14", "label": "-/-/-/-/-/-/-/4/4/-/-/-/-", "to": "fic_1856_1281.txt-1296-54", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1284-14", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_1851_503986.txt-165-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1284-14", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "fic_1834_7047.txt-438-30", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1284-14", "label": "-/-/-/-/-/3/0/-/-/-/-/-/-", "to": "fic_1854_9826.txt-2995-24", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1823_553494.txt-190-75", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "fic_1848_7341.txt-1681-50", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_9069.txt-676-40", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1857_767292.txt-1611-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_9069.txt-676-40", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1853_9069.txt-676-40", "label": "4/-/-/-/-/-/-/-/-/-/3/-/-", "to": "fic_1833_7239.txt-209-3", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1853_9069.txt-676-40", "label": "4/-/-/-/-/-/-/-/-/-/-/1/-", "to": "fic_1849_7192.txt-6161-4", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1149-30", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_1840_586584.txt-140-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_1279.txt-222-47", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1843_7208.txt-12969-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1839_8877.txt-142-20", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_1840_586584.txt-140-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1839_8877.txt-142-20", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1848_7193.txt-9888-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-9818-5", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-9818-5", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1856_1281.txt-5311-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-9818-5", "label": "4/-/-/-/-/-/-/-/-/-/-/4/-", "to": "fic_1856_1281.txt-1432-45", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-9818-5", "label": "4/-/-/-/-/-/-/-/-/-/-/4/-", "to": "fic_1849_7192.txt-6161-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-9818-5", "label": "-/-/-/-/-/-/-/-/-/-/4/-/1", "to": "mag_1839_586418.txt-95-5", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-9818-5", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1855_9098.txt-4674-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1683-24", "label": "4/-/-/-/-/4/-/4/-/-/-/-/-", "to": "nf_1859_748120.txt-2353-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_5515.txt-1683-24", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1835_7309.txt-3124-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_3465.txt-1089-43", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "nf_1821_747955.txt-233-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_3465.txt-1089-43", "label": "-/-/-/-/-/3/-/4/-/-/-/-/-", "to": "fic_1823_7246.txt-4692-15", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1853_3465.txt-1089-43", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1843_7208.txt-1235-45", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_3465.txt-1089-43", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1823_553448.txt-466-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1857_526498.txt-79-16", "label": "1/-/-/-/-/-/-/-/-/-/4/-/-", "to": "nf_1857_767292.txt-1611-8", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-3033-25", "label": "3/-/-/-/-/3/-/2/-/-/-/-/-", "to": "fic_1848_7341.txt-1681-50", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-3033-25", "label": "3/-/-/-/-/4/-/2/-/-/-/-/-", "to": "fic_1843_7208.txt-1235-45", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-3033-25", "label": "-/-/-/-/-/4/-/-/4/-/-/-/-", "to": "fic_1848_7341.txt-1445-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-3033-25", "label": "-/-/-/-/-/3/4/-/-/-/-/-/-", "to": "mag_1826_553698.txt-262-40", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-3033-25", "label": "4/2/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1834_7047.txt-438-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-3033-25", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1854_9826.txt-2995-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-513-8", "label": "4/-/-/-/-/-/-/-/0/-/-/-/-", "to": "fic_1854_9826.txt-2995-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-513-8", "label": "-/4/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1840_586584.txt-140-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-513-8", "label": "0/3/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1845_7103.txt-365-23", "label": "4/-/-/-/-/3/-/-/2/-/-/-/-", "to": "mag_1840_586584.txt-140-47", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1845_7103.txt-365-23", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1843_555104.txt-700-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1840_586584.txt-140-47", "label": "4/-/-/-/-/-/-/-/2/4/-/-/-", "to": "fic_1854_9826.txt-223-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1840_586584.txt-140-47", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "nf_1821_747955.txt-233-0", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1840_586584.txt-140-47", "label": "-/-/-/-/-/-/-/4/4/-/-/-/-", "to": "fic_1812_8649.txt-18-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1840_586584.txt-140-47", "label": "4/-/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1840_586584.txt-140-47", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1857_767292.txt-1611-8", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1823_7246.txt-4692-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1857_767292.txt-1611-8", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1852_9031.txt-623-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1849_7192.txt-6161-4", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1845_7183.txt-2911-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1849_7192.txt-6161-4", "label": "3/-/-/-/-/-/-/-/3/-/-/-/-", "to": "fic_1848_7193.txt-9888-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1849_7192.txt-6161-4", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "nf_1859_748120.txt-2353-5", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1849_7192.txt-6161-4", "label": "4/-/-/-/-/-/-/-/-/-/4/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1849_7192.txt-6161-4", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1851_746.txt-9213-32", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1849_7192.txt-6161-4", "label": "-/-/-/-/-/-/-/-/-/-/0/-/4", "to": "nf_1852_752548.txt-2578-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1849_7192.txt-6161-4", "label": "-/-/-/-/-/-/-/-/-/-/4/4/-", "to": "fic_1856_1281.txt-1432-45", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1840_554848.txt-170-30", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1821_747955.txt-233-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1848_747893.txt-2275-26", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1845_587497.txt-188-37", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1849_5168.txt-697-54", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1854_9826.txt-2995-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1849_5168.txt-697-54", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1848_7193.txt-9900-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1845_747502.txt-359-46", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1851_503986.txt-165-17", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1845_747502.txt-359-46", "label": "-/-/-/-/3/-/-/-/-/-/-/-/-", "to": "mag_1821_553346.txt-34-22", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1851_746.txt-9213-32", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "fic_1828_7259.txt-660-46", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1851_746.txt-9213-32", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1830_747487.txt-1879-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1851_746.txt-9213-32", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "mag_1845_587497.txt-188-37", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1851_746.txt-9213-32", "label": "-/-/-/-/-/-/-/-/-/-/-/4/-", "to": "fic_1858_1282.txt-5496-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_1281.txt-5311-18", "label": "-/-/-/-/-/-/-/-/-/-/-/4/-", "to": "fic_1856_1281.txt-1432-45", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_1281.txt-5311-18", "label": "-/-/-/-/-/-/-/-/-/-/-/4/-", "to": "fic_1842_8882.txt-1086-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_9826.txt-2995-24", "label": "-/-/-/-/-/3/-/4/4/-/-/-/-", "to": "fic_1832_7177.txt-120-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_9826.txt-2995-24", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "mag_1859_506520.txt-371-22", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1854_9826.txt-2995-24", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "fic_1843_7208.txt-12969-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_9826.txt-2995-24", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_9826.txt-2995-24", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1823_7246.txt-4692-15", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1855_9098.txt-4674-8", "label": "-/-/-/-/-/4/-/4/-/-/-/-/-", "to": "mag_1826_553698.txt-262-40", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1855_9098.txt-4674-8", "label": "-/-/-/-/-/-/-/-/-/3/-/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1828_7259.txt-660-46", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "fic_1848_7193.txt-9888-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1828_7259.txt-660-46", "label": "4/-/-/-/-/-/-/-/3/-/-/-/-", "to": "fic_1848_7193.txt-9900-20", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1828_7259.txt-660-46", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1860_9168.txt-1744-29", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1828_7259.txt-660-46", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1845_587497.txt-188-37", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_7189.txt-3024-9", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "mag_1845_587497.txt-188-37", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-1235-45", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1848_7193.txt-11140-48", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9168.txt-1744-29", "label": "-/-/-/-/-/3/-/-/2/-/-/-/-", "to": "mag_1845_587497.txt-188-37", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1860_9168.txt-1744-29", "label": "-/-/-/-/-/-/-/-/-/3/-/-/-", "to": "fic_1858_1282.txt-5496-20", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1860_9168.txt-1744-29", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1851_746.txt-341-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_1281.txt-1296-54", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1843_7208.txt-12969-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1843_555104.txt-700-19", "label": "4/-/-/-/-/-/-/-/4/-/-/-/-", "to": "nf_1859_748120.txt-2353-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1843_555104.txt-700-19", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1852_9031.txt-623-17", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/-/-/4/-/-/-/4/-/-/-", "to": "fic_1848_7193.txt-9900-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "fic_1858_1282.txt-5496-20", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1851_746.txt-341-19", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-12969-15", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "nf_1853_771859.txt-2267-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1821_553346.txt-34-22", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1859_506520.txt-371-22", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1821_553346.txt-34-22", "label": "-/-/-/-/-/4/-/4/4/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7052.txt-3737-12", "label": "4/-/-/-/-/4/-/2/-/-/-/-/-", "to": "nf_1859_748120.txt-2353-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7052.txt-3737-12", "label": "-/-/-/-/-/4/-/-/-/4/-/-/-", "to": "fic_1842_7206.txt-2048-60", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7052.txt-3737-12", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1852_752548.txt-2578-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7052.txt-3737-12", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_1851_555704.txt-209-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7052.txt-3737-12", "label": "-/-/-/-/3/-/-/-/-/-/-/-/-", "to": "fic_1858_1282.txt-5496-20", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1844_748164.txt-1079-17", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1848_7193.txt-9900-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_755595.txt-1836-22", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7193.txt-11140-48", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1834_7047.txt-438-30", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1848_7193.txt-11140-48", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1856_9077.txt-1344-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1845_622.txt-3293-12", "label": "-/-/-/-/4/-/-/-/-/-/4/-/-", "to": "nf_1859_748120.txt-2353-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1834_7047.txt-438-30", "label": "-/-/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1853_9200.txt-4849-26", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "mag_1823_553448.txt-466-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1852_752548.txt-2578-9", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_748120.txt-2353-5", "label": "3/-/-/-/-/4/-/-/2/-/-/-/-", "to": "mag_1823_553448.txt-466-23", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1859_748120.txt-2353-5", "label": "-/-/-/-/-/4/-/-/4/-/-/-/-", "to": "mag_1855_566557.txt-206-51", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_587497.txt-188-37", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "nf_1845_747928.txt-1155-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1845_587497.txt-188-37", "label": "-/-/-/-/-/-/-/-/4/4/-/-/-", "to": "fic_1848_7193.txt-9900-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1845_587497.txt-188-37", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1845_7183.txt-2911-6", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1823_553448.txt-466-23", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "nf_1845_747928.txt-1155-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1853_771859.txt-2267-8", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "fic_1842_7206.txt-2048-60", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1851_555704.txt-209-6", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1851_555704.txt-209-6", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1830_747487.txt-1879-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1842_7206.txt-2048-60", "label": "3/-/-/-/-/-/-/-/2/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1842_7206.txt-2048-60", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1848_7186.txt-2335-19", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1851_503986.txt-165-17", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1848_7193.txt-9900-20", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1856_9077.txt-1344-9", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1833_7239.txt-209-3", "label": "-/-/-/4/-/-/-/-/-/-/-/-/2", "to": "fic_1856_1281.txt-4033-64", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1835_7309.txt-3124-18", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "fic_1844_800.txt-2485-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_800.txt-2485-6", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-5496-20", "label": "4/-/-/-/-/3/-/-/-/4/-/-/-", "to": "fic_1845_7183.txt-2911-6", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-5496-20", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "fic_1856_9077.txt-1344-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1858_1282.txt-5496-20", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1830_747487.txt-1879-4", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1839_7233.txt-3517-2", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1830_8660.txt-616-9", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1826_553698.txt-262-40", "label": "-/-/-/-/-/4/-/2/-/-/-/-/-", "to": "fic_1852_9832.txt-2005-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1826_553698.txt-262-40", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "nf_1830_747487.txt-1879-4", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1826_553698.txt-262-40", "label": "3/4/-/-/-/-/4/-/-/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 4.0, "width": 4}, {"color": "lightgray", "from": "mag_1845_587427.txt-128-16", "label": "-/-/-/-/-/-/-/-/1/-/-/-/-", "to": "mag_1840_586512.txt-853-72", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1847_747595.txt-241-22", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1836_7052.txt-3737-12", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1847_747595.txt-241-22", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1848_7193.txt-11140-48", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1849_7192.txt-6161-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1848_7193.txt-9900-20", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1860_9168.txt-1744-29", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/2/-/1/-/-/-/-/-", "to": "nf_1852_752548.txt-2578-9", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "1/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1848_7906.txt-111-29", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1834_7047.txt-438-30", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1826_553698.txt-262-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1856_1281.txt-5311-18", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1843_7208.txt-9818-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1851_746.txt-9213-32", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/-/-/-/-/-/-/-/1/-", "to": "fic_1856_1281.txt-1432-45", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/-/-/1/-/-/-/-/-/-/-/-", "to": "fic_1812_8649.txt-18-4", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/1/-/-/-/-/-/-/-/-/-/2", "to": "nf_1857_767292.txt-1611-8", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "mag_1840_586512.txt-853-72", "label": "-/-/1/-/-/-/-/-/-/-/-/-/2", "to": "fic_1848_7193.txt-11140-48", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "nf_1845_747502.txt-339-15", "label": "2/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1853_9040.txt-627-24", "label": "2/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1853_9040.txt-627-24", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1853_9069.txt-676-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1835_554357.txt-300-24", "label": "-/-/-/-/-/2/-/-/-/-/-/-/-", "to": "nf_1857_767292.txt-1611-8", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1835_554357.txt-300-24", "label": "-/-/-/-/-/2/-/-/-/-/-/-/-", "to": "fic_1851_746.txt-9213-32", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1835_554357.txt-300-24", "label": "0/-/-/-/-/-/-/1/2/-/-/-/-", "to": "fic_1854_8328.txt-3033-25", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1848_7906.txt-111-29", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "nf_1848_747893.txt-2275-26", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7906.txt-111-29", "label": "-/-/-/-/-/-/-/2/-/-/-/-/-", "to": "fic_1849_7192.txt-6161-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_5515.txt-1284-14", "label": "3/-/-/-/-/-/-/-/2/2/-/-/-", "to": "fic_1853_9069.txt-676-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1848_7193.txt-10390-7", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/1/-/-/-/-", "to": "mag_1843_555104.txt-700-19", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/1/-/-/-/-", "to": "nf_1845_747928.txt-1155-15", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "1/-/-/-/-/-/-/-/-/-/-/2/-", "to": "mag_1857_526498.txt-79-16", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1851_746.txt-9213-32", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "nf_1852_752548.txt-2578-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/-/-/-/1/-", "to": "fic_1843_7208.txt-513-8", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "mag_1855_566557.txt-206-51", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "fic_1836_7052.txt-3737-12", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1853_9069.txt-676-40", "label": "-/-/2/-/-/-/-/-/-/-/-/-/2", "to": "fic_1848_7193.txt-11140-48", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7208.txt-9818-5", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1842_7206.txt-2048-60", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7208.txt-9818-5", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "-/-/-/-/-/-/-/-/-/2/-/-/2", "to": "mag_1845_587497.txt-188-37", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1858_1282.txt-5496-20", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "1/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1848_7193.txt-9888-11", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1833_7239.txt-209-3", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "1/-/-/-/-/-/-/-/1/-/-/1/-", "to": "fic_1851_746.txt-9213-32", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "1/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1856_1281.txt-5311-18", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "1/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1856_1281.txt-1432-45", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "-/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1849_7192.txt-6161-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1857_526498.txt-79-16", "label": "-/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7208.txt-513-8", "label": "3/-/-/-/-/1/-/0/2/2/-/-/-", "to": "mag_1826_553698.txt-262-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7208.txt-513-8", "label": "-/-/-/-/-/1/0/-/3/2/-/-/-", "to": "fic_1834_7047.txt-438-30", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1845_7103.txt-365-23", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "nf_1856_755595.txt-1836-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1833_7321.txt-3317-3", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1843_7039.txt-4238-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1851_746.txt-1956-13", "label": "0/-/-/-/-/-/-/2/-/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1851_746.txt-1956-13", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1848_7341.txt-1681-50", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/2/-/-/-/-/-/-/-", "to": "mag_1821_553346.txt-34-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "nf_1845_747928.txt-1155-15", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "mag_1845_587497.txt-188-37", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/1/-/-/4/2/-/-/-", "to": "fic_1833_7239.txt-209-3", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "nf_1852_752548.txt-2578-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/-/-/-/-/2/2/4/-", "to": "fic_1849_7192.txt-6161-4", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/-/-/-/1/-/-/-/-", "to": "nf_1848_747893.txt-2275-26", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1857_767292.txt-1611-8", "label": "1/-/-/-/-/-/-/-/-/-/2/-/-", "to": "fic_1848_7193.txt-9888-11", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1849_7192.txt-6161-4", "label": "-/-/-/-/-/-/-/-/1/-/-/-/-", "to": "mag_1845_587497.txt-188-37", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1849_7192.txt-6161-4", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "fic_1858_1282.txt-5496-20", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1849_7192.txt-6161-4", "label": "2/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1849_7192.txt-6161-4", "label": "-/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1851_503986.txt-165-17", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1849_7192.txt-6161-4", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1856_1281.txt-5311-18", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1848_747893.txt-2275-26", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "fic_1845_7183.txt-2911-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1845_747502.txt-359-46", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "nf_1852_752548.txt-2578-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1851_746.txt-9213-32", "label": "2/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1851_746.txt-9213-32", "label": "3/-/-/-/-/-/-/-/-/-/-/1/-", "to": "fic_1842_8882.txt-1086-8", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1851_746.txt-9213-32", "label": "-/-/-/-/-/-/-/-/-/-/3/1/0", "to": "fic_1856_1281.txt-1432-45", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1851_746.txt-9213-32", "label": "-/-/-/-/-/-/-/-/-/-/-/2/-", "to": "fic_1856_1281.txt-5311-18", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_1281.txt-5311-18", "label": "-/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1828_7259.txt-660-46", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1844_7189.txt-3024-9", "label": "-/-/-/-/-/-/-/-/-/-/1/-/-", "to": "nf_1852_752548.txt-2578-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1860_9168.txt-1744-29", "label": "-/-/-/-/-/-/-/-/1/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1860_9168.txt-1744-29", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1860_9168.txt-1744-29", "label": "0/-/-/-/-/-/-/2/2/-/-/-/-", "to": "fic_1830_8660.txt-616-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/-/-/2/-/-/-/2/-/-/-", "to": "nf_1852_752548.txt-2578-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-9888-11", "label": "2/-/-/-/-/-/-/-/-/2/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "fic_1856_9077.txt-1344-9", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/-/-/-/-/2/-/-/-/-/-", "to": "mag_1826_553698.txt-262-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-9888-11", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "nf_1853_771859.txt-2267-8", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7208.txt-12969-15", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1848_7341.txt-1445-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1836_7052.txt-3737-12", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "mag_1839_586418.txt-95-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-11140-48", "label": "-/-/1/-/-/-/-/-/-/-/-/-/1", "to": "mag_1839_586418.txt-95-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-11140-48", "label": "-/-/1/-/-/-/-/-/-/-/-/-/2", "to": "fic_1856_1281.txt-1432-45", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-11140-48", "label": "-/-/1/-/-/-/-/-/-/-/-/-/1", "to": "mag_1839_586418.txt-113-40", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1852_752548.txt-2578-9", "label": "-/-/-/-/-/3/-/-/1/-/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1852_752548.txt-2578-9", "label": "3/-/-/-/-/-/-/-/-/2/2/-/-", "to": "fic_1845_7183.txt-2911-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1859_748120.txt-2353-5", "label": "-/-/-/-/-/-/-/1/2/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1842_7206.txt-2048-60", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7193.txt-9900-20", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1833_7239.txt-209-3", "label": "2/-/-/-/-/-/-/-/2/-/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1835_7309.txt-3124-18", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1823_7246.txt-4692-15", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1854_9826.txt-223-0", "label": "-/-/-/-/-/-/-/-/-/-/0/1/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1823_7246.txt-4692-15", "label": "-/-/-/-/-/0/-/2/1/-/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "fic_1823_7246.txt-4692-15", "label": "-/-/-/-/-/-/-/-/1/-/-/-/-", "to": "fic_1842_8882.txt-1086-8", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_1281.txt-1432-45", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-113-40", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_1281.txt-1432-45", "label": "1/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1839_586418.txt-95-5", "label": "-/-/-/-/-/1/-/-/1/-/-/-/-", "to": "fic_1856_9077.txt-1344-9", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1848_7341.txt-1445-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "fic_1856_1281.txt-4033-64", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1845_747928.txt-1155-15", "label": "-/-/-/-/-/4/-/2/2/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1845_7183.txt-2911-6", "label": "-/-/-/-/-/-/-/2/-/-/-/-/-", "to": "fic_1856_1281.txt-4033-64", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1856_1281.txt-1360-18", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "nf_1853_771859.txt-2267-8", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1835_554357.txt-300-24", "label": "-/-/-/0/-/-/-/-/-/-/-/-/-", "to": "fic_1844_7081.txt-1082-14", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1855_602.txt-2752-15", "label": "0/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1852_9031.txt-623-17", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1856_5515.txt-1284-14", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "fic_1851_746.txt-9213-32", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1843_7208.txt-513-8", "label": "-/-/-/-/-/-/-/-/-/-/-/-/0", "to": "nf_1844_748164.txt-1079-17", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1851_746.txt-9213-32", "label": "0/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1844_7081.txt-1082-14", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1828_7259.txt-660-46", "label": "0/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1839_586418.txt-95-5", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "mag_1845_587497.txt-188-37", "label": "-/-/-/0/-/-/-/-/-/-/-/-/-", "to": "fic_1844_7081.txt-1082-14", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "fic_1854_9826.txt-223-0", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "fic_1832_7177.txt-120-19", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>

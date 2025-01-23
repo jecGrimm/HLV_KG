@@ -1,0 +1,1569 @@
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+    <center>
+        <h1 id="heading">land_nn (1)</h1>
+    </center>
+
+
+    <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+       #mynetwork {
+            width: 65%;
+            height: 90%;
+
+            margin-right: 2%;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+
+            background-color: {
+                    {
+                    bgcolor
+                }
+            }
+
+            ;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+            {
+            % if nodes|length>100 and physics_enabled %
+        }
+
+        #loadingBar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+
+            width: {
+                    {
+                    width
+                }
+            }
+
+            ;
+
+            height: {
+                    {
+                    height
+                }
+            }
+
+            ;
+            background-color:rgba(200, 200, 200, 0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 20px;
+            height: 20px;
+            margin: auto auto auto auto;
+            border-radius: 11px;
+            border: 2px solid rgba(30, 30, 30, 0.05);
+            background: rgb(0, 173, 246);
+            /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #border {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 500px;
+            height: 23px;
+            margin: auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        #text {
+            position: absolute;
+            top: 8px;
+            left: 530px;
+            width: 30px;
+            height: 50px;
+            margin: auto auto auto auto;
+            font-size: 22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position: relative;
+            top: 400px;
+            width: 600px;
+            height: 44px;
+            margin: auto auto auto auto;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            background: rgb(252, 252, 252);
+            /* Old browsers */
+            background: -moz-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(252, 252, 252, 1)), color-stop(100%, rgba(237, 237, 237, 1)));
+            /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* IE10+ */
+            background: linear-gradient(to bottom, rgba(252, 252, 252, 1) 0%, rgba(237, 237, 237, 1) 100%);
+            /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcfcfc', endColorstr='#ededed', GradientType=0);
+            /* IE6-9 */
+            border-radius: 72px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if conf %
+        }
+
+        #config {
+            float: left;
+            width: 400px;
+            height: 600px;
+        }
+
+            {
+            % endif %
+        }
+
+            {
+            % if tooltip_link %
+        }
+
+        /* position absolute is important and the container has to be relative or absolute as well. */
+        div.popup {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            display: none;
+            background-color: #f5f4ed;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+            border: 1px solid #808074;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        /* hide the original tooltip */
+
+
+        .vis-tooltip {
+            position: absolute;
+        }
+
+        #config {
+            display: none;
+
+        }
+
+            {
+            % endif %
+        }
+
+        #custom_wugs {
+            height: 90%;
+            width: 30%;
+            overflow: scroll;
+        }
+
+        #custom_wugs>* {
+            padding: 1%;
+            margin-left: 2%;
+        }
+
+
+
+
+
+
+        .help-tip {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            text-align: center;
+            background-color: #E55B0A;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 26px;
+            cursor: default;
+        }
+
+        .help-tip:before {
+            content: '?';
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .help-tip:hover p {
+            display: block;
+            transform-origin: 100% 0%;
+
+            -webkit-animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
+
+        }
+
+        .help-tip p {
+            /* The tooltip */
+            display: none;
+            text-align: left;
+            background-color: #1E2021;
+            padding: 20px;
+            width: 800px;
+            position: absolute;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            right: 16px;
+            color: #FFF;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .help-tip p:before {
+            /* The pointer of the tooltip */
+            position: absolute;
+            content: '';
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-bottom-color: #1E2021;
+            right: 10px;
+            top: -12px;
+        }
+
+        .help-tip p:after {
+            /* Prevents the tooltip from being hidden */
+            width: 100%;
+            height: 40px;
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: 0;
+        }
+
+
+        /* CSS animation */
+
+        @-webkit-keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            100% {
+                opacity: 100%;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 100%;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-icon {
+            position: absolute;
+            top: 40%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid red;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            visibility: hidden;
+        }
+
+        #custom_wugs {
+            font-size: smaller;
+        }
+
+        .shifted {
+            margin-left: 3%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        #fillSD {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+     <div id="loader" style="display: none"></div>
+
+    <div id="mynetwork"></div>
+    
+    
+
+    <div id="custom_wugs">
+
+
+
+        <div class="help-tip">
+            <p><em>General</em><br />
+           Firefox is the recommended browser for this application. For large graphs, loading time may vary. This application is under development. Feedback is appreciated. The code, from which you can generate your own graphs, can be found here:  <a href="https://github.com/Garrafao/WUGs/" target="_blank" style="color: white">WUGs repository</a><br /><br /><br />
+                <em>Statistics</em><br />
+            The statistics section gets updated as the filters are used. For in-depth stats, refer to the stats dropdowns on the bottom.<br /><br /><br />
+                <em>Edge & node filters</em><br />
+            Edge weights are calculated as the mean of all annotations of the node pair.
+            Nodes with noisy data appear black and have -1 as their label. Both the noisy nodes and edges with wrongly calculated weights can be filtered out.
+            Edge and node filters are interlinked and should show the desired selection. While one filter is being calculated, the page will prevent you from selecting another filter.<br /><br /><br />
+                <em>Annotators filter</em><br />
+            The annotators filter resets all other filters and shows the initial graph, but only edges the selected annotators have annotated.</p>
+        </div>
+
+        <div class="infoContainer">
+            <h4>Info: </h4>
+            <div id="clusterInfo"></div>
+            <h4>Statistics:</h4>
+            <div id="statistics"></div>
+            <p id="fillMean">Edge weight mean: </p>
+            <p id="fillSD">Edge weight standard deviation: </p>
+        </div>
+        <div class ="edgeFilterContainer">
+            <h4>Edge filters: </h4>
+
+            <label for="checkboxNaN">Show NaN edges </label>
+            <input type="checkbox" id="checkboxNaN" onclick="filterNaN()">
+            <br><br>
+            <div class="slideContainer" style="display: block; clear: both">
+                <label for="slider-min" style="display: block">Min weight: <span id="sliderValueDisplayMin" style="display: inline-block">1</span></label>
+                <input type="range" min="1" max="4" value="1" class="slider-load" id="slider-min">
+                <label for="slider" style="display: block">Max weight: <span id="sliderValueDisplay" style="display: inline-block">4</span></label>
+                <input type="range" min="1" max="4" value="4" class="slider-load" id="slider">
+            </div>
+        </div>
+
+
+
+
+        <div class="nodeFilterContainer">
+            <h4>Node filters: </h4>
+
+            <label for="checkboxNoiseLabels">Show noise cluster</label>
+            <input type="checkbox" id="checkboxNoiseLabels" onclick="filterNoiseLabels()">
+            <br><br>
+            <form onsubmit="dateFilter();return false">
+                <label for="minPicker">From date: </label>
+                <select class="picker" id="minPicker"></select>
+                <label for="maxPicker">to date: </label>
+                <select class="picker" id="maxPicker"></select>
+                <input type="submit" value="Filter">
+            </form>
+
+            <label for="groupPicker">Grouping: </label>
+            <select  class="select-load" id="groupPicker">
+                <option>All</option>
+                <option>1</option>
+                <option>2</option>
+            </select>
+            <div class="loading-icon"></div>
+        </div>
+
+        <div id="annotatorsContainer"></div>
+
+        <div class="detailsContainer">
+            <details id="stats">
+                <summary class="bold">Stats</summary>
+                <table id="stats-table"></table>
+            </details>
+            <details id="statsGroupings">
+                <summary class="bold">Grouping stats</summary>
+                <table id="stats-groupings-table"></table>
+            </details>
+            <details id="statsAgreement">
+                <summary class="bold">Agreement stats</summary>
+                <table id="stats-agreement-table"></table>
+            </details>
+            <details id="statsPlotting">
+                <summary class="bold">Plotting stats</summary>
+                <table id="stats-plotting-table"></table>
+            </details>
+            <details id="statsDataJoint">
+                <summary class="bold">Annotator data</summary>
+            </details>
+        </div>
+
+    </div>
+
+    <div id="config">
+
+    </div>
+
+    
+     <!--<script type="text/javascript" src="../stats.js"></script>
+     <script type="text/javascript" src="../stats_agreement.js"></script>
+     <script type="text/javascript" src="../stats_groupings.js"></script>
+     <script type="text/javascript" src="../stats_plotting.js"></script>
+     <script type="text/javascript" src="../data_joint.js"></script>-->
+
+    <script type="text/javascript">
+        // initialize global variables.
+        var edges;
+        var nodes;
+        var network;
+        var container;
+        var options, data;
+
+
+        // This method is responsible for drawing the graph, returns the drawn network
+        function drawGraph() {
+            var container = document.getElementById('mynetwork');
+
+            
+
+            // parsing and collecting nodes and edges from the python
+            nodes = new vis.DataSet([{"color": "#377eb8", "date": "1842", "id": "fic_1842_9749.txt-2070-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eSir Ronald Thou art soaring away, beautiful bird, Upon thy\u003cbr\u003epinions into distant \u003cb\u003eland\u003c/b\u003e, Bathing thy downy bosom\u0027s loftiest\u003cbr\u003eflight In welkin zephyrs.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1842\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1842_9749.txt-2070-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 211.95034615341152, "y": 10.253966643623688}, {"color": "#377eb8", "date": "1851", "id": "mag_1851_504052.txt-6-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eand bolted to its place; and the car is then drawn to the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e, suspended by rings from a hawser which has previously\u003cbr\u003ebeen stretched from the ship to the shore.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1851_504052.txt-6-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -0.03563054564010907, "y": -107.45348798442015}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-637-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA neighboring farmer, into whose \u003cb\u003eland\u003c/b\u003e the acres in\u003cbr\u003equestion made an awkward elbow, was anxious to buy Solomon\u0027s title,\u003cbr\u003eand dispossess the unlawful occupant.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-637-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -152.36980073899724, "y": -151.46738797473128}, {"color": "#377eb8", "date": "1830", "id": "mag_1830_554083.txt-510-65", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn the very paragraph of the compact which contains the\u003cbr\u003estipulation, it is stated, by way of description and recital, that the\u003cbr\u003ePresident of the United States has directed that a treaty should be\u003cbr\u003eheld with the Creeks; \u0027 and, in a previous paragraph, the United\u003cbr\u003eStates engage to open a land-office, for the disposition of the vacant\u003cbr\u003e\u003cb\u003elands\u003c/b\u003e thus ceded, to which the Indian title has been, or may\u003cbr\u003ehereafter be, extinguished. \u0027\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1830_554083.txt-510-65\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 223.82794164439326, "y": 167.69023699486763}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7166.txt-602-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe Pawnee and his bride enjoyed the blessings of summer in\u003cbr\u003eanother \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7166.txt-602-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 168.14395837134836, "y": -307.83826512952123}, {"color": "#377eb8", "date": "1854", "id": "fic_1854_8328.txt-1758-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eGo, tourist, where the Genesee, In falling, shakes the solid\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e!\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1854_8328.txt-1758-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -157.10690818684134, "y": 3.915005338186627}, {"color": "#377eb8", "date": "1829", "id": "nf_1829_751465.txt-3079-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe Catholic army (says Antonio Agapida) entered Moclin in\u003cbr\u003esolemn state, not as a licentious host intent upon plunder and\u003cbr\u003edesolation, but as a band of Christian warriors coming to purify and\u003cbr\u003eregenerate the \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1829_751465.txt-3079-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -205.45343363406812, "y": 83.26471669943811}, {"color": "#377eb8", "date": "1842", "id": "nf_1842_747853.txt-1755-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe thus established and perfected an institution, which was to\u003cbr\u003elast through all ages, and extend over all \u003cb\u003elands\u003c/b\u003e, and be the\u003cbr\u003emeans of completing the great work of redemption.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1842\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1842_747853.txt-1755-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 35.90172913766074, "y": -500.8362546413857}, {"color": "#377eb8", "date": "1847", "id": "mag_1847_555460.txt-176-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003eland\u003c/b\u003e rose with a gentle elevation from the river,\u003cbr\u003ewas level, smooth, and covered with a verdure as rich and fragrant as\u003cbr\u003ecan clothe the surface of nature beneath the warmth\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1847_555460.txt-176-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 139.67047616533407, "y": -270.73044149555477}, {"color": "#377eb8", "date": "1836", "id": "fic_1836_7040.txt-1434-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAthens, with all her faults, is still my own, my beautiful, my\u003cbr\u003ebeloved \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1836_7040.txt-1434-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -84.74186778069432, "y": 309.0898644418353}, {"color": "#377eb8", "date": "1845", "id": "fic_1845_8969.txt-967-62", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMerely to die is nothing, for the firm confidence with which my\u003cbr\u003esoul hangs on that Saviour, at whose holy altar I once hoped myself to\u003cbr\u003eminister, removes all fear, and rather makes the summons welcome, as a\u003cbr\u003ecall to brighter realms and higher joys; but the thought that I no\u003cbr\u003emore can help this bleeding \u003cb\u003eland\u003c/b\u003e, nor prop its failing fortunes\u003cbr\u003e-- this is my grief, my bitter grief.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1845\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1845_8969.txt-967-62\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -228.77782009978327, "y": -131.0215657271287}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7051.txt-2222-25", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAnd Henry came, and the scene of his first detection, and the\u003cbr\u003eform of the friend he had betrayed, in a distant \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7051.txt-2222-25\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 9.895038640890993, "y": -277.36463980561626}, {"color": "#377eb8", "date": "1836", "id": "fic_1836_7276.txt-1687-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ea blessing and honour to the \u003cb\u003eland\u003c/b\u003e, made me more and more\u003cbr\u003eashamed of myself.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1836_7276.txt-1687-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 1.1744685183047714, "y": -53.46950528931516}, {"color": "#377eb8", "date": "1836", "id": "nf_1836_748113.txt-821-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eVery extensive mill privileges are gained by the aid of a cross\u003cbr\u003edam, running from the principal one to a point of \u003cb\u003eland\u003c/b\u003e in\u003cbr\u003eRoxbury, which divides the reserveir or full basin on the west, from\u003cbr\u003ethe running or empty basin on the east.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1836_748113.txt-821-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -67.60611418847412, "y": -80.60850634561783}, {"color": "#377eb8", "date": "1853", "id": "mag_1853_566282.txt-86-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs private citizens are bound to obey those laws of the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e which are not contrary to the will of God, so the\u003cbr\u003eministers of justice are under a moral obligation to execute these\u003cbr\u003elaws; unless they are entrusted with discretionary powers to dispense\u003cbr\u003ewith their execution in particular cases.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_566282.txt-86-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -147.59759888821577, "y": 153.4821970329406}, {"color": "#377eb8", "date": "1844", "id": "fic_1844_7189.txt-5141-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is the \u003cb\u003eland\u003c/b\u003e of Death -- the land of the Grave.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1844_7189.txt-5141-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 167.62172255118472, "y": 79.13625597995038}, {"color": "#377eb8", "date": "1850", "id": "fic_1850_7304.txt-5022-30", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe sea rose between the assailant and his prey, -- the storm\u003cbr\u003eparted them, and while the feebler vessels of Melendez, partially\u003cbr\u003eunder the security of the \u003cb\u003eland\u003c/b\u003e, swept back towards the\u003cbr\u003esettlement which he had made on shore, the brigantines and bateaux of\u003cbr\u003eRibault were forced to rejoin their greater vessels, and they all bore\u003cbr\u003eaway to sea before the gale.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1850\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1850_7304.txt-5022-30\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -32.222083454547864, "y": -239.83221219928038}, {"color": "#377eb8", "date": "1852", "id": "mag_1852_504526.txt-390-17", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMany animals were seen at different times in the vicinity of\u003cbr\u003ethe sea, some on the \u003cb\u003eland\u003c/b\u003e, and others flying freely over the\u003cbr\u003ewater.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1852_504526.txt-390-17\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -19.959317532360657, "y": -171.50524355864312}, {"color": "#377eb8", "date": "1849", "id": "mag_1849_525090.txt-128-63", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003etaken place within the last thirty years is said to be gre \u0027 *\u003cbr\u003eter than the whole averaqe product of the land of this country, and\u003cbr\u003ethat increase has been obtained by the application of l\u0027bor to the\u003cbr\u003eextent of twenty, forty, eighty, or one hundred shillings per acre;\u003cbr\u003ebeing less than the cost of the wild \u003cb\u003elands\u003c/b\u003e of the West to the\u003cbr\u003esettler, if we estimate his actual expenditure from the time he sets\u003cbr\u003eout on his pilgrimage until he is enabled to clear and cultivate as\u003cbr\u003emuch as enables him to obtain subsistence for himself and his family,\u003cbr\u003eand 38 Jan., // provide a proper shelter for them.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1849_525090.txt-128-63\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 200.6952996404719, "y": -99.80014108302032}, {"color": "#377eb8", "date": "1846", "id": "fic_1846_7121.txt-1072-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBarbary, whence these Moors came, is a \u003cb\u003eland\u003c/b\u003e of sorcery\u003cbr\u003eand their neighbor Egypt is the home of magicians.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1846\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1846_7121.txt-1072-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -429.1054977027203, "y": 30.429707822273105}, {"color": "#377eb8", "date": "1835", "id": "fic_1835_7203.txt-1082-42", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eMary seated herself at it, and after a short, but beautiful\u003cbr\u003eprelude, she commenced one of Burns \u0027 plaintive songs, to a tune which\u003cbr\u003ewas new to me, but which was obviously from the poet\u0027s own\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e, and by one who felt the inspiration of his verse.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1835_7203.txt-1082-42\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -418.83518569637846, "y": -307.52802398743114}, {"color": "#377eb8", "date": "1854", "id": "mag_1854_505118.txt-532-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is an interesting, and yet a melancholy sight, to see the\u003cbr\u003epoor outcasts from their own German \u003cb\u003eland\u003c/b\u003e, in all the quaint\u003cbr\u003efashions of frock and head-dress, which have outlasted centuries,\u003cbr\u003etrooping along in the middle of the gayest scenes of Paris-exiled\u003cbr\u003eforever from one home, and wholly uncertain where the future one will\u003cbr\u003ebe. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1854_505118.txt-532-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -189.52341584801934, "y": 1.2358782437584384}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_8106.txt-268-59", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eFew suns set on that dismal scene, My wounds were still\u003cbr\u003eunsear\u0027d and green, When thundering on with trump and drum, I heard\u003cbr\u003eagain the war-horse come, Like gathering tempest, big and black, That\u003cbr\u003ethrough the forest wings its track, Sweeping and tearing all that\u003cbr\u003estand, And desolating wood and \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_8106.txt-268-59\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -64.63051061576355, "y": 293.0145246885106}, {"color": "#377eb8", "date": "1851", "id": "mag_1851_566070.txt-107-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThey drew the people together from all parts of the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e, and werd well calculated to render them not only pious,\u003cbr\u003ebut social and happy.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1851_566070.txt-107-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -20.111610532811415, "y": 109.99755695974483}, {"color": "#377eb8", "date": "1859", "id": "fic_1859_9216.txt-3281-55", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOut of her sight I passed hours of misery -- hours when the\u003cbr\u003eaccusing voices drowned out every harmony of life; when those pursuing\u003cbr\u003eeyes, which coffin and turf could not cover, or grave-stone seal\u003cbr\u003etogether, looked into mine, till I longed to take refuge from them in\u003cbr\u003ethe still \u003cb\u003eland\u003c/b\u003e\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1859_9216.txt-3281-55\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 139.7890278308535, "y": -58.60403926738251}, {"color": "#377eb8", "date": "1856", "id": "mag_1856_590811.txt-254-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis practice created a class of tenants, or compelled the\u003cbr\u003ecolonists to buy their \u003cb\u003elands\u003c/b\u003e of the large owners; it also made\u003cbr\u003egreat\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1856_590811.txt-254-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 69.65712494894605, "y": 170.0175272238539}, {"color": "#377eb8", "date": "1830", "id": "mag_1830_554083.txt-544-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eGeorgia remonstrated against it on the single ground, that it\u003cbr\u003ebelonged to her, as a separate State, to treat with Indians occupying\u003cbr\u003ea part of the \u003cb\u003eland\u003c/b\u003e within her chartered limits.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1830\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1830_554083.txt-544-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -38.964904168513876, "y": -109.75019836243673}, {"color": "#377eb8", "date": "1846", "id": "fic_1846_7679.txt-205-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWar drove his iron car from \u003cb\u003eland\u003c/b\u003e to land, And scattered\u003cbr\u003erage and ruin from his hand; Pale Europe trembled with the cannon\u0027s\u003cbr\u003eroar, And helpless anguish wailed on every shore.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1846\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1846_7679.txt-205-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 276.08130029823525, "y": -250.35597330975511}, {"color": "#377eb8", "date": "1837", "id": "nf_1837_755525.txt-1641-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHere were assembled the judges of the \u003cb\u003eland\u003c/b\u003e, the\u003cbr\u003eministers of religion, the legislators of the state and nation,\u003cbr\u003eseveral of the heroes of the revolution, and numerous eminent literary\u003cbr\u003echaracters from various parts of the United States, to unite with the\u003cbr\u003eyounger sons of Harvard, in offerings of affectionate gratitude to a\u003cbr\u003eman, who had no gifts of power or titles of honor to bestow; but whose\u003cbr\u003euseful\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_755525.txt-1641-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -278.5579957830463, "y": 75.59173000463872}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7208.txt-13087-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs recently administered and regarded, the presidential arm is\u003cbr\u003eclothed with thunder, and whatever bolt is shot forth rattles and\u003cbr\u003eblazes through the whole length of the \u003cb\u003eland\u003c/b\u003e, scattering dismay,\u003cbr\u003econfusion, and ruin.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7208.txt-13087-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -43.46452626961556, "y": 105.31248435300058}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747716.txt-183-82", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBy the third article of this latter treaty, the United States\u003cbr\u003estipulate that the inhabitants of the ceded territory shall be\u003cbr\u003emaintained and protected in the free enjoyment of their liberty,\u003cbr\u003eproperty, and the religion which they profess; and in execution of\u003cbr\u003ethis article, so far as it respected real property, Congress\u003cbr\u003eimmediately proceeded to establish, in various parts of the province,\u003cbr\u003eBoards of Commissioners, to examine and report upon all claims for\u003cbr\u003e\u003cb\u003elands\u003c/b\u003e made by the inhabitants under\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747716.txt-183-82\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -20.975583198461585, "y": 237.38001432258918}, {"color": "#377eb8", "date": "1855", "id": "fic_1855_602.txt-4286-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe realities of the world affected me as visions, and as\u003cbr\u003evisions only, while the wild ideas of the \u003cb\u003eland\u003c/b\u003e of dreams\u003cbr\u003ebecame, in turn, not the material of my every-day existence, but in\u003cbr\u003every deed that existence utterly and solely in itself.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_602.txt-4286-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 322.9451381826987, "y": -139.70649655963436}, {"color": "#377eb8", "date": "1859", "id": "mag_1859_506498.txt-193-24", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is from this clause of the Constitution alone that Congress\u003cbr\u003ederives the power to provide for the surveys and sale of the public\u003cbr\u003e\u003cb\u003elands\u003c/b\u003e and all other property belonging to the United States,\u003cbr\u003enot only in the Territories, hut also in the several States of the\u003cbr\u003eUnion.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1859_506498.txt-193-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -147.77909478046516, "y": 81.81845751565409}, {"color": "#377eb8", "date": "1823", "id": "fic_1823_7248.txt-1618-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ewe shall sooner clear the \u003cb\u003eland\u003c/b\u003e of these devils, than if\u003cbr\u003ewe huddle about our own hearths.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1823\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1823_7248.txt-1618-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 42.066756462408065, "y": 75.75819946986287}, {"color": "#377eb8", "date": "1847", "id": "mag_1847_555508.txt-399-52", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIreland // itself, wretched, starving Ireland, is owned, as it\u003cbr\u003ewere, in counties, by the English and Irish nobility and gentry; it is\u003cbr\u003ecarved out into monster estates, which are leased piecemeal to\u003cbr\u003emiddlemen and great farmers, who again subdivide and underlet the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e which they hire, till the division is brought down to the\u003cbr\u003elittle conacre patches of the miserable peasants.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1847_555508.txt-399-52\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 49.53544097132739, "y": -340.22972277396553}, {"color": "#377eb8", "date": "1836", "id": "mag_1836_554422.txt-221-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is his inheritance, secured to him not by the laws of the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e, but by the common consent of mankind.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1836\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1836_554422.txt-221-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -55.15457014711544, "y": 202.77184646314046}, {"color": "#377eb8", "date": "1847", "id": "fic_1847_2913.txt-51-50", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHaving thus spoken, Mary Hamilton accepted the aid of the\u003cbr\u003eearl\u0027s proffered arm, and both together leisurely descended the hill,\u003cbr\u003eintently gazing upon the sea, they did so as if watching the slow\u003cbr\u003eprogress of the ship, which was now standing in towards the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1847_2913.txt-51-50\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -183.84481163649, "y": -364.64106924379894}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747581.txt-123-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA charter intended to convey political power only would never\u003cbr\u003econtain words expressly granting the \u003cb\u003eland\u003c/b\u003e, the soil, and the\u003cbr\u003ewaters.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747581.txt-123-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 187.77403921863979, "y": 286.1802189916801}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9072.txt-773-29", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThen, led on by the child-like attention and womanly\u003cbr\u003eintelligence of his eager listener, he described to her his travels in\u003cbr\u003ethe farther West, in the \u003cb\u003eland\u003c/b\u003e which she cherished and loved as\u003cbr\u003eher father\u0027s birthplace and the home of his boyhood; told her of the\u003cbr\u003eboundless prairies, which had been the red man\u0027s hunting-ground, and\u003cbr\u003eof streams so broad and long that the boasted rivers of Damascus and\u003cbr\u003eof Lebanon were as feeble rills in comparison.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9072.txt-773-29\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -97.82981546876518, "y": -93.91029874028858}, {"color": "#377eb8", "date": "1856", "id": "nf_1856_769137.txt-442-21", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe agitations in Ireland, Scotland, and Wales have long been\u003cbr\u003eon the verge of bloody conflict, and a \u003cb\u003eLand\u003c/b\u003e League has been\u003cbr\u003eformed in Germany at Berlin, of which Dr. A. Theodor Stamm is\u003cbr\u003epresident, having for its object the transfer of land ownership from\u003cbr\u003eindividuals to the State.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1856_769137.txt-442-21\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -160.2673811226687, "y": -30.629511323252714}, {"color": "#377eb8", "date": "1852", "id": "nf_1852_752548.txt-3701-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is not uncommon for the land speculators to sell a farm to a\u003cbr\u003erespectable settler at an unusually low price, in order to give a\u003cbr\u003echaracter to a neighbourhood where they hold other \u003cb\u003elands\u003c/b\u003e, and\u003cbr\u003ethus to use him as a decoy duck for friends or countrymen.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1852_752548.txt-3701-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 170.12814113147226, "y": -70.89828034775982}, {"color": "#377eb8", "date": "1847", "id": "nf_1847_748116.txt-2453-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOur own \u003cb\u003eland\u003c/b\u003e still spreads out before the enterprising\u003cbr\u003eyoung man so many millions of untilled acres, that it would seem to be\u003cbr\u003ea plain indication of Providence, that for some time to come we should\u003cbr\u003ebe an agricultural people.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1847_748116.txt-2453-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -27.080782663981566, "y": -75.26186576516109}, {"color": "#377eb8", "date": "1855", "id": "fic_1855_9098.txt-632-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNapoleon, preferring \u003cb\u003eland\u003c/b\u003e to money, holds the old\u003cbr\u003ehomestead plantation, which he has most singularly divided and\u003cbr\u003esubdivided into tracts after the plan of the map of Europe.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_9098.txt-632-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -298.23665229853066, "y": -110.20771164568468}, {"color": "#377eb8", "date": "1827", "id": "mag_1827_553793.txt-53-70", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis definition is, however, essentially different from the\u003cbr\u003eother, and confounds that rent, \" which is paid for the use of the\u003cbr\u003eoriginal and indestructible powers of the soil, \" with that paid in\u003cbr\u003econsequence of the advance in the price of raw produce from\u003cbr\u003erestrictions on the trade in corn, and the monopoly which in some\u003cbr\u003ecountries is connected with the possession of \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1827_553793.txt-53-70\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 0.38230490488666985, "y": 65.04798174712703}, {"color": "#377eb8", "date": "1844", "id": "fic_1844_7426.txt-470-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003efrom Poems (1844) Birds fly away over \u003cb\u003eland\u003c/b\u003e and sea,\u003cbr\u003eSeeking their sunny home; The winds are wandering strong and free,\u003cbr\u003eWherever they choose to roam.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1844\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1844_7426.txt-470-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 76.59208430072526, "y": -101.77769418853471}, {"color": "#377eb8", "date": "1855", "id": "mag_1855_566598.txt-331-135", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe talks of a class of men who play upon the public sympathies,\u003cbr\u003ewho make a trade of philanthropy and live by it, whose benevolence is\u003cbr\u003eaccording to their mere instincts and sensibilities, and without\u003cbr\u003eregard to God\u0027s comprehensive government is always exclusively on one\u003cbr\u003eside, and that the side of crime, lawlessness, and violence-who are\u003cbr\u003espreading abroad a new visionary philosophy and literature which\u003cbr\u003esubject scripture to the interpretation of the intuitional reason, and\u003cbr\u003ecorresponding impulses of a romantic sensibility, and plead for the\u003cbr\u003eboasted dignity and perfectibility of man, and set up his imaginary\u003cbr\u003erights above his duties, and his happiness above his virtue; who are\u003cbr\u003eencouraged by selfish and time-serving politicians, and are doing much\u003cbr\u003emis- chief iu the \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1855_566598.txt-331-135\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -71.6915826382176, "y": 176.42047660743273}, {"color": "#377eb8", "date": "1857", "id": "nf_1857_755095.txt-678-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWhen the French wanted to get a commanding site for a post on\u003cbr\u003ethe Iroquois \u003cb\u003elands\u003c/b\u003e, near Niagara, Joncaire was the man to\u003cbr\u003emanage it.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1857_755095.txt-678-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -343.94037763451786, "y": 59.33310315298477}, {"color": "#377eb8", "date": "1855", "id": "nf_1855_747674.txt-576-55", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTwysden was thrown into the Tower for defending his client as\u003cbr\u003eMr. Sloane, at Sandusky, has just been punished by the honor able\u003cbr\u003ecourt of the United States for a similar offence, but after a few days\u003cbr\u003emade a confession of his \" error, \" defending the just laws of the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e,, promised to offend no more, and was set at liberty,\u003cbr\u003eignominiously leaving his client to defend himself and be\u003cbr\u003edefeated.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1855_747674.txt-576-55\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 443.3267912603771, "y": 97.52337433105544}, {"color": "#377eb8", "date": "1851", "id": "fic_1851_1253.txt-325-3", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eCircassia, the \u003cb\u003eland\u003c/b\u003e of beauty and oppression, whose\u003cbr\u003enoble valleys produce such miracles of female loveliness, and whose\u003cbr\u003elevel plains are the vivid scenes of such terrible struggles; where a\u003cbr\u003ebrave, unconquerable peasantry have, for a very long period, defied\u003cbr\u003ethe combined powers of the whole of Russia, and whose daughters,\u003cbr\u003ethough the children of such brave sires, are yet taught and reared\u003cbr\u003efrom childhood to look forward to a life of slavery in a Turkish harem\u003cbr\u003eas the height of their ambition -- Circassia,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1851_1253.txt-325-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 147.94896536262175, "y": -242.91935617870766}, {"color": "#377eb8", "date": "1858", "id": "mag_1858_526597.txt-36-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe fearful consumption of human life which (Irained the\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e, sweeping off almost one entire generation of able-bodied\u003cbr\u003emen, and leaving the tillage of the fields to the decrepitude of age,\u003cbr\u003efeebly aided by female hands, gave ample opportunity to gratify the\u003cbr\u003eardent minds panting to exchange the tame drudgery of school and\u003cbr\u003ecollege for the limited, but to them world-wide, authority of the\u003cbr\u003esubaltern\u0027s sword and epaulet.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1858\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1858_526597.txt-36-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -104.79286107676526, "y": 101.24348082897376}, {"color": "#377eb8", "date": "1835", "id": "mag_1835_565135.txt-63-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOn one side, the river is continually forming new\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1835_565135.txt-63-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -136.14830977584586, "y": 388.29480274855314}, {"color": "#377eb8", "date": "1852", "id": "nf_1852_752548.txt-497-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTo the \u003cb\u003eland\u003c/b\u003e he has left, that name belongs for ever, and\u003cbr\u003ein no instance does he bestow it upon another. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1852_752548.txt-497-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 70.71788371648695, "y": 255.05628178635214}, {"color": "#377eb8", "date": "1860", "id": "mag_1860_527181.txt-175-1", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003eland\u003c/b\u003e is also rich in the common metals, the\u003cbr\u003eproduction of which, as well as of gold and silver, would be\u003cbr\u003eincalculably increased, should Mexico pass under the dominion\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1860_527181.txt-175-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 99.3634413218269, "y": -140.62367470405374}, {"color": "#377eb8", "date": "1856", "id": "fic_1856_7889.txt-42-14", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe dawn steals up the eastern sky, Gray vapors hang o\u0027er sea\u003cbr\u003eand \u003cb\u003eland\u003c/b\u003e, On the rank grass dews lightly lie That cool by night\u003cbr\u003ethe heated sand, And from the tall palmetto\u0027s top, On the low roof,\u003cbr\u003efall drop by drop.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1856_7889.txt-42-14\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -35.20496430731658, "y": 283.326384103263}, {"color": "#377eb8", "date": "1854", "id": "fic_1854_9160.txt-1775-4", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eShe gazed on the \u003cb\u003eland\u003c/b\u003e which had, in truth, been her\u003cbr\u003ecountry, until its outlines were lost in the haze of falling night;\u003cbr\u003eand then, ordering her couch to be spread on the deck al fresco,\u003cbr\u003ecommanded the pilot to awaken her should the coast be in sight at\u003cbr\u003edaybreak.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1854_9160.txt-1775-4\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 238.39598211362068, "y": -90.11944629266354}, {"color": "#377eb8", "date": "1835", "id": "fic_1835_7271.txt-3081-22", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" I hope not, \" muttered Rose to herself, in the back-ground; \"\u003cbr\u003ethis a\u0027n\u0027t to be the \u003cb\u003eland\u003c/b\u003e for them that strut in scarlet\u003cbr\u003ebroadcloth and gold epaulets,\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1835_7271.txt-3081-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 103.89256389916166, "y": -183.0996902158137}, {"color": "#377eb8", "date": "1853", "id": "mag_1853_555822.txt-470-44", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTake away party hostility, and these scenes xviii not be of so\u003cbr\u003efrequent occurrence, and perchance a little time may be gained for the\u003cbr\u003econsideration of subjects so momentous as the tariff, the currency,\u003cbr\u003ethe proper disposal of the public \u003cb\u003elands\u003c/b\u003e, the fisheries, and\u003cbr\u003ereciprocity of trade with the British Colonies.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_555822.txt-470-44\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 204.0994963973133, "y": 201.13179581283646}, {"color": "#377eb8", "date": "1857", "id": "nf_1857_753133.txt-2426-11", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe next preceding clause of the act, which speaks of\u003cbr\u003e\u003cb\u003elands\u003c/b\u003e \" included within the limits of any incorporated town, \"\u003cbr\u003eimplies the contrary, in making separate provision for a township\u003cbr\u003eexisting by special or public authority.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1857_753133.txt-2426-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 185.29798363188422, "y": -147.45410917883413}, {"color": "#377eb8", "date": "1835", "id": "fic_1835_7064.txt-1327-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eOh that I had been born in such a \u003cb\u003eland\u003c/b\u003e!\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1835_7064.txt-1327-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -179.03299224020765, "y": -181.98002537451853}, {"color": "#377eb8", "date": "1852", "id": "mag_1852_504229.txt-84-19", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt the commencement of the enterprise Napoleon had promised, to\u003cbr\u003eeach of his soldiers, seven acres of \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1852\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1852_504229.txt-84-19\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -100.7400425180711, "y": 177.6745196939401}, {"color": "#377eb8", "date": "1829", "id": "mag_1829_553961.txt-432-38", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt is appointed for the residence of the agent of the United\u003cbr\u003eStates with the Creek Indians (he, however, was absent at this time),\u003cbr\u003eand is situated in a very handsome tract of \u003cb\u003eland\u003c/b\u003e on the left\u003cbr\u003eside of the Flint river, which rushes over a rocky bed between pretty\u003cbr\u003esteep banks.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1829\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1829_553961.txt-432-38\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 271.5394498937111, "y": 229.45559936507578}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747581.txt-1705-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt further declared that all \u003cb\u003elands\u003c/b\u003e should be held in\u003cbr\u003efree and common socage according to the tenure of East Greenwich in\u003cbr\u003eEngland; that in all criminal cases there should be a trial by jury;\u003cbr\u003ethat estates of femes covert should be conveyed only by deed upon\u003cbr\u003eprivy examination; that wills in 1 1 Chalmers\u0027s Annals, 579, 580. a 1\u003cbr\u003eChalmers\u0027s Annals, 581, 583; Smith\u0027s New York, 123, 125, 126 72,\u003cbr\u003e75.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747581.txt-1705-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -157.66625743149598, "y": -46.34842749833171}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7161.txt-514-42", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\" Cousin, \" exclaimed the abbe, turning to the young duke, \"\u003cbr\u003ecousin of Noirmoutier, if you have done this thing, you are not only a\u003cbr\u003edisgrace to our name and race, but to the very \u003cb\u003eland\u003c/b\u003e you live\u003cbr\u003ein.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7161.txt-514-42\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -280.2769857347636, "y": -236.57983199167003}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9817.txt-3296-9", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBefore we were aware of our proximity to the \u003cb\u003eland\u003c/b\u003e, we\u003cbr\u003ewere whirled into a cove and run aground, about a hundred yards from\u003cbr\u003ethe shore.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9817.txt-3296-9\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -7.811209757237418, "y": -356.72460232619346}, {"color": "#377eb8", "date": "1859", "id": "nf_1859_747504.txt-1183-2", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHouses and \u003cb\u003elands\u003c/b\u003e have, indeed, a real value; never\u003cbr\u003etheless, if everybody wished to sell them at the same time, what would\u003cbr\u003ebecome of it?\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1859_747504.txt-1183-2\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 204.80072182822758, "y": 267.99634810433656}, {"color": "#377eb8", "date": "1853", "id": "fic_1853_9200.txt-1041-12", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e, I wished him to believe that I was in a foreign\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1853_9200.txt-1041-12\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 138.80347578067813, "y": -330.6734340553618}, {"color": "#377eb8", "date": "1860", "id": "fic_1860_9188.txt-5059-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn this part of the world, where the green \u003cb\u003eland\u003c/b\u003e is as\u003cbr\u003elevel as the blue sea, these intersecting branches form a net-work of\u003cbr\u003einternal navigation, as if the whole land were cut up into winding\u003cbr\u003ecanals.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1860\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1860_9188.txt-5059-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 29.96290390882178, "y": 323.0190808176517}, {"color": "#377eb8", "date": "1833", "id": "nf_1833_747716.txt-366-18", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003ethose sections, his conclusion was, that the ordinance\u003cbr\u003econtained no authority to a sub-delegate to grant \u003cb\u003elands\u003c/b\u003e in\u003cbr\u003ereward of any other services, of which description were those rendered\u003cbr\u003eby Soulard.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1833\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1833_747716.txt-366-18\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 101.07965364942417, "y": 160.1616509153962}, {"color": "#377eb8", "date": "1834", "id": "mag_1834_564675.txt-90-32", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt this time Athens too had fallen from her high estate, but\u003cbr\u003eher walls were crowded with the young, the rich, the noble, the\u003cbr\u003easpiring, from every \u003cb\u003eland\u003c/b\u003e; parents named their children after\u003cbr\u003ethe great men of her history; kings and princes came on classic\u003cbr\u003epilgrimages to her shrines; and Adrian thought the title of emperor\u003cbr\u003enot glorious enough, until he had added that of Archon of\u003cbr\u003eAthens.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1834\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1834_564675.txt-90-32\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 276.4706546400699, "y": -406.95125056865015}, {"color": "#377eb8", "date": "1848", "id": "mag_1848_565775.txt-204-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eland\u003c/b\u003e, bearing engraven upon its face the story of their\u003cbr\u003enation\u0027s greatness or of its wrongs.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1848_565775.txt-204-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -309.25961097515665, "y": -49.15635873743644}, {"color": "#377eb8", "date": "1857", "id": "nf_1857_753133.txt-2537-89", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn fine, as it seems to me, there is nothing of the present\u003cbr\u003ecase, in so far as appears by the questions presented, and the\u003cbr\u003eofficial reports and statement by which they are explained, except a\u003cbr\u003econvict of claim to two or three sectional subdivisions of land\u003cbr\u003ebetween different sets of preemptors, one set being avowed municipal\u003cbr\u003epreemptors, and the other professed agricultural preemptors, but both\u003cbr\u003esets having in reality the same ulterior purposes in regard to the use\u003cbr\u003eof the \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1857_753133.txt-2537-89\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -132.7285084845325, "y": -48.897906489813074}, {"color": "#377eb8", "date": "1854", "id": "fic_1854_70.txt-1141-20", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eluxury and heedless expense, by want of calculation and a\u003cbr\u003eworthy aim, as the million households in the \u003cb\u003eland\u003c/b\u003e; and the only\u003cbr\u003ecure for it, as for them, is in a rigid economy, a stern and more than\u003cbr\u003eSpartan simplicity of life and elevation of purpose.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1854_70.txt-1141-20\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -85.21018179715246, "y": 99.76697324781883}, {"color": "#377eb8", "date": "1855", "id": "fic_1855_8110.txt-831-15", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eWho o\u0027er the wide, wide sea hast flown, -- To make our lovely\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e thine own: Thou askest of a brother Bard That which he\u003cbr\u003edeems severe and hard; A task to which he will demur, -- A song in\u003cbr\u003epraise of Mauvaiseterre; For he\u0027s been thinking all along, -- That\u003cbr\u003eneither stream is worthy of a song.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_8110.txt-831-15\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -237.86933568075077, "y": -191.25423560512792}, {"color": "#377eb8", "date": "1848", "id": "mag_1848_524876.txt-163-10", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut whether there be a revenue standard of the public\u003cbr\u003e\u003cb\u003elands\u003c/b\u003e, or what that standard is, if there be one, we are not\u003cbr\u003einformed.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1848_524876.txt-163-10\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 293.41357851695903, "y": 66.74786683695142}, {"color": "#377eb8", "date": "1848", "id": "fic_1848_7186.txt-1065-7", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe God of Blood, in some \u003cb\u003elands\u003c/b\u003e, demanded the offerings\u003cbr\u003eof an lnquisition, pledged to do the works of hell on earth, on the\u003cbr\u003evictims of persesution, slain without mercy on the battle fields of\u003cbr\u003ebigotry.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1848\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1848_7186.txt-1065-7\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 38.65518647309251, "y": 29.319167643163677}, {"color": "#377eb8", "date": "1823", "id": "fic_1823_7214.txt-1383-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYet cautious as in foeman\u0027s \u003cb\u003eland\u003c/b\u003e, Lord Marnion\u0027s order\u003cbr\u003espeeds the band, Some opener ground to gain; And scarce a furlong had\u003cbr\u003ethey rode, When thinner trees, receding show\u0027d, A little woodland\u003cbr\u003eplain.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1823\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1823_7214.txt-1383-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -2.658305940951201, "y": -18.20679812588841}, {"color": "#377eb8", "date": "1828", "id": "fic_1828_8619.txt-136-46", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003elike my friends before, I\u0027d strive till life-blood is no more;\u003cbr\u003eLike them, I think the only path Of safety from the ruffian\u0027s wrath,\u003cbr\u003eIs sword to sword, and man to man, To drive these villains from our\u003cbr\u003e\u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1828\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1828_8619.txt-136-46\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -118.12824026204834, "y": -98.63784844515018}, {"color": "#377eb8", "date": "1840", "id": "mag_1840_586555.txt-112-48", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn the case of Jackson against Lamphire where the attempt was\u003cbr\u003emade to set up a covenant against a State by implication, the Supreme\u003cbr\u003eCourt held this language: \" The patentcontains no covenant to do or\u003cbr\u003enot to do any farther act in relation to the \u003cb\u003eland\u003c/b\u003e, and we do\u003cbr\u003enot feel ourselves at liberty in this case to create one by\u003cbr\u003eimplication. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1840\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1840_586555.txt-112-48\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 115.30533581598009, "y": 52.88893392210528}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7325.txt-534-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eYou say your son has courted the girl, \" said the deacon, after\u003cbr\u003ea long pause; \" that strip of \u003cb\u003eland\u003c/b\u003e is the best part of Susan\u0027s\u003cbr\u003eshare; I paid down five hundred dollars on the nail for it; I\u0027ve got\u003cbr\u003epapers here that Judge Smith and Squire Moseley say will stand good in\u003cbr\u003eany court of law. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7325.txt-534-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 11.24405418475273, "y": 258.09650397645515}, {"color": "#377eb8", "date": "1855", "id": "fic_1855_2416.txt-1354-23", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003econtent to remain quiet in his new home, and there repent of\u003cbr\u003ehis many sins, but immediately got up an immense \u003cb\u003eland\u003c/b\u003e\u003cbr\u003especulation, by which he hoped to build a village on his grounds, and\u003cbr\u003ethus make another fortune.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1855\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1855_2416.txt-1354-23\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -38.675948959540364, "y": -332.3495852647461}, {"color": "#377eb8", "date": "1847", "id": "mag_1847_524570.txt-44-6", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eTheir eyes were gloating over the \u003cb\u003elands\u003c/b\u003e of our neighbor,\u003cbr\u003elying between the proper limits of Texas and the Great North River of\u003cbr\u003ethe Mexicans; including parts of four other departments of Mexico,\u003cbr\u003ewith Santa F *, and then stretching away to the Pacific, and embracing\u003cbr\u003ethe best portions, or the whole, of the Californias: and heaven knows\u003cbr\u003ehow much more besides.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1847_524570.txt-44-6\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": 221.46872130499904, "y": 223.8694745288009}, {"color": "#377eb8", "date": "1859", "id": "mag_1859_556807.txt-8-0", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cb\u003eLands\u003c/b\u003e and ages are described mainly by the memoirs of\u003cbr\u003etheir representative men; and it is not events or institutions, but\u003cbr\u003epersonages, that sustain interest in the narrative.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1859_556807.txt-8-0\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -93.90518666158559, "y": 33.34492091661706}, {"color": "#377eb8", "date": "1853", "id": "fic_1853_9142.txt-2635-5", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHere I am in the \u003cb\u003eland\u003c/b\u003e of my forefathers; here I can\u003cbr\u003eenjoy all those rights which a benevolent God hath so liberally\u003cbr\u003evouchsafed to man; here I can exercise and improve my gifts and graces\u003cbr\u003ein enlightening, instructing, and exhorting the benighted sons of the\u003cbr\u003eforest in the truths of the Christian religion; here I can bow down\u003cbr\u003ein\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1853_9142.txt-2635-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -46.919998654235044, "y": -195.69252772961858}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747610.txt-2459-90", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eNew England Rum at 3 s 10 d a gallon by the hogshead or barrel,\u003cbr\u003eexclusive of 13 s 4 d for the hogshead, or 4 s for the barrel, and 4 s\u003cbr\u003e6 d by the single gallon, at the town where the same is distilled, and\u003cbr\u003eso in like proportion for smaller quantities, according to the old and\u003cbr\u003eapproved customs for retailing smaller quantities, allowing one penny\u003cbr\u003eeach ten miles for every gallon that has been or shall be transported\u003cbr\u003eby \u003cb\u003eland\u003c/b\u003e from the place of distillery. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747610.txt-2459-90\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -108.794180411433, "y": -292.6291399523709}, {"color": "#377eb8", "date": "1827", "id": "nf_1827_747582.txt-989-47", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe power here given to define a felony at sea, implies an\u003cbr\u003eadmission, that if such a power were not given, Congress would be\u003cbr\u003eexcluded the use of the power altogether; and it further implies, that\u003cbr\u003ethe power of defining felonies on \u003cb\u003eland\u003c/b\u003e, solely and exclusively\u003cbr\u003ebelongs to the States.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1827\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1827_747582.txt-989-47\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -34.01035940702285, "y": 330.1620313323397}, {"color": "#377eb8", "date": "1839", "id": "nf_1839_747931.txt-42-73", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e/q/ In speaking of food of plants of the most essential and\u003cbr\u003eproper nature, I have never found any that answers a better purpose\u003cbr\u003ethan well rotted manure from the stable yard, as horse, cow, or hog\u003cbr\u003emanure placed in a heap for fermentation with a quantity of loam, or\u003cbr\u003epeat incorporated therewith; this compost should be well rotted and\u003cbr\u003emixed before it is carried on the \u003cb\u003eland\u003c/b\u003e.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1839\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1839_747931.txt-42-73\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -134.080787502306, "y": -315.45438578565654}, {"color": "#377eb8", "date": "1849", "id": "fic_1849_583.txt-2550-8", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eStranger and sojourner as I am in the \u003cb\u003eland\u003c/b\u003e, though for\u003cbr\u003eme no social hearth may blaze, no hospitable roof throw open its\u003cbr\u003edoors, nor the warm grasp of friendship welcome me at the threshold,\u003cbr\u003eyet I feel the influence of the season beaming into my soul from the\u003cbr\u003ehappy looks of those around me.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1849\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1849_583.txt-2550-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -107.80720753431149, "y": 260.64135575000216}, {"color": "#377eb8", "date": "1853", "id": "mag_1853_566330.txt-36-35", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut though by the mercy of God, and the wisdom of our fathers,\u003cbr\u003ewe are personally strangers to this form of wretchedness; yet we have\u003cbr\u003eseen multitudes of greater sufferers in this \u003cb\u003eland\u003c/b\u003e of the free,\u003cbr\u003ethan can be found in Austrian dungeons.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1853\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1853_566330.txt-36-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -8.426723494432833, "y": -225.24924216455076}, {"color": "#377eb8", "date": "1859", "id": "nf_1859_748098.txt-2590-54", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eA man may be put at a point where - as Napoleon was, or\u003cbr\u003eWellington in Spain, or Sir John Moore in the north of Portugal, or\u003cbr\u003eOlive in India - he can make a special providence for a nation, for a\u003cbr\u003erace, for an age, for one \u003cb\u003eland\u003c/b\u003e or for the globe I Now God can\u003cbr\u003edo a great deal more than man, and a great deal better.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1859\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1859_748098.txt-2590-54\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -78.42085336830995, "y": -166.2351305767199}, {"color": "#377eb8", "date": "1843", "id": "fic_1843_7074.txt-1164-51", "label": "0", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThis was the second day of practice in the elementary lessons\u003cbr\u003eof forest travelling; in which, however, they had been sufficiently\u003cbr\u003efortunate as to get a taste of \" buttermilk land, \" -- \" spouty land,\u003cbr\u003e\" -- and to learn the nature of \" mash \u003cb\u003eland\u003c/b\u003e \" -- \" rooty and\u003cbr\u003esnaggy land \" -- of mud holes, ordinary and extraordinary -- of quick\u003cbr\u003esands -- and \" corduroys \" woven single and double twill -- and even\u003cbr\u003efords with and without bottom.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1843\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1843_7074.txt-1164-51\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -366.039023706631, "y": -13.485286542797143}, {"color": "#ff7f00", "date": "1856", "id": "nf_1856_755595.txt-102-5", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe day previous to our \u003cb\u003elanding\u003c/b\u003e was a Sunday, and I was\u003cbr\u003epleased to observe the decorum which pervaded the ship.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1856\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1856_755595.txt-102-5\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -202.144163289439, "y": 397.50819491156744}, {"color": "#ff7f00", "date": "1822", "id": "mag_1822_553415.txt-22-1", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eHe \u003cb\u003elands\u003c/b\u003e among us, falls into some circle, good or bad,\u003cbr\u003eas the case may be, hears them speak in strong terms of their party\u003cbr\u003eadversaries, is able to make none of that secret\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1822\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1822_553415.txt-22-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn2\u003c/p\u003e", "x": -167.3746181508152, "y": 338.3561599797571}, {"color": "#ff7f00", "date": "1837", "id": "nf_1837_755525.txt-1321-24", "label": "1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAt an early hour, the whole city was in motion; almost every\u003cbr\u003eman, woman and child was preparing to witness the \u003cb\u003elanding\u003c/b\u003e of\u003cbr\u003etheir much respected guest.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1837\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1837_755525.txt-1321-24\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -150.90477677137812, "y": 367.83570761040556}, {"color": "#984ea3", "date": "1835", "id": "fic_1835_5605.txt-2000-3", "label": "5", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eI would jest \u003cb\u003eland\u003c/b\u003e as many of us as could be spared, with\u003cbr\u003ecutlasses and boarding-pikes \" -- \" And pistols, \" interrupted\u003cbr\u003eanother. \"\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1835\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1835_5605.txt-2000-3\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -434.69190077502117, "y": -773.1939453159042}, {"color": "k", "date": "1857", "id": "nf_1857_753133.txt-293-50", "label": "-1", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eDacotah, 12 201 Richmond, 6 207 Monteville, 5 212 Homer, 10 222\u003cbr\u003eWinona, 7 229 Fountain City, 12 241 Mount Vernon, 14 255 Minneiska, 4\u003cbr\u003e259 Alma, 15 274 Wabashaw, 10 284 Nelson\u0027s Landing, 3 287 Reed\u0027s\u003cbr\u003e\u003cb\u003eLanding\u003c/b\u003e, 2 289 Foot of Lake Pepin, 2 291 North Pepin, 6 297\u003cbr\u003eJohnstown, 2 299 Lake City, 5 304 Central Point, 2 306 Florence, 3 309\u003cbr\u003eMaiden Rock, 3 312 Westerville, 3 315 Wacouta, 12 327 Red Wing, 6 333\u003cbr\u003eThing\u0027s Landing, 7 340 Diamond bluff, 8 348 Prescott, 13 361 Point\u003cbr\u003eDouglass, 1 362 Hastings, 3 365 Grey Cloud, 12 377 Pine Bend, 4 381\u003cbr\u003eRed Rock, 8 389 Kaposia, 3 392 St. Paul, 5 397 The scenery on the\u003cbr\u003eupper Mississippi is reputed to be beautiful.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1857\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1857_753133.txt-293-50\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -2000.0, "y": -250.46603787962397}, {"color": "#a65628", "date": "1851", "id": "fic_1851_746.txt-7144-8", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eBut though the green palmy cliffs of the \u003cb\u003eland\u003c/b\u003e soon\u003cbr\u003eloomed on the starboard bow, and with delighted nostrils the fresh\u003cbr\u003ecinnamon was snuffed in the air, yet not a single jet was\u003cbr\u003edescried.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1851\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: fic_1851_746.txt-7144-8\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 361.20199674763853, "y": -157.29507349652573}, {"color": "#a65628", "date": "1847", "id": "mag_1847_555508.txt-403-11", "label": "4", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIn France and Switzerland, also, he who tills the \u003cb\u003eland\u003c/b\u003e\u003cbr\u003eis the owner of it, and, small though his property be, its product is\u003cbr\u003esufficient for his wants.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1847_555508.txt-403-11\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": 320.32685784379066, "y": -211.3352123402273}, {"color": "#4daf4a", "date": "1847", "id": "mag_1847_524602.txt-267-1", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eThe \u003cb\u003eland\u003c/b\u003e was hung in crape, and one convulsive sob shook\u003cbr\u003ethe heart of the nation.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1847\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: mag_1847_524602.txt-267-1\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -152.13750231223725, "y": 278.06653563402955}, {"color": "#4daf4a", "date": "1854", "id": "nf_1854_750816.txt-2319-35", "label": "2", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eAs soon as Londonderry had fallen, and it was universally\u003cbr\u003esupposed that the fall of Londonderry could not be long delayed, he\u003cbr\u003emight cross the sea with part of his forces, and \u003cb\u003eland\u003c/b\u003e in\u003cbr\u003eScotland, where his friends were supposed to be numerous.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1854_750816.txt-2319-35\u003cbr\u003etype: usage\u003cbr\u003epos: nn1_vv0@\u003c/p\u003e", "x": -180.98289102825996, "y": 171.54451621447168}, {"color": "#dede00", "date": "1854", "id": "nf_1854_750818.txt-312-22", "label": "8", "physics": false, "shape": "circle", "size": 10, "title": "\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003eIt was not held to be necessary that the Parliament should, as\u003cbr\u003ein our time, fix the amount of the \u003cb\u003eland\u003c/b\u003e force.\u003cspan style=\"color:#808080;\"\u003e\u003c/span\u003e\u003cp style=\"font-size:8px;\"\u003e\u003cbr\u003edate: 1854\u003cbr\u003egrouping: 1\u003cbr\u003eidentifier: nf_1854_750818.txt-312-22\u003cbr\u003etype: usage\u003cbr\u003epos: nn1\u003c/p\u003e", "x": -84.75859056861523, "y": -364.5820684777114}]);
+        edges = new vis.DataSet([{"color": "black", "from": "fic_1842_9749.txt-2070-15", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1859_9216.txt-3281-55", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-637-6", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "nf_1857_753133.txt-2537-89", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-637-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1828_8619.txt-136-46", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_755595.txt-102-5", "label": "-/-/-/-/-/-/-/-/-/-/-/4/-", "to": "nf_1837_755525.txt-1321-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1830_554083.txt-510-65", "label": "4/-/-/-/-/-/-/4/-/-/-/-/-", "to": "nf_1833_747716.txt-366-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7166.txt-602-12", "label": "3/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1843_7166.txt-602-12", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1853_9200.txt-1041-12", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-1758-14", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1859_506498.txt-193-24", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-1758-14", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1858_526597.txt-36-10", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_8328.txt-1758-14", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1859_556807.txt-8-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1829_751465.txt-3079-38", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1856_769137.txt-442-21", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1829_751465.txt-3079-38", "label": "-/-/-/4/-/-/-/-/-/-/-/-/-", "to": "mag_1859_556807.txt-8-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1847_555460.txt-176-1", "label": "4/-/-/-/-/4/-/4/3/4/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7040.txt-1434-17", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1849_583.txt-2550-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1836_7040.txt-1434-17", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "mag_1853_566282.txt-86-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1845_8969.txt-967-62", "label": "-/-/-/-/-/-/-/0/4/-/-/-/-", "to": "nf_1856_769137.txt-442-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1845_8969.txt-967-62", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "mag_1852_504526.txt-390-17", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7051.txt-2222-25", "label": "3/-/-/-/-/-/-/4/-/-/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 3.5, "width": 4}, {"color": "black", "from": "fic_1843_7051.txt-2222-25", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "fic_1855_2416.txt-1354-23", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7051.txt-2222-25", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "nf_1847_748116.txt-2453-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1836_7276.txt-1687-6", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1843_7208.txt-13087-29", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-821-23", "label": "-/-/-/-/-/3/-/0/-/-/-/-/-", "to": "nf_1856_769137.txt-442-21", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-821-23", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "mag_1853_566330.txt-36-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1836_748113.txt-821-23", "label": "-/-/-/-/3/-/-/-/-/-/-/-/-", "to": "mag_1851_566070.txt-107-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1853_566282.txt-86-11", "label": "-/-/-/-/-/4/-/0/-/-/-/-/-", "to": "nf_1856_769137.txt-442-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_7189.txt-5141-3", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1823_7248.txt-1618-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1850_7304.txt-5022-30", "label": "-/-/-/-/-/-/-/-/-/-/4/-/-", "to": "fic_1855_2416.txt-1354-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1850_7304.txt-5022-30", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "nf_1857_753133.txt-2537-89", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1852_504526.txt-390-17", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "fic_1848_7186.txt-1065-7", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1846_7121.txt-1072-9", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "nf_1856_769137.txt-442-21", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1854_505118.txt-532-20", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1854_70.txt-1141-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_8106.txt-268-59", "label": "-/-/-/-/-/-/-/-/-/4/-/-/-", "to": "fic_1843_7325.txt-534-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_8106.txt-268-59", "label": "-/-/-/-/-/-/-/-/-/3/-/-/-", "to": "mag_1855_566598.txt-331-135", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_8106.txt-268-59", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "fic_1849_583.txt-2550-8", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_8106.txt-268-59", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "mag_1851_566070.txt-107-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1851_566070.txt-107-10", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1855_566598.txt-331-135", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1851_566070.txt-107-10", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1847_748116.txt-2453-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1859_9216.txt-3281-55", "label": "-/-/-/-/-/4/-/-/4/-/-/-/-", "to": "nf_1847_748116.txt-2453-2", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1859_9216.txt-3281-55", "label": "-/-/-/-/3/-/-/-/-/-/-/-/-", "to": "mag_1853_566330.txt-36-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1859_9216.txt-3281-55", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1852_752548.txt-3701-35", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1859_9216.txt-3281-55", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1840_586555.txt-112-48", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1859_9216.txt-3281-55", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1857_753133.txt-2426-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1856_590811.txt-254-15", "label": "4/-/-/-/-/4/-/-/-/-/-/-/-", "to": "mag_1827_553793.txt-53-70", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1846_7679.txt-205-6", "label": "3/-/-/-/-/-/-/4/-/2/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-13087-29", "label": "-/-/-/-/-/4/-/4/3/-/-/-/-", "to": "mag_1827_553793.txt-53-70", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7208.txt-13087-29", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "mag_1859_506498.txt-193-24", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1833_747716.txt-183-82", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1858_526597.txt-36-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1855_602.txt-4286-21", "label": "-/-/-/-/-/-/-/-/-/-/-/3/-", "to": "fic_1851_1253.txt-325-3", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1859_506498.txt-193-24", "label": "4/-/-/-/-/4/-/0/3/-/-/-/-", "to": "nf_1856_769137.txt-442-21", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1847_555508.txt-399-52", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "fic_1847_2913.txt-51-50", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1836_554422.txt-221-14", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1856_7889.txt-42-14", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1836_554422.txt-221-14", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1854_70.txt-1141-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1836_554422.txt-221-14", "label": "-/-/-/-/-/-/-/-/-/-/-/3/-", "to": "nf_1847_748116.txt-2453-2", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1836_554422.txt-221-14", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "fic_1860_9188.txt-5059-10", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1833_747581.txt-123-15", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1833_747716.txt-366-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1860_9072.txt-773-29", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1835_7064.txt-1327-9", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_769137.txt-442-21", "label": "-/-/-/-/-/1/-/-/4/4/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_769137.txt-442-21", "label": "-/-/-/-/-/4/-/-/3/-/-/-/-", "to": "fic_1843_7074.txt-1164-51", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1856_769137.txt-442-21", "label": "4/-/-/-/-/-/-/0/4/-/-/-/-", "to": "nf_1857_753133.txt-2537-89", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_769137.txt-442-21", "label": "4/-/-/-/-/1/-/0/4/-/-/-/-", "to": "mag_1827_553793.txt-53-70", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1856_769137.txt-442-21", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1848_565775.txt-204-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-2453-2", "label": "4/-/-/-/-/-/-/2/3/-/-/-/-", "to": "nf_1839_747610.txt-2459-90", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-2453-2", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1859_748098.txt-2590-54", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-2453-2", "label": "-/-/-/-/-/4/-/4/-/-/-/-/-", "to": "fic_1853_9142.txt-2635-5", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-2453-2", "label": "3/-/-/-/-/-/-/-/4/-/-/-/-", "to": "nf_1854_750816.txt-2319-35", "weight": 3.5, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-2453-2", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1855_2416.txt-1354-23", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1847_748116.txt-2453-2", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "fic_1835_7271.txt-3081-22", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1827_553793.txt-53-70", "label": "3/-/-/-/-/-/-/-/3/3/-/-/-", "to": "nf_1857_755095.txt-678-15", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1827_553793.txt-53-70", "label": "-/-/-/-/-/4/-/-/3/-/-/-/-", "to": "mag_1852_504229.txt-84-19", "weight": 3.5, "width": 4}, {"color": "black", "from": "mag_1827_553793.txt-53-70", "label": "-/-/-/-/-/3/-/-/-/-/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1827_553793.txt-53-70", "label": "4/-/-/-/-/3/3/-/-/-/-/-/-", "to": "fic_1844_7426.txt-470-9", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1844_7426.txt-470-9", "label": "4/-/-/-/-/4/-/2/-/-/-/-/-", "to": "fic_1835_7271.txt-3081-22", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_7426.txt-470-9", "label": "4/-/-/-/-/2/-/2/2/3/3/-/-", "to": "nf_1833_747716.txt-366-18", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1844_7426.txt-470-9", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "fic_1853_9200.txt-1041-12", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1844_7426.txt-470-9", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1844_7426.txt-470-9", "label": "-/-/-/3/-/-/-/-/-/-/-/-/-", "to": "nf_1833_747581.txt-1705-5", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1851_746.txt-7144-8", "label": "-/-/-/-/-/-/-/-/-/-/-/-/3", "to": "mag_1847_555508.txt-403-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1855_566598.txt-331-135", "label": "-/-/-/-/-/-/-/-/-/-/3/-/-", "to": "nf_1827_747582.txt-989-47", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1855_566598.txt-331-135", "label": "-/-/-/-/-/-/-/-/-/3/-/-/-", "to": "fic_1856_7889.txt-42-14", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1855_566598.txt-331-135", "label": "-/-/-/-/-/-/-/-/4/-/-/-/-", "to": "fic_1849_583.txt-2550-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_565135.txt-63-10", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1849_583.txt-2550-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1835_565135.txt-63-10", "label": "3/-/-/-/-/-/-/-/-/-/-/2/-", "to": "nf_1837_755525.txt-1321-24", "weight": 2.5, "width": 4}, {"color": "black", "from": "mag_1860_527181.txt-175-1", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "nf_1857_753133.txt-2426-11", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1860_527181.txt-175-1", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "mag_1847_555508.txt-403-11", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1860_527181.txt-175-1", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1834_564675.txt-90-32", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1856_7889.txt-42-14", "label": "-/-/-/-/-/4/-/-/-/-/-/-/-", "to": "fic_1843_7325.txt-534-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1856_7889.txt-42-14", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "nf_1827_747582.txt-989-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_9160.txt-1775-4", "label": "3/-/-/-/-/-/-/-/3/-/-/-/-", "to": "nf_1833_747716.txt-366-18", "weight": 3.0, "width": 4}, {"color": "black", "from": "mag_1853_555822.txt-470-44", "label": "4/-/-/-/-/4/-/4/4/-/-/-/-", "to": "nf_1833_747716.txt-366-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1835_7064.txt-1327-9", "label": "2/-/-/-/-/-/-/-/-/-/3/-/-", "to": "nf_1839_747610.txt-2459-90", "weight": 2.5, "width": 4}, {"color": "black", "from": "fic_1860_9817.txt-3296-9", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1855_2416.txt-1354-23", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1859_747504.txt-1183-2", "label": "4/-/-/-/-/4/-/-/4/-/-/-/-", "to": "nf_1833_747716.txt-366-18", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1833_747716.txt-366-18", "label": "-/-/-/-/-/-/-/-/3/-/-/-/-", "to": "mag_1847_524602.txt-267-1", "weight": 3.0, "width": 4}, {"color": "black", "from": "nf_1833_747716.txt-366-18", "label": "-/-/-/-/-/-/-/4/-/-/-/-/-", "to": "fic_1848_7186.txt-1065-7", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1857_753133.txt-2537-89", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "fic_1854_70.txt-1141-20", "weight": 4.0, "width": 4}, {"color": "black", "from": "mag_1847_524602.txt-267-1", "label": "-/-/0/-/-/-/-/-/-/-/-/-/3", "to": "nf_1854_750816.txt-2319-35", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1854_70.txt-1141-20", "label": "-/-/-/-/-/-/-/-/-/4/-/-/-", "to": "fic_1849_583.txt-2550-8", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1854_70.txt-1141-20", "label": "3/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1827_747582.txt-989-47", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1848_7186.txt-1065-7", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "mag_1859_556807.txt-8-0", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1823_7214.txt-1383-6", "label": "-/-/-/-/-/-/-/-/-/-/-/-/4", "to": "fic_1828_8619.txt-136-46", "weight": 4.0, "width": 4}, {"color": "black", "from": "fic_1843_7325.txt-534-23", "label": "4/-/-/-/-/-/-/-/-/-/-/-/-", "to": "nf_1827_747582.txt-989-47", "weight": 4.0, "width": 4}, {"color": "black", "from": "nf_1854_750816.txt-2319-35", "label": "-/-/4/-/-/-/-/-/-/-/-/-/2", "to": "nf_1837_755525.txt-1321-24", "weight": 3.0, "width": 4}, {"color": "black", "from": "fic_1853_9142.txt-2635-5", "label": "-/-/-/-/4/-/-/-/-/-/-/-/-", "to": "nf_1859_748098.txt-2590-54", "weight": 4.0, "width": 4}, {"color": "lightgray", "from": "mag_1851_504052.txt-6-14", "label": "-/-/-/2/-/-/-/-/-/-/-/-/-", "to": "nf_1854_750818.txt-312-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1856_755595.txt-102-5", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1843_8106.txt-268-59", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1856_755595.txt-102-5", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "mag_1827_553793.txt-53-70", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1856_755595.txt-102-5", "label": "2/-/-/-/-/-/-/-/-/-/1/-/-", "to": "nf_1829_751465.txt-3079-38", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "nf_1856_755595.txt-102-5", "label": "1/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1830_554083.txt-510-65", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1856_755595.txt-102-5", "label": "-/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1847_555508.txt-403-11", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "nf_1856_755595.txt-102-5", "label": "-/-/-/2/-/-/-/-/-/-/-/-/-", "to": "mag_1829_553961.txt-432-38", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1829_751465.txt-3079-38", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "nf_1854_750816.txt-2319-35", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1829_751465.txt-3079-38", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1822_553415.txt-22-1", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1836_7040.txt-1434-17", "label": "-/-/-/1/-/-/-/-/-/-/-/-/-", "to": "fic_1835_5605.txt-2000-3", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1845_8969.txt-967-62", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "mag_1853_566282.txt-86-11", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1853_566282.txt-86-11", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "fic_1835_7271.txt-3081-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_8106.txt-268-59", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "mag_1822_553415.txt-22-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1835_5605.txt-2000-3", "label": "-/-/-/-/-/-/-/-/2/-/-/-/-", "to": "nf_1847_748116.txt-2453-2", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1859_9216.txt-3281-55", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "nf_1839_747610.txt-2459-90", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1830_554083.txt-544-29", "label": "-/-/-/-/-/-/-/-/-/-/-/1/-", "to": "mag_1822_553415.txt-22-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "fic_1846_7679.txt-205-6", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "nf_1854_750818.txt-312-22", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1843_7208.txt-13087-29", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "mag_1853_555822.txt-470-44", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1822_553415.txt-22-1", "label": "-/-/-/-/-/1/-/-/-/2/-/-/-", "to": "mag_1855_566598.txt-331-135", "weight": 1.5, "width": 2}, {"color": "lightgray", "from": "mag_1822_553415.txt-22-1", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1849_583.txt-2550-8", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1822_553415.txt-22-1", "label": "-/-/-/-/-/-/-/-/-/2/-/-/-", "to": "fic_1856_7889.txt-42-14", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1822_553415.txt-22-1", "label": "-/-/-/-/-/1/-/-/-/-/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1822_553415.txt-22-1", "label": "2/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1835_565135.txt-63-10", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1822_553415.txt-22-1", "label": "-/-/-/2/-/-/-/-/-/-/-/-/-", "to": "mag_1847_524570.txt-44-6", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1823_7248.txt-1618-5", "label": "-/-/-/-/-/-/-/-/-/-/-/-/2", "to": "nf_1847_748116.txt-2453-2", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1827_553793.txt-53-70", "label": "-/-/-/-/-/-/-/1/-/-/-/-/-", "to": "nf_1837_755525.txt-1321-24", "weight": 1.0, "width": 2}, {"color": "lightgray", "from": "mag_1827_553793.txt-53-70", "label": "-/-/-/-/-/-/-/2/-/-/-/-/-", "to": "fic_1849_583.txt-2550-8", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "mag_1855_566598.txt-331-135", "label": "-/-/-/2/-/-/-/-/-/-/-/-/-", "to": "fic_1853_9200.txt-1041-12", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1854_9160.txt-1775-4", "label": "-/-/-/-/2/-/-/-/-/-/-/-/-", "to": "mag_1852_504229.txt-84-19", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "nf_1837_755525.txt-1321-24", "label": "-/-/-/2/-/-/-/-/-/-/-/-/-", "to": "fic_1843_7074.txt-1164-51", "weight": 2.0, "width": 2}, {"color": "lightgray", "from": "fic_1842_9749.txt-2070-15", "label": "-/-/-/-/0/-/-/-/-/-/-/-/-", "to": "mag_1822_553415.txt-22-1", "weight": NaN, "width": 1.0}, {"color": "lightgray", "from": "nf_1857_753133.txt-293-50", "label": "0/-/-/-/-/-/-/-/-/-/-/-/-", "to": "mag_1860_527181.txt-175-1", "weight": NaN, "width": 1.0}]);
+
+        // adding nodes and edges to the graph
+        data = { nodes: nodes, edges: edges };
+
+        var options = {
+    "configure": {
+        "enabled": true,
+        "filter": [
+            "nodes",
+            "edges"
+        ]
+    },
+    "edges": {
+        "color": {
+            "inherit": false
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": false,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+        
+
+        
+        // if this network requires displaying the configure window,
+        // put it in its div
+        options.configure["container"] = document.getElementById("config");
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+        drawGraph();
+
+
+        let nodesInTimePeriod = new Set();
+        let edgesInTimePeriod = new Set();
+        let edgesBelowWeight = new Set();
+        let nodesInGrouping = new Set();
+        let edgesInGrouping = new Set();
+        let edgesToBeShown = new Set();
+        let nodesToBeShown = new Set();
+
+        edges.forEach(function (edge) {
+            edgesBelowWeight.add(edge.id);
+            edgesInGrouping.add(edge.id);
+            edgesInTimePeriod.add(edge.id);
+            edgesToBeShown.add(edge.id);
+        })
+
+        nodes.forEach(function (node) {
+            nodesInTimePeriod.add(node.id);
+            nodesInGrouping.add(node.id);
+            nodesToBeShown.add(node.id);
+        })
+
+
+        function showEdges() {
+            edgesToBeShown.forEach(function (edge) {
+                edge.hidden = false;
+                edges.update(edge);
+            })
+        }
+
+        //Missing the loading icon
+        //slider code from pyvis filter example
+        // Handler event when slider changes
+
+        let slider = document.getElementById('slider');
+        let sliderMin = document.getElementById('slider-min');
+        let sliderDisplay = document.getElementById('sliderValueDisplay');
+        let sliderMinDisplay = document.getElementById('sliderValueDisplayMin');
+
+        sliderDisplay.innerHTML = "4";
+        sliderMinDisplay.innerHTML = "1";
+
+        function weightFilter() {
+            console.log("weight filter got called");
+            // Get the value of the slider
+            let sliderValue = slider.value;
+            let sliderMinValue = sliderMin.value;
+
+            // Display the selected value next to slider
+            sliderDisplay.innerHTML = sliderValue;
+            sliderMinDisplay.innerHTML = sliderMinValue;
+
+            // Loop through the edges
+            edges.forEach(function (edge) {
+                // Check if the edge should be displayed based on its weight
+                if (edge.weight <= sliderValue && edge.weight >= sliderMinValue) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        edgesBelowWeight.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    }
+                    // Edge should be displayed
+                    // Unhide edge if it's hidden and update DataSet
+
+                } else if (isNaN(edge.weight)) {
+                    //console.log("its NaN")
+                } else {
+
+                    // Edge should not be displayed
+                    // Hide edge if not already hidden and update DataSet
+                    if (!edge.hidden) {
+                        edgesBelowWeight.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                }
+            });
+
+
+            calcMean();
+        }
+
+
+
+        //code for node date filter
+        let dates = [];
+        nodes.forEach(function (node) {
+            date = node.date;
+            if (!dates.includes(date)) {
+                dates.push(date);
+            }
+        });
+        dates.sort();
+
+
+        //code for date slider
+        let minDate = 10000;
+        let maxDate = 0;
+
+        let minPicker = document.getElementById('minPicker');
+        let maxPicker = document.getElementById('maxPicker');
+
+        if (!minPicker.hasChildNodes()) {
+            dates.forEach(function (date) {
+                if (Number(date) < minDate) {
+                    minDate = Number(date);
+                }
+                if (Number(date) > maxDate) {
+                    maxDate = Number(date);
+                }
+
+
+                let option = document.createElement('option');
+                option.text = date;
+                option.value = date;
+
+                let option2 = document.createElement('option');
+                option2.text = date;
+                option2.value = date;
+
+                minPicker.append(option);
+                maxPicker.append(option2);
+
+            })
+        } else {
+            minDate = Number(dates[0]);
+            maxDate = Number(dates[dates.length-1]);
+        }
+        maxPicker.selectedIndex = dates.length - 1;
+
+
+
+        function showSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'visible';
+                resolve();
+            });
+        }
+
+        function hideSelectLoad() {
+            return new Promise(function (resolve) {
+                loadingIcon.style.visibility = 'hidden';
+                resolve();
+            });
+        }
+
+
+
+        const loadingIcon = document.querySelector('.loading-icon');
+        const select = document.querySelector('.select-load');
+
+        select.addEventListener('change', function () {
+            showSelectLoad();
+            setTimeout(selectGroup, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        //const slider_load = document.querySelector('.slider-load');
+
+         slider.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+         sliderMin.addEventListener('change', function() {
+            showSelectLoad();
+            setTimeout(weightFilter,1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+
+        });
+
+        let groupPicker = document.getElementById('groupPicker');
+        groupPicker.selectedIndex = 0;
+        let minValue = minPicker.value;
+        let maxValue = maxPicker.value;
+
+        function selectGroup() {
+            return new Promise(function (resolve, reject) {
+                let selectValue = document.getElementById('groupPicker').value;
+
+                console.log("grouping value: " + selectValue);
+
+                if (selectValue == 1) {
+                    nodes.forEach(function (node) {
+
+
+                        if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else if (selectValue == 2) {
+                    nodes.forEach(function (node) {
+                        if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                } else {
+                    nodes.forEach(function (node) {
+                        if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                            node.hidden = false;
+                            nodes.update(node);
+                        } else {
+                            node.hidden = true;
+                            nodes.update(node);
+                        }
+                    })
+                }
+                loadingIcon.style.visibility = 'hidden';
+
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        if (showNaNEdges && !nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+
+                            edge.hidden = false;
+                            edges.update(edge);
+                        } else {
+                            edge.hidden = true;
+                            edge.hidden = true;
+                            edges.update(edge);
+                        }
+                    } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && !isNaN(edge.weight)) {
+                        edgesInGrouping.add(edge.id);
+                        edge.hidden = false;
+                        edges.update(edge);
+                    } else {
+                        edgesInGrouping.delete(edge.id);
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+
+
+                })
+                loadingIcon.style.visibility = 'hidden';
+                calcMean();
+                updateClusterDistribution();
+                resolve();
+            });
+
+        }
+
+        function dateFilter() {
+            showSelectLoad();
+            setTimeout(pickDates, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function pickDates() {
+            loadingIcon.style.visibility = 'visible';
+
+            let selectValue = document.getElementById('groupPicker').value;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            //console.log("showing dates between " + minValue + " and " + maxValue);
+
+            if (selectValue == 1) {
+                nodes.forEach(function (node) {
+
+
+                    if (node.title.includes("grouping: 1") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else if (selectValue == 2) {
+                nodes.forEach(function (node) {
+                    if (node.title.includes("grouping: 2") && Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            } else {
+                nodes.forEach(function (node) {
+                    if (Number(node.date) >= Number(minValue) && Number(node.date) <= Number(maxValue) && (Number(node.label) !== -1 || (Number(node.label) == -1 && showNoiseLabels))) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    } else {
+                        node.hidden = true;
+                        nodes.update(node);
+                    }
+                })
+            }
+
+            edges.forEach(function (edge) {
+
+
+                if (isNaN(edge.weight) && !showNaNEdges) {
+
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && isNaN(edge.weight)){
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden && edge.weight >= sliderMin.value && edge.weight <= slider.value) {
+                    edgesInTimePeriod.add(edge.id);
+                    edge.hidden = false;
+                    edges.update(edge);
+                } else {
+                    edgesInTimePeriod.delete(edge.id);
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+            })
+            loadingIcon.style.visibility = 'hidden'
+
+
+            calcMean();
+            updateClusterDistribution();
+
+        }
+
+        let showNaNEdges = true;
+
+        function filterNaN() {
+            showSelectLoad();
+            setTimeout(selectNaN, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+
+        };
+
+        const checkboxNaN = document.getElementById("checkboxNaN");
+
+        function selectNaN() {
+            if (checkboxNaN.checked) {
+
+                showNaNEdges = true;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = false;
+                        edges.update(edge);
+                        pickDates();
+                    }
+                });
+            } else {
+                showNaNEdges = false;
+                edges.forEach(function (edge) {
+                    if (isNaN(edge.weight)) {
+                        edge.hidden = true;
+                        edges.update(edge);
+                    }
+                });
+            }
+
+
+        }
+
+
+        const checkboxNoiseLabels = document.getElementById("checkboxNoiseLabels");
+
+        document.getElementById("checkboxNaN").checked = true;
+        document.getElementById("checkboxNoiseLabels").checked = true;
+
+        let showNoiseLabels = true;
+
+        function filterNoiseLabels() {
+            showSelectLoad();
+            setTimeout(selectNoiseLabels, 1000);
+
+
+            setTimeout(hideSelectLoad, 1000);
+        }
+
+        function selectNoiseLabels() {
+            if (checkboxNoiseLabels.checked) {
+
+                showNoiseLabels = true;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+                        node.hidden = false;
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (!nodes.get(edge.to).hidden && !nodes.get(edge.from).hidden) {
+                        if (isNaN(edge.weight) && !showNaNEdges) {
+                            edge.hidden = true;
+                            edges.update(edge);
+
+                        } else {
+                            edge.hidden = false;
+                            edges.update(edge);
+                        }
+                    }
+                })
+
+            } else {
+
+                showNoiseLabels = false;
+
+                nodes.forEach(function (node) {
+                    if (Number(node.label) == -1) {
+
+                        node.hidden = true;
+
+                        nodes.update(node);
+                    }
+                })
+
+                edges.forEach(function (edge) {
+                    if (nodes.get(edge.to).hidden || nodes.get(edge.from).hidden || (isNaN(edge.weight) && !showNaNEdges)) {
+
+                        edge.hidden = true;
+                        edges.update(edge);
+
+                    }
+                })
+
+            }
+            updateClusterDistribution();
+        }
+
+
+        let fillMean = document.getElementById("fillMean");
+        let fillSD = document.getElementById("fillSD");
+
+
+        function calcMean() {
+            let edgeValues = [];
+            edges.forEach(function (edge) {
+                if (!edge.hidden) {
+                    let label = parseFloat(edge.weight);
+                    if (!isNaN(label)) {
+                        edgeValues.push(label);
+                    }
+                }
+            })
+
+            let mean = edgeValues.reduce((a, b) => a + b, 0) / edgeValues.length;
+            let sd = dev(edgeValues, mean);
+            if (isNaN(mean)) {
+                mean = 0;
+            }
+            if (isNaN(sd)) {
+                sd = 0;
+            }
+            mean = mean.toFixed(5);
+            sd = sd.toFixed(5);
+
+            fillMean.innerHTML = "Edge weight mean: ";
+            fillSD.innerHTML = "Edge weight standard deviation: "
+
+            fillMean.append(mean);
+            fillSD.append(sd);
+
+        }
+
+
+        // Javascript program to calculate the standard deviation of an array
+
+        function dev(arr, mean) {
+
+            // Assigning (value - mean) ^ 2 to every array item
+            arr = arr.map((k) => {
+                return (k - mean) ** 2
+            })
+
+
+            // Calculating the sum of updated array
+            let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+
+            // Returning the standard deviation
+            return Math.sqrt(sum / arr.length)
+        }
+
+        calcMean();
+
+
+        let heading = document.getElementById("heading").innerHTML;
+        let onlyLemma = heading.replace(/ .*/, '');
+
+        //NEW
+
+        // set up flag variables to track which scripts have been loaded successfully
+        let statsLoaded = false;
+        let statsGroupingsLoaded = false;
+        let statsAgreementLoaded = false;
+        let statsPlottingLoaded = false;
+        let statsDataJointLoaded = false;
+
+        let filteredStats = [];
+        let filteredStatsGroupings = [];
+        let filteredStatsAgreement = [];
+        let filteredStatsPlotting = [];
+        let filteredStatsDataJoint = [];
+
+        let clusteringMethod;
+        let cluster_freq_dist;
+        let cluster_prob_dist;
+        let noise_cluster_count;
+        let clusterInfo;
+        let statisticsDiv;
+        let nodePosition;
+
+
+        // create event listeners for each script to set the corresponding flag when loaded
+        document.addEventListener('statsLoaded', function () {
+            console.log('stats.js is fully loaded!');
+            statsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsGroupingsLoaded', function () {
+            console.log('stats_groupings.js is fully loaded!');
+            statsGroupingsLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsAgreementLoaded', function () {
+            console.log('stats_agreement.js is fully loaded!');
+            statsAgreementLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsPlottingLoaded', function () {
+            console.log('stats_plotting.js is fully loaded!');
+            statsPlottingLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        document.addEventListener('statsDataJointLoaded', function () {
+            console.log('data_joint.js is fully loaded!');
+            statsDataJointLoaded = true;
+            checkAllScriptsLoaded();
+        });
+
+        // load each script with the same function
+        function loadScript(scriptUrl, eventName) {
+            const script = document.createElement('script');
+            script.src = scriptUrl;
+            script.type = 'text/javascript';
+
+            script.addEventListener('load', function () {
+                console.log(scriptUrl + ' loaded successfully');
+                document.dispatchEvent(new Event(eventName));
+            });
+
+            script.addEventListener('error', function () {
+                console.log('Failed to load ' + scriptUrl);
+                checkAllScriptsLoaded();
+            });
+
+            document.body.appendChild(script);
+        }
+
+        // call the loadScript function for each script you want to load
+        loadScript('../stats.js', 'statsLoaded');
+        loadScript('../stats_groupings.js', 'statsGroupingsLoaded');
+        loadScript('../stats_agreement.js', 'statsAgreementLoaded');
+        loadScript('../stats_plotting.js', 'statsPlottingLoaded');
+        loadScript('../data_joint.js', 'statsDataJointLoaded');
+
+        // check if all scripts have been loaded, and execute the code that depends on them if they have
+        function checkAllScriptsLoaded() {
+
+            if (statsLoaded) {
+                try {
+                    filteredStats = stats.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats not found');
+                }
+
+                try {
+                    generateTable(filteredStats, "stats");
+                } catch (err) {
+                    console.log('problem generating table with stats');
+                }
+
+                try {
+                    clusteringMethod = filteredStats[0].algorithm;
+                } catch (err) {
+                    console.log('filteredStats[0] not found');
+                }
+
+
+
+            }
+
+            if (statsGroupingsLoaded) {
+                try {
+                    filteredStatsGroupings = stats_groupings.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_groupings not found');
+                }
+
+                try {
+                    generateTable(filteredStatsGroupings, "statsGroupings");
+                } catch (err) {
+                    console.log('problem generating table with stats_groupings');
+                }
+
+                cluster_freq_dist = filteredStatsGroupings[0].cluster_freq_dist;
+                cluster_prob_dist = filteredStatsGroupings[0].cluster_prob_dist;
+            }
+
+            if (statsAgreementLoaded) {
+                try {
+                    filteredStatsAgreement = stats_agreement.filter(row => row.data === onlyLemma);
+                } catch (err) {
+                    console.log('stats_agreement not found');
+                }
+
+                try {
+                    generateTable(filteredStatsAgreement, "statsAgreement");
+                } catch (err) {
+                    console.log('problem generating table with stats_agreement');
+                }
+
+
+            }
+
+            if (statsPlottingLoaded) {
+                try {
+                    filteredStatsPlotting = stats_plotting.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_plotting not found');
+                }
+
+                try {
+                    generateTable(filteredStatsPlotting, "statsPlotting");
+                } catch (err) {
+                    console.log('problem generating table with stats_plotting');
+                }
+
+                nodePosition = filteredStatsPlotting[0].node_position;
+            }
+
+            if (statsDataJointLoaded) {
+                try {
+                    filteredStatsDataJoint = data_joint.filter(row => row.lemma === onlyLemma);
+                } catch (err) {
+                    console.log('stats_data_joint not found');
+                }
+
+                try {
+                    generateDetails(filteredStatsDataJoint, "statsDataJoint");
+                } catch (err) {
+                    console.log('problem generating table with statsDataJoint');
+                }
+
+                if(!annotatorsContainer.hasChildNodes()){
+                    fillAnnotatorsContainer(filteredStatsDataJoint);
+                }
+            }
+
+            noise_cluster_count = 0;
+            nodes.forEach(function (node) {
+                if (Number(node.label) == -1) {
+                    noise_cluster_count += 1;
+                }
+            });
+
+            clusterInfo = document.getElementById("clusterInfo");
+            statisticsDiv = document.getElementById("statistics");
+
+            clusterInfo.innerHTML = `
+            <p>Node position: ${nodePosition}</p>
+            <p>Clustering method: ${clusteringMethod}</p>`;
+
+            statisticsDiv.innerHTML = `
+            <p id="clusterFreqDist">Cluster frequency distribution: ${cluster_freq_dist}</p>
+            <p id="clusterProbDist">Cluster probability distribution: ${cluster_prob_dist}</p>
+            <p id="noiseClusterCount">Noise Cluster: [${noise_cluster_count}]</p>`;
+
+        }
+
+
+        function generateTable(jsonData, id) {
+            if (!jsonData || jsonData.length === 0) {
+                console.error(`Error: Invalid JSON data in generateTable function for id '${id}'`);
+                return;
+            }
+
+            let div = document.createElement('div');
+
+
+            let keys = Object.keys(jsonData[0]);
+            keys.forEach(function (key) {
+                let details = document.createElement('details');
+                details.classList.add('shifted');
+                let summary = document.createElement('summary');
+                summary.innerText = key;
+                details.appendChild(summary);
+                let content = document.createElement('div');
+                content.innerText = jsonData[0][key];
+                details.appendChild(content);
+                div.appendChild(details);
+
+            })
+
+            document.getElementById(id).append(div);
+        }
+
+        function generateDetails(jsonData, id) {
+            let div = document.createElement('div');
+
+            for (let i = 0; i < jsonData.length; i++) {
+                let surroundingDetails = document.createElement('details');
+                surroundingDetails.classList.add('shifted');
+                let surroundingSummary = document.createElement('summary');
+                surroundingSummary.innerText = i.toString();
+                surroundingDetails.appendChild(surroundingSummary);
+                div.appendChild(surroundingDetails);
+                let keys = Object.keys(jsonData[i]);
+                keys.forEach(function (key) {
+                    let details = document.createElement('details');
+                    details.classList.add('shifted');
+                    let summary = document.createElement('summary');
+                    summary.innerText = key;
+                    details.appendChild(summary);
+                    let content = document.createElement('div');
+                    content.innerText = jsonData[i][key];
+                    details.appendChild(content);
+                    surroundingDetails.appendChild(details);
+
+                })
+            }
+
+            document.getElementById(id).append(div);
+        }
+
+
+
+
+        function updateClusterDistribution() {
+            let clusterFreqDist = [];
+            let clusterProbDist = [];
+            let noiseClusterCount = 0;
+            let temp = [];
+            let numberOfNodes = 0;
+
+            nodes.forEach(function (node) {
+                if (!node.hidden) {
+                    temp.push(Number(node.label));
+                }
+
+
+            })
+
+            temp.sort();
+
+            let biggestLabel = temp[temp.length - 1];
+
+            for (let i = 0; i <= biggestLabel; i++) {
+                clusterFreqDist.push(0);
+                clusterProbDist.push(0);
+            }
+
+            temp.forEach(function (item) {
+                if (!(item == -1)) {
+                    numberOfNodes += 1;
+                    clusterFreqDist[item] += 1;
+                } else {
+                    noiseClusterCount += 1;
+                }
+            })
+
+            for (let j = 0; j < clusterFreqDist.length; j++) {
+                if (clusterFreqDist[j] > 0) {
+
+                    clusterProbDist[j] = (clusterFreqDist[j] / numberOfNodes);
+
+                    let parts = clusterProbDist[j].toString().split('.');
+
+                    // Check the length of the decimal part
+                    if (parts[1] && parts[1].length > 5) {
+                        // Round the value to 5 decimal places if the decimal part is longer than 5 digits
+                        clusterProbDist[j] = clusterProbDist[j].toFixed(5);
+                    }
+                }
+            }
+
+            document.getElementById("clusterFreqDist").innerHTML = "Cluster frequency distribution: [" + clusterFreqDist.toString() + "]";
+            document.getElementById("clusterProbDist").innerHTML = "Cluster probability distribution: [" + clusterProbDist.toString() + "]";
+            document.getElementById("noiseClusterCount").innerHTML = "Noise cluster: [" + noiseClusterCount.toString() + "]";
+        }
+
+
+        let annotatorsContainer = document.getElementById("annotatorsContainer");
+        let annotators = [];
+
+        function fillAnnotatorsContainer(jsonData) {
+            let div = document.createElement('div');
+            let h4 = document.createElement('h4');
+            h4.innerHTML = "Annotator filter (resets all other filters): ";
+            div.appendChild(h4);
+
+            for (let i = 0; i < jsonData.length; i++) {
+
+                let annotator = jsonData[i]["annotator"]
+                if (!annotators.includes(annotator)) {
+                    annotators.push(annotator);
+                }
+            }
+
+            annotators.sort();
+
+            for (let j = 0; j < annotators.length; j++) {
+                let label = document.createElement('label');
+                label.innerHTML = annotators[j];
+                label.for = annotators[j];
+                let checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.checked = true;
+                checkbox.id = annotators[j];
+                div.appendChild(label);
+                div.appendChild(checkbox);
+            }
+
+            let button = document.createElement('button');
+            button.innerHTML = "Show graph";
+            button.onclick = annotatorsFilter;
+            div.appendChild(button);
+            let br = document.createElement('br')
+            let br2 = document.createElement('br')
+            div.appendChild(br);
+            div.appendChild(br2);
+
+            annotatorsContainer.append(div);
+        }
+
+
+
+        function annotatorsFilter() {
+            showSelectLoad();
+            setTimeout(calculateSubGraph, 1000);
+
+
+            setTimeout(hideSelectLoad, 2000);
+
+
+        }
+
+        function calculateSubGraph() {
+            loadingIcon.style.visibility = 'visible';
+            let onlyCheckedAnnotators = [];
+            for (let i = 0; i < annotators.length; i++) {
+                let checkAnnotator = document.getElementById(annotators[i]);
+                if (checkAnnotator.checked) {
+                    onlyCheckedAnnotators.push(annotators[i]);
+                }
+            }
+
+
+            let filteredForAnnotators = filteredStatsDataJoint.filter(row => onlyCheckedAnnotators.includes(row.annotator));
+
+
+            groupPicker.selectedIndex = 0;
+            sliderMin.value = 1;
+            slider.value = 4;
+            sliderDisplay.innerHTML = "4";
+            sliderMinDisplay.innerHTML = "1";
+            checkboxNoiseLabels.checked = true;
+            checkboxNaN.checked = true;
+            maxPicker.selectedIndex = dates.length - 1;
+            minPicker.selectedIndex = 0;
+            minValue = minPicker.value;
+            maxValue = maxPicker.value;
+
+            nodes.forEach(function (node){
+                if(node.hidden){
+                    node.hidden = false;
+                    nodes.update(node);
+                }
+            })
+
+            /*edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+
+                let edgeAnnotations = [];
+
+                for (let k = 0; k < filteredForAnnotators.length; k++) {
+                    let item = filteredForAnnotators[k];
+                    let identifier1 = item.identifier1;
+                    let identifier2 = item.identifier2;
+                    let weight = Number(item.judgment);
+
+                    if((identifier1 == to_id && identifier2 == from_id) || (identifier1 == from_id && identifier2 == to_id)){
+
+                        if(0 < weight < 5){
+                            //console.log("there is a corresponding annotation thats not NaN");
+                            edgeAnnotations.push(weight);
+                        }
+                    }
+                }
+
+                if (edgeAnnotations.length !== 0){
+                let median;
+                let filteredArray = edgeAnnotations;
+                filteredArray.sort((a, b) => a - b);
+                let middle = Math.floor(filteredArray.length / 2);
+                if (filteredArray.length % 2 === 0) {
+                    median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                } else {
+                    median = filteredArray[middle];
+                }
+
+                    console.log("the median for this edge is: " + median);
+
+                    if (median == 0){
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                    edges.update(edge);
+
+                    } else {
+                    edge.hidden = true;
+                    edges.update(edge);
+                }
+
+
+
+
+
+
+
+            })
+            */
+
+
+            // Create a map to store the filteredForAnnotators array
+            let annotationsMap = new Map();
+            filteredForAnnotators.forEach(function (item) {
+                let identifier1 = item.identifier1;
+                let identifier2 = item.identifier2;
+                let weight = Number(item.judgment);
+                if (weight >= 0 && weight < 5) {
+                    // Only store annotations with weight between 0 and 5
+                    let key = [identifier1, identifier2].sort().join('-');
+                    let annotations = annotationsMap.get(key) || [];
+                    annotations.push(weight);
+                    annotationsMap.set(key, annotations);
+                }
+            });
+
+            // Iterate over the edges and get the annotations from the map
+            edges.forEach(function (edge) {
+                let to = nodes.get(edge.to);
+                let to_id = to.id;
+                let from = nodes.get(edge.from);
+                let from_id = from.id;
+                let key = [to_id, from_id].sort().join('-');
+                let edgeAnnotations = annotationsMap.get(key) || [];
+
+
+                    //console.log("edge annos: " + edgeAnnotations);
+
+                if (edgeAnnotations.length !== 0) {
+                    let median;
+                    let filteredArray = edgeAnnotations.filter(a => a > 0);
+                    filteredArray.sort((a, b) => a - b);
+
+                    if (filteredArray.length === 0) {
+                        median = 0;
+                    } else {
+                        let middle = Math.floor(filteredArray.length / 2);
+                        if (filteredArray.length % 2 === 0) {
+                            median = (filteredArray[middle - 1] + filteredArray[middle]) / 2;
+                        } else {
+                            median = filteredArray[middle];
+                        }
+                    }
+
+
+                    //console.log("the median for this edge is: " + median);
+
+                    if (median == 0) {
+                        median = NaN;
+                    }
+
+                    edge.hidden = false;
+                    edge.weight = median;
+                    edge.label = edge.weight;
+
+                } else {
+                    edge.hidden = true;
+                }
+
+                edges.update(edge);
+            });
+
+
+
+            loadingIcon.style.visibility = 'hidden';
+
+            calcMean();
+            updateClusterDistribution();
+        }
+
+
+        sliderMin.value = 1;
+        slider.value = 4;
+
+
+    </script>
+</body>
+
+</html>
