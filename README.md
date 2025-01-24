@@ -10,6 +10,12 @@ This repository provides a tool to visualize annotations of non-aggregated datas
 Additional:
 - Connect Dataset entity to metadata from ZENO
 - CLI for visualizations
+- function call mit category=uses["category"] für bessere Lesbarkeit
+- nicht gebrauchte imports löschen
+- Dateien in Ordnern organisieren
+- andere Sprachen
+- color coding für visualisierungen
+- variations query: wichtige daten hinzufügen
 
 ## Installation
 git clone --recurse-submodules

@@ -1,6 +1,11 @@
 from rdflib import Graph, Literal, RDF, URIRef, BNode
 from rdflib.namespace import FOAF , XSD, SDO, Namespace, RDFS
-#@prefix nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> .
+import csv
+import re
+import os
+from explore_data import full
+from tqdm import tqdm
+
 NIF = Namespace("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#")
 HLV_Word = Namespace("https://hlv.org/word/")
 HLV_Sentence = Namespace("https://hlv.org/sentence/")
@@ -11,90 +16,131 @@ HLV = Namespace("http://hlv.org/")
 RDAI = Namespace("http://rdaregistry.info/Elements/i/")
 RDAIO = Namespace("http://rdaregistry.info/Elements/i/object/")
 RDAA = Namespace("http://rdaregistry.info/Elements/a/")
-# Create a Graph
-g = Graph(bind_namespaces="rdflib")
-# Prefixes
-g.bind("hlv", HLV)
-g.bind("nif", NIF)
-g.bind("rdai", RDAI)
-g.bind("rdaio", RDAIO)
-g.bind("rdaa", RDAA)
-g.bind("hlv_word", HLV_Word)
-g.bind("hlv_sentence", HLV_Sentence)
-g.bind("hlv_annotation", HLV_Annotation)
-g.bind("hlv_annotator", HLV_Annotator)
 
-# dataset node
-dwug_en = URIRef("dwug_en", base = HLV)
+def bind_namespaces(g):
+    # Prefixes
+    g.bind("hlv", HLV)
+    g.bind("nif", NIF)
+    g.bind("rdai", RDAI)
+    g.bind("rdaio", RDAIO)
+    g.bind("rdaa", RDAA)
+    g.bind("hlv_word", HLV_Word)
+    g.bind("hlv_sentence", HLV_Sentence)
+    g.bind("hlv_annotation", HLV_Annotation)
+    g.bind("hlv_annotator", HLV_Annotator)
 
-g.add((dwug_en, RDF.type, SDO.Dataset))
+def model_dataset(g, dataset_name):
+    # dataset node
+    dataset_uri = URIRef(dataset_name, base = HLV)
 
-attack_43_49 = URIRef("attack_43_49", base = HLV_Word)
-g.add((attack_43_49, RDF.type, NIF.Word))
-g.add((attack_43_49, NIF.sourceUrl, dwug_en))
-g.add((attack_43_49, RDFS.label, Literal("attack_43_49", datatype=XSD.string)))
-# from uses
-g.add((attack_43_49, NIF.anchorOf, Literal("attack", datatype=XSD.string)))
-g.add((attack_43_49, NIF.lemma, Literal("attack_nn", datatype=XSD.string)))
-g.add((attack_43_49, NIF.posTag, Literal("nn1", datatype=XSD.string)))
-g.add((attack_43_49, NIF.beginIndex, Literal("43", datatype=XSD.integer)))
-g.add((attack_43_49, NIF.endIndex, Literal("49", datatype=XSD.integer)))
+    g.add((dataset_uri, RDF.type, SDO.Dataset))
 
-sentence1 = URIRef("fic_1835_7016.txt-2023-9", base = HLV_Sentence)
-g.add((sentence1, RDF.type, NIF.Context))
-g.add((sentence1, RDF.type, SDO.Observation))
-g.add((sentence1, RDFS.label, Literal("fic_1835_7016.txt-2023-9", datatype=XSD.string)))
-g.add((sentence1, NIF.isString, Literal("As the stranger fell to the earth under an attack so impetuous and unexpected, he uttered an exclamation in which Juan recognized the language of Mexico.", lang="en")))
-g.add((sentence1, SDO.observationDate, Literal("1835", datatype=XSD.gYear)))
-g.add((sentence1, NIF.beginIndex, Literal("0", datatype=XSD.integer)))
-g.add((sentence1, NIF.endIndex, Literal("153", datatype=XSD.integer)))
+    return dataset_uri
 
-g.add((attack_43_49, NIF.referenceContext, sentence1))
+def model_words(g, dataset_uri, word, start_pos, end_pos, lemma, pos_tag, language):
+    word_uri = URIRef(f"{word}_{start_pos}_{end_pos}", base = HLV_Word)
+    g.add((word_uri, RDF.type, NIF.Word))
+    g.add((word_uri, NIF.sourceUrl, dataset_uri))
+    g.add((word_uri, RDFS.label, Literal(f"{word}_{start_pos}_{end_pos}", datatype=XSD.string)))
+    # from uses
+    g.add((word_uri, NIF.anchorOf, Literal(word, lang="en")))
+    g.add((word_uri, NIF.lemma, Literal(lemma, datatype=XSD.string)))
+    g.add((word_uri, NIF.posTag, Literal(pos_tag, datatype=XSD.string)))
+    g.add((word_uri, NIF.beginIndex, Literal(start_pos, datatype=XSD.integer)))
+    g.add((word_uri, NIF.endIndex, Literal(end_pos, datatype=XSD.integer)))
 
-attack_250_256 = URIRef("attack_250_256", base = HLV_Word)
-g.add((attack_250_256, RDF.type, NIF.Word))
-g.add((attack_250_256, NIF.sourceUrl, dwug_en))
-g.add((sentence1, RDFS.label, Literal("attack_250_256", datatype=XSD.string)))
+    return word_uri
 
-# from uses
-g.add((attack_250_256, NIF.anchorOf, Literal("attack", lang="en")))
-g.add((attack_250_256, NIF.lemma, Literal("attack_nn", datatype=XSD.string)))
-g.add((attack_250_256, NIF.posTag, Literal("nn1", datatype=XSD.string)))
-g.add((attack_250_256, NIF.beginIndex, Literal("250", datatype=XSD.integer)))
-g.add((attack_250_256, NIF.endIndex, Literal("256", datatype=XSD.integer)))
+def model_sentences(g, sentence_id, sentence, language, year, start_pos, end_pos, word_uri):
+    sentence_uri = URIRef(sentence_id, base = HLV_Sentence)
+    g.add((sentence_uri, RDF.type, NIF.Context))
+    g.add((sentence_uri, RDF.type, SDO.Observation))
+    g.add((sentence_uri, RDFS.label, Literal(sentence_id, datatype=XSD.string)))
+    g.add((sentence_uri, NIF.isString, Literal(sentence, lang=language)))
+    g.add((sentence_uri, SDO.observationDate, Literal(year, datatype=XSD.gYear)))
+    g.add((sentence_uri, NIF.beginIndex, Literal(start_pos, datatype=XSD.integer)))
+    g.add((sentence_uri, NIF.endIndex, Literal(end_pos, datatype=XSD.integer)))
 
-sentence2 = URIRef("mag_1834_554263.txt-306-48", base = HLV_Sentence)
-g.add((sentence2, RDF.type, NIF.Context))
-g.add((sentence2, RDF.type, SDO.Observation))
-g.add((sentence2, RDFS.label, Literal("mag_1834_554263.txt-306-48", datatype=XSD.string)))
-g.add((sentence2, NIF.isString, Literal("The great object with each party seemed to be to make the other begin the attack: the English would not do this, because they saw that their artillery was rapidly thinning the ranks of their enemies; and Charles was under the necessity of making the attack.", lang="en")))
-g.add((sentence2, SDO.observationDate, Literal("1834", datatype=XSD.gYear)))
-g.add((sentence2, NIF.beginIndex, Literal("0", datatype=XSD.integer)))
-g.add((sentence2, NIF.endIndex, Literal("257", datatype=XSD.integer)))
+    g.add((word_uri, NIF.referenceContext, sentence_uri))
 
-g.add((attack_250_256, NIF.referenceContext, sentence2))
+    return sentence_uri
 
-# judgements
-annotation1 = URIRef("1", base = HLV_Annotation)
-g.add((annotation1, RDF.type, NIF.Annotation))
-# Item
-g.add((annotation1, RDF.type, RDAI.P40080))
-g.add((annotation1, RDFS.label, Literal("attack_nn_43_49_250_256", datatype=XSD.string)))
+def model_annotation(g, idx, word1_uri, word2_uri, category, comment, language):
+    # judgements
+    annotation_uri = URIRef(idx, base = HLV_Annotation)
+    g.add((annotation_uri, RDF.type, NIF.Annotation))
+    # Item
+    g.add((annotation_uri, RDF.type, RDAI.P40080))
+    g.add((annotation_uri, RDFS.label, Literal(f"{g.value(word1_uri, NIF.lemma)}_{g.value(word1_uri, NIF.beginIndex)}_{g.value(word1_uri, NIF.endIndex)}_{g.value(word2_uri, NIF.beginIndex)}_{g.value(word2_uri, NIF.endIndex)}", datatype=XSD.string)))
 
-g.add((attack_43_49, NIF.annotation, annotation1))
-g.add((attack_250_256, NIF.annotation, annotation1))
-g.add((annotation1, NIF.category, Literal("0", datatype=XSD.integer)))
-# comment
-g.add((annotation1, RDAI.P40064, Literal("", lang="en")))
+    g.add((word1_uri, NIF.annotation, annotation_uri))
+    g.add((word2_uri, NIF.annotation, annotation_uri))
+    g.add((annotation_uri, NIF.category, Literal(category, datatype=XSD.integer)))
+    # comment
+    g.add((annotation_uri, RDAI.P40064, Literal(comment, lang=language)))
 
-annotator9 = URIRef("9", base=HLV_Annotator)
-# Agent
-g.add((annotator9, RDF.type, RDAA.P50157))
-g.add((annotator9, RDFS.label, Literal("annotator9", datatype=XSD.string)))
+    return annotation_uri
 
-# has annotator
-g.add((annotation1, RDAIO.P40015, annotator9))
+def model_annotator(g, annotator, annotation_uri):
+    annotator_uri = URIRef(re.search("\d+", annotator).group(), base=HLV_Annotator)
+    # Agent
+    g.add((annotator_uri, RDF.type, RDAA.P50157))
+    g.add((annotator_uri, RDFS.label, Literal(annotator, datatype=XSD.string)))
 
+    # has annotator
+    g.add((annotation_uri, RDAIO.P40015, annotator_uri))
+    return annotator_uri
+
+def read_csv(path):
+    csvfile = open(path)
+    reader = csv.DictReader(csvfile, delimiter='\t', quoting=csv.QUOTE_NONE,strict=True)
+    return csvfile, list(reader)
+
+def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_words = full, language="en"):
+    g = Graph(bind_namespaces="rdflib")
+    bind_namespaces(g)
+    dataset_uri = model_dataset(g, dataset_name)
+    annotation_idx = 1
+    # Iterate through single csv files
+    for annotated_word in tqdm(set(annotated_words).intersection(set(os.listdir(data_path))), desc="Processing data"):
+        judgment_file, judgment_dict = read_csv(f"{data_path}/{annotated_word}/judgments.csv")
+        uses_file, uses_dict = read_csv(f"{data_path}/{annotated_word}/uses.csv")
+        
+        for judgment_row in judgment_dict:
+            # first word
+            sentence1_id = judgment_row["identifier1"]
+            uses1_rows = [row for row in uses_dict if row["identifier"] == sentence1_id]
+            uses1_row = uses1_rows[0]
+            token1 = uses1_row["context_tokenized"].split(" ")[int(uses1_row["indexes_target_token_tokenized"])]
+            start1, end1 = uses1_row["indexes_target_token"].split(":")
+            start1_sent, end1_sent = uses1_row["indexes_target_sentence"].split(":")
+            word1_uri = model_words(g, dataset_uri, token1, start1, end1, annotated_word, uses1_row["pos"], language)
+            model_sentences(g, sentence1_id, uses1_row["context"], language, uses1_row["date"], start1_sent, end1_sent, word1_uri)
+            
+            # second word
+            sentence2_id = judgment_row["identifier2"]
+
+            uses2_rows = [row for row in uses_dict if row["identifier"] == sentence2_id]
+            uses2_row = uses2_rows[0]
+            token2 = uses2_row["context_tokenized"].split(" ")[int(uses2_row["indexes_target_token_tokenized"])]
+            start2, end2 = uses2_row["indexes_target_token"].split(":")
+            start2_sent, end2_sent = uses2_row["indexes_target_sentence"].split(":")
+            word2_uri = model_words(g, dataset_uri, token2, start2, end2, annotated_word, uses2_row["pos"], language)
+            model_sentences(g, sentence2_id, uses2_row["context"], language, uses2_row["date"], start2_sent, end2_sent, word2_uri)
+
+            # annotation
+            annotation_uri = model_annotation(g, str(annotation_idx), word1_uri, word2_uri, judgment_row["judgment"], judgment_row["comment"], language)
+            annotation_idx += 1
+            model_annotator(g, judgment_row["annotator"], annotation_uri)
+
+        judgment_file.close()
+        uses_file.close()
+        
+    # Print out the entire Graph in the RDF Turtle format
+    #g.serialize(destination = f"{dataset_name}.ttl", encoding="utf-8", format="turtle")
+
+    g.serialize(destination = f"{dataset_name}.ttl", encoding="utf-8", format="turtle")
+    return g
 
 # Iterate over triples in store and print them out.
 # print("--- printing raw triples ---")
@@ -106,6 +152,6 @@ g.add((annotation1, RDAIO.P40015, annotator9))
 # for person in g.subjects(RDF.type, FOAF.Person):
 #     for mbox in g.objects(person, FOAF.mbox):
 #         print(mbox)
-
-# Print out the entire Graph in the RDF Turtle format
-g.serialize(destination = "dwug_en.ttl", encoding="utf-8", format="turtle")
+if __name__ == "__main__":
+    # Create a Graph
+    g = create_kg()

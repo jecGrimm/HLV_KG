@@ -118,7 +118,6 @@ def create_pos_subgraph(g, pos):
     return g.query(pos_query)
 
 def create_pos_vis(g, pos_tags):
-    # TODO: position edge labels
     fig, axs = plt.subplots(len(pos_tags))
     fig.suptitle("POS-tag comparison over the whole dataset")
     

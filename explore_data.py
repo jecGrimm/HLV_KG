@@ -19,5 +19,6 @@ for element in stats:
     else:
         missing.append(element["lemma"])
 
-print(f"{len(full)} full annotations: {full}")
-print(f"{len(missing)} missing annotations: {missing}")
+if __name__ == "__main__":
+    print(f"{len(full)} full annotations: {full}")
+    print(f"{len(missing)} missing annotations: {missing}")

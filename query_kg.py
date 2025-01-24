@@ -96,8 +96,8 @@ if __name__ == "__main__":
     g = rdflib.Graph()
     g.parse("./dwug_en.ttl", format='turtle').serialize(format="turtle")
 
-    #annotated_sentences(g)
-    #num_labels(g)
-    #filter_variation(g, start = 1)
+    annotated_sentences(g)
+    num_labels(g)
+    filter_variation(g, start = 2)
     #filter_variation(g, start = 1, end = 3)
-    filter_variation(g, start = 3, end = 3)
+    filter_variation(g, start = 1, end=1)
