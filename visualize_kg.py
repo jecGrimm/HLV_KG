@@ -80,6 +80,87 @@ def inspect_instance(g, words, path):
     rdf_grapher_vis(instance_graph_rdf.serialize(format="turtle"), path)
     return instance_graph_rdf
 
+def inspect_annotator(g, annotator, path):
+    '''
+    DEPRECATED!!! Zu viele triple selbst auf dem Test-Graphen!!
+    This function creates a visualization of all annotations in the dataset.
+    
+    @params
+        g: graph
+    '''
+    annotator_query = f"""
+    PREFIX nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
+    PREFIX rdaa: <http://rdaregistry.info/Elements/a/> 
+    PREFIX rdai: <http://rdaregistry.info/Elements/i/> 
+    PREFIX rdaio: <http://rdaregistry.info/Elements/i/object/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+    PREFIX schema: <https://schema.org/> 
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+    PREFIX hlv_word: <https:/hlv.org/word/>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+    CONSTRUCT {{
+        ?word1 nif:anchorOf ?anchor1 ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence1 .
+
+        ?word2 nif:anchorOf ?anchor2 ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence2 .
+                
+        ?sentence1 rdfs:label ?sentence1label;
+            nif:isString ?sentence1str .
+        ?sentence2 rdfs:label ?sentence2label;
+            nif:isString ?sentence2str .
+
+        ?annotation rdaio:P40015 ?annotator;
+            rdfs:label ?annotation_lbl ;
+            nif:category ?category ;
+            rdai:P40064 ?comment .
+            
+        ?annotator rdfs:label "{annotator}"^^xsd:string.
+    }}
+    WHERE {{
+        ?word1 nif:anchorOf ?anchor1 ;
+            rdf:type ?class1 ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence1 .
+
+        ?word2 nif:anchorOf ?anchor2 ;
+            rdf:type ?class2 ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence2 .
+        
+        FILTER(?sentence1 != ?sentence2)
+        
+        ?sentence1 rdfs:label ?sentence1label;
+            rdf:type ?sentence1class;
+            nif:isString ?sentence1str .
+        ?sentence2 rdfs:label ?sentence2label;
+            rdf:type ?sentence2class;
+            nif:isString ?sentence2str .
+
+        ?annotation rdaio:P40015 ?annotator;
+            rdfs:label ?annotation_lbl ;
+            nif:category ?category ;
+            rdai:P40064 ?comment .
+        FILTER(DATATYPE(?category)=xsd:string)
+            
+        ?annotator rdfs:label "{annotator}"^^xsd:string.
+
+    }}
+    """
+    #hlv_word:{words[0]}
+
+    annotator_graph_rdf = g.query(annotator_query)
+    print("number of triples", len(annotator_graph_rdf))
+    # for row in instance_graph_rdf:
+    #     print(row)
+    #     print("\n")
+
+    rdf_grapher_vis(annotator_graph_rdf.serialize(format="turtle"), path)
+    return annotator_graph_rdf
+
 def rdf_grapher_vis(g, path):
     '''
     This method creates the visualization for the full knowledge graph.
@@ -451,11 +532,13 @@ if __name__ == "__main__":
     #result = g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
     result = g.parse("./graphs/test_dwug_en.ttl", format='turtle').serialize(format="turtle")
     
-    words = ["circled_mag_1856_590750.txt-21-18","circling_fic_1849_7230.txt-2441-6"]
-    inspect_instance(g, words, f"./visualizations/instance/{'_'.join(words)}_dwug_en.png")
+    # words = ["circled_mag_1856_590750.txt-21-18","circling_fic_1849_7230.txt-2441-6"]
+    # inspect_instance(g, words, f"./visualizations/instance/{'_'.join(words)}_dwug_en.png")
 
     # Annotator visualization 
     # with rdf-grapher
+    annotator = "annotator1"
+    inspect_annotator(g, annotator, f"./visualizations/annotator/{annotator}_labels_dwug_en.png")
 
     # with networkx
     # pos = create_annotation_pos(g)

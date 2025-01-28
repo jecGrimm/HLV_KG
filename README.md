@@ -4,7 +4,6 @@ This repository provides a tool to visualize annotations of non-aggregated datas
 ## TODOS:
 1. Create KG
 2. Visualizations
-- einzelne Instanzen: rdf-grapher (sonst SPARQL)
 3. Queries
 - lbl query
 4. Code cleanup
