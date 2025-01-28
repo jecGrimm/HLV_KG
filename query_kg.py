@@ -1,7 +1,7 @@
 import rdflib
 
-def annotated_sentences(g):
-    annotations_query = """
+def annotation_per_annotator(g, annotator):
+    annotations_query = f"""
     PREFIX nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
     PREFIX rdaa: <http://rdaregistry.info/Elements/a/> 
     PREFIX rdai: <http://rdaregistry.info/Elements/i/> 
@@ -10,30 +10,38 @@ def annotated_sentences(g):
     PREFIX schema: <https://schema.org/> 
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
 
-    SELECT DISTINCT ?annotator ?token ?sentence
-    WHERE {
-        ?word nif:anchorOf ?token;
-            nif:annotation ?annotation;
-            nif:referenceContext/nif:isString ?sentence.    
+    SELECT DISTINCT ?annotation_lbl (GROUP_CONCAT(?category) as ?categories) (GROUP_CONCAT(?sentencestr; separator=" || ") as ?sentences)
+    WHERE {{
+        ?annotation rdaio:P40015/rdfs:label "{annotator}"^^xsd:string;
+            rdfs:label ?annotation_lbl ;
+            nif:category ?category .
+        
+        ?word nif:annotation ?annotation ;
+            nif:referenceContext ?sentence .
 
-        ?annotation rdaio:P40015/rdfs:label ?annotator.
-    }
-    ORDER BY ?annotator ?lemma"""
+        ?sentence rdfs:label ?sentenceid ;
+            nif:isString ?sentencestr .
+
+    }} 
+    GROUP BY ?sentencestr
+    ORDER BY ?annotation_lbl ?categories ?sentences
+    """
+    #IF((DATATYPE(?category)=xsd:string), (BIND(?category) as ?category_str), (BIND(?category) as ?category_int))
 
     qres = g.query(annotations_query)
     #print(qres)
     # store results in a csv file
-    qres.serialize("./query_results/annotated_sents.csv", encoding='utf-8', format='csv')
+    qres.serialize(f"./query_results/{annotator}.csv", encoding='utf-8', format='csv')
 
     # print results
     # for row in qres:
     #     print(f"{row.annotator}: {row.token} - {row.sentence}")
 
+
 def num_labels(g):
     '''
     This query answers the question: How many distinct labels has a annotation?
     '''
-    # TODO: Filter category for integer
     num_labels_query = """
     PREFIX nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
     PREFIX rdaa: <http://rdaregistry.info/Elements/a/> 
@@ -149,8 +157,8 @@ if __name__ == "__main__":
     #g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
     g.parse("./graphs/test_dwug_en.ttl", format='turtle').serialize(format="turtle")
     
-    # annotated_sentences(g) # get annotated sentences per annotator
-    num_labels(g) # get all instances with variation count
+    annotation_per_annotator(g, annotator="annotator1") # get annotated sentences per annotator
+    #num_labels(g) # get all instances with variation count
     #filter_variation(g, start = 2) # get high variation
     #filter_variation(g, start = 1, end=1) # get no variation
     #get_pos_tags(g) # all pos tags in the dataset
