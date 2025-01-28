@@ -18,14 +18,76 @@ from rdflib import URIRef, Literal
 import numpy as np
 from tqdm import tqdm
 
-def full_vis(result):
+def inspect_instance(g, words, path):
+    '''
+    This function creates a visualization of all annotations in the dataset.
+    
+    @params
+        g: graph
+    '''
+    instance_query = f"""
+    PREFIX nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
+    PREFIX rdaa: <http://rdaregistry.info/Elements/a/> 
+    PREFIX rdai: <http://rdaregistry.info/Elements/i/> 
+    PREFIX rdaio: <http://rdaregistry.info/Elements/i/object/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+    PREFIX schema: <https://schema.org/> 
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+    PREFIX hlv_word: <https:/hlv.org/word/>
+
+    CONSTRUCT {{
+        ?word1 rdfs:label "{words[0]}"^^xsd:string ;
+            ?word1_p ?word1_o ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence1 .
+
+        ?word2 rdfs:label "{words[1]}"^^xsd:string ;
+            ?word1_p ?word1_o ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence2 .
+        
+        ?sentence1 ?sentence1_p ?sentence1_o .
+        ?sentence2 ?sentence2_p ?sentence2_o .
+
+        ?annotation ?annotation_p ?annotation_o .
+    }}
+    WHERE {{
+        ?word1 rdfs:label "{words[0]}"^^xsd:string ;
+            ?word1_p ?word1_o ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence1 .
+
+        ?word2 rdfs:label "{words[1]}"^^xsd:string ;
+            ?word1_p ?word1_o ;
+            nif:annotation ?annotation ;
+            nif:referenceContext ?sentence2 .
+        
+        ?sentence1 ?sentence1_p ?sentence1_o .
+        ?sentence2 ?sentence2_p ?sentence2_o .
+
+        ?annotation ?annotation_p ?annotation_o .
+
+    }}
+    """
+    #hlv_word:{words[0]}
+
+    instance_graph_rdf = g.query(instance_query)
+    print("number of triples", len(instance_graph_rdf))
+    # for row in instance_graph_rdf:
+    #     print(row)
+    #     print("\n")
+
+    rdf_grapher_vis(instance_graph_rdf.serialize(format="turtle"), path)
+    return instance_graph_rdf
+
+def rdf_grapher_vis(g, path):
     '''
     This method creates the visualization for the full knowledge graph.
 
     @param result: the serialized turtle string
     '''
     #print("result:", result)
-    params = {"rdf": result, "from": "ttl", "to": "png"}
+    params = {"rdf": g, "from": "ttl", "to": "png"}
     url = f"http://www.ldf.fi/service/rdf-grapher"
     #r = requests.get(url, params = params)
     r = requests.post(url, params = params)
@@ -33,7 +95,7 @@ def full_vis(result):
     i = Image.open(BytesIO(r.content))
     i.show()
 
-    i.save("./visualizations/full/full_dwug_en.png")
+    i.save(path)
 
 def create_annotation_subgraph(g):
     '''
@@ -388,14 +450,18 @@ if __name__ == "__main__":
     g = rdflib.Graph()
     #result = g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
     result = g.parse("./graphs/test_dwug_en.ttl", format='turtle').serialize(format="turtle")
-    #full_vis(result) # geht nicht mit dem großen KG
+    
+    words = ["circled_mag_1856_590750.txt-21-18","circling_fic_1849_7230.txt-2441-6"]
+    inspect_instance(g, words, f"./visualizations/instance/{'_'.join(words)}_dwug_en.png")
 
     # Annotator visualization 
+    # with rdf-grapher
+
     # with networkx
-    pos = create_annotation_pos(g)
-    color_mode = "range"
-    color_dict = get_colors(g, color_mode) # TODO: für all data laufen lassen
-    create_full_annotation_vis(g, pos, color_dict, color_mode)
+    # pos = create_annotation_pos(g)
+    # color_mode = "range"
+    # color_dict = get_colors(g, color_mode)
+    # create_full_annotation_vis(g, pos, color_dict, color_mode)
 
     # test
     #create_single_annotator_vis(g, f"annotator1", pos, color_dict, color_mode="range")
