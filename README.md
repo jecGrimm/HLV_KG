@@ -7,7 +7,10 @@ This repository provides a tool to visualize the variation of the annotations in
 3. Queries
 4. Code cleanup
 - Code alles neu laufen lassen
-- Dokumentation
+-> fix key error of defaultdict
+-> fix pos scales for annoator vis 
+-> fix annotator queries
+-> full data
 5. Schreiben
 
 Additional:
@@ -103,6 +106,9 @@ The knowledge graph relies mainly on the classes and properties on the [NIF 2.0 
 
 ### explore_data.py
 This script extracts the words from the dataset that are annotated by all annotators and stores them in the file `full_annotations.txt`.
+
+### main.py
+This script creates the data stored in the folders `graphs`, `query_results`, and `visualizations`. It can be seen as an example pipeline for the provided scripts. 
 
 ### query_kg.py
 This script contains the SPARQL queries to parse the RDF-graph. Available queries are:

@@ -147,14 +147,15 @@ def create_full_annotation_vis(g, pos, color_dict, color_mode = "distinct"):
 
     # lower labels are closer to the center, higher labels further away
     scales = [0.25, 0.5, 0.75, 1, 1.25, 1.5]
+    scaled_pos = defaultdict(tuple)
     for lbl, category in lbl2category.items():
-        pos[lbl] = (pos[lbl][0] * scales[category], pos[lbl][1] * scales[category])
+        scaled_pos[lbl] = (pos[lbl][0] * scales[category], pos[lbl][1] * scales[category])
 
     # plot
     fig, ax = plt.subplots()
     fig.suptitle("Full annotation graph")
 
-    nx.draw_networkx_nodes(annotation_graph_nx, ax=ax, pos=pos, nodelist = annotation_nodes, node_size=1, node_color=colors, margins=(0.8, 0.8))
+    nx.draw_networkx_nodes(annotation_graph_nx, ax=ax, pos=scaled_pos, nodelist = annotation_nodes, node_size=1, node_color=colors, margins=(0.8, 0.8))
 
     ax.margins(x=0.6, y=0.6)
     ax.axis('off')
@@ -231,7 +232,7 @@ def create_single_annotator_vis(g, annotator, pos, color_dict, color_mode = "dis
 
     fig.legend(handles = get_legend_elements(color_mode), loc="upper right") 
     plt.tight_layout() 
-    plt.savefig(f"./visualizations/annotator/{annotator}_{color_mode}_dwug_en.png", format="PNG", dpi=300)
+    plt.savefig(f"./visualizations/annotator/{color_mode}/{annotator}_{color_mode}_dwug_en.png", format="PNG", dpi=300)
 
 def get_colors(g, color_mode = "distinct"):
     '''
@@ -244,7 +245,7 @@ def get_colors(g, color_mode = "distinct"):
             range: colors are defined by the range of distinct labels for the annotations
     @returns color_dict: dictionary mapping the nodes to their colors
     '''
-    print("assigning colors...")
+    print(f"assigning {color_mode} colors...")
     if not os.path.isfile(f"./resources/color_dict_{color_mode}.json"):
         # get range and number of distinct categories
         num_lbls_file = "./query_results/num_labels.csv"
@@ -285,7 +286,8 @@ def get_colors(g, color_mode = "distinct"):
         with open(f"./resources/color_dict_{color_mode}.json", 'w', encoding="utf-8") as color_file:
             json.dump(color_dict, color_file)
     else:
-        # load assigned colors
+        # needs to be initialized to avoid key errors
+        color_dict = defaultdict(lambda: "#f20c1f")
         with open(f"./resources/color_dict_{color_mode}.json", 'r', encoding="utf-8") as color_file:
             color_dict = json.load(color_file)
         

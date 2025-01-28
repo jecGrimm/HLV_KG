@@ -180,6 +180,7 @@ def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_
         dataset_name: name of the dataset
         annotated_words: list of words that should be included
         language: language of the dataset
+    @returns g: RDF-graph
     '''
     g = Graph(bind_namespaces="rdflib")
     bind_namespaces(g)
