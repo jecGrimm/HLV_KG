@@ -1,6 +1,34 @@
 import rdflib
 
-def annotation_per_annotator(g, annotator):
+def category_stats(g):
+    category_query = f"""
+    PREFIX nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
+    PREFIX rdaa: <http://rdaregistry.info/Elements/a/> 
+    PREFIX rdai: <http://rdaregistry.info/Elements/i/> 
+    PREFIX rdaio: <http://rdaregistry.info/Elements/i/object/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+    PREFIX schema: <https://schema.org/> 
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+    SELECT DISTINCT ?category (COUNT(?category) as ?num_annotated) (COUNT(DISTINCT ?annotation_lbl) as ?num_distinct_sentence_pairs) (COUNT(DISTINCT ?annotator) as ?num_annotators) (GROUP_CONCAT(DISTINCT ?annotator; separator=" | ") as ?annotators)
+    WHERE {{
+        ?annotation nif:category ?category ;
+            rdfs:label ?annotation_lbl ;
+            rdaio:P40015/rdfs:label ?annotator .
+
+        FILTER(isNumeric(?category))
+    }} 
+    GROUP BY ?category
+    ORDER BY ?category ?annotators
+    """
+    #IF((DATATYPE(?category)=xsd:string), (BIND(?category) as ?category_str), (BIND(?category) as ?category_int))
+
+    qres = g.query(category_query)
+    #print(qres)
+    # store results in a csv file
+    qres.serialize(f"./query_results/category_stats.csv", encoding='utf-8', format='csv')
+
+def annotations_per_annotator(g, annotator):
     annotations_query = f"""
     PREFIX nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
     PREFIX rdaa: <http://rdaregistry.info/Elements/a/> 
@@ -157,7 +185,8 @@ if __name__ == "__main__":
     #g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
     g.parse("./graphs/test_dwug_en.ttl", format='turtle').serialize(format="turtle")
     
-    annotation_per_annotator(g, annotator="annotator1") # get annotated sentences per annotator
+    category_stats(g)
+    #annotations_per_annotator(g, annotator="annotator1") # get annotated sentences per annotator
     #num_labels(g) # get all instances with variation count
     #filter_variation(g, start = 2) # get high variation
     #filter_variation(g, start = 1, end=1) # get no variation
