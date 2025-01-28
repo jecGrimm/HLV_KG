@@ -10,7 +10,6 @@ import matplotlib.colors as mcolors
 import os.path
 from csv import DictReader
 from collections import defaultdict
-from WUGs.scripts.cluster_ import transform_edge_weights
 from matplotlib.lines import Line2D
 import json
 from rdflib.namespace import Namespace, RDFS, RDF, XSD
@@ -34,7 +33,76 @@ def full_vis(result):
     i = Image.open(BytesIO(r.content))
     i.show()
 
-    i.save("./visualizations/full_dwug_en.png")
+    i.save("./visualizations/full/full_dwug_en.png")
+
+def create_annotation_subgraph(g):
+    '''
+    This function creates a visualization of all annotations in the dataset.
+    
+    @params
+        g: graph
+    '''
+    annotation_query = f"""
+    PREFIX nif: <http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#> 
+    PREFIX rdaa: <http://rdaregistry.info/Elements/a/> 
+    PREFIX rdai: <http://rdaregistry.info/Elements/i/> 
+    PREFIX rdaio: <http://rdaregistry.info/Elements/i/object/>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+    PREFIX schema: <https://schema.org/> 
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+
+    CONSTRUCT {{
+        ?annotation_lbl nif:category ?category.
+    }}
+    WHERE {{
+        ?annotation rdfs:label ?annotation_lbl ;
+            nif:category ?category.
+
+        FILTER (isNumeric(?category))   
+    }}
+    """
+    #annotator_query.format(annotator_label=annotator)
+
+    annotation_graph_rdf = g.query(annotation_query)
+    # for row in annotation_graph_rdf:
+    #     print(row)
+    #     print("\n")
+    return annotation_graph_rdf
+
+def create_full_annotation_vis(g, pos, color_dict, color_mode = "distinct"):
+    '''
+    This function visualizes all annotations.
+
+    @params 
+        g: graph
+        full_pos: positions of all graph nodes in the visualization
+        color_dict: colors of the nodes
+        color_mode: kind of variation
+    '''
+    annotation_graph_rdf = create_annotation_subgraph(g)
+    annotation_graph_nx = rdflib_to_networkx_graph(annotation_graph_rdf) 
+    lbl2category = {triple[0]:int(triple[2]) for triple in annotation_graph_rdf}
+    annotation_nodes = lbl2category.keys()
+    
+    colors = [color_dict[str(lbl)] for lbl in annotation_nodes]
+
+    scales = [0.25, 0.5, 0.75, 1, 1.25, 1.5]
+    for lbl, category in lbl2category.items():
+        pos[lbl] = (pos[lbl][0] * scales[category], pos[lbl][1] * scales[category])
+
+    fig, ax = plt.subplots()
+    fig.suptitle("Full annotation graph")
+
+    nx.draw_networkx_nodes(annotation_graph_nx, ax=ax, pos=pos, nodelist = annotation_nodes, node_size=1, node_color=colors, margins=(0.8, 0.8))
+
+    ax.margins(x=0.6, y=0.6)
+    ax.axis('off')
+
+    fig.legend(handles = get_legend_elements(color_mode), loc="upper right") 
+    plt.tight_layout() 
+    #plt.show()
+    plt.savefig(f"./visualizations/full/full_annotations_{color_mode}_dwug_en.png", format="PNG", dpi=300)
+
 
 def create_annotator_subgraph(g, annotator):
     '''
@@ -60,6 +128,8 @@ def create_annotator_subgraph(g, annotator):
         ?annotation rdaio:P40015 ?annotator ;
             rdfs:label ?annotation_lbl ;
             nif:category ?category.
+
+        FILTER (isNumeric(?category))
         ?annotator rdfs:label "{annotator}"^^xsd:string .    
     }}
     """
@@ -126,27 +196,6 @@ def create_annotator_vis(g, annotators):
     #plt.savefig("annotator_dwug_en.png", format="PNG", dpi=300)
 
 def create_single_annotator_vis(g, annotator, pos, color_dict, color_mode = "distinct"):
-    legend_elements = []
-    if color_mode == "range":
-        # change colors and labels
-        legend_elements = [
-            Line2D([0], [0], marker='o', color='w', label='Annotator',markerfacecolor="#f20c1f", markersize=10),
-            Line2D([0], [0], marker='o', color='w', label='Range 0',markerfacecolor="#0730b8", markersize=10),   
-            Line2D([0], [0], marker='o', color='w', label='Range 1',markerfacecolor="#9e4603", markersize=10), 
-            Line2D([0], [0], marker='o', color='w', label='Range 2',markerfacecolor="#039c12", markersize=10),   
-            Line2D([0], [0], marker='o', color='w', label='Range 3',markerfacecolor="#cf086f", markersize=10),  
-            Line2D([0], [0], marker='o', color='w', label='Range 4',markerfacecolor="#9c038d", markersize=10),      
-        ]
-    else:
-        legend_elements = [
-            Line2D([0], [0], marker='o', color='w', label='Annotator',markerfacecolor="#f20c1f", markersize=10),
-            Line2D([0], [0], marker='o', color='w', label='No distinct labels',markerfacecolor="#168ff2", markersize=10),   
-            Line2D([0], [0], marker='o', color='w', label='2 distinct labels',markerfacecolor="#ff7f00", markersize=10),   
-            Line2D([0], [0], marker='o', color='w', label='3 distinct labels',markerfacecolor="#1fed18", markersize=10),   
-            Line2D([0], [0], marker='o', color='w', label='4 distinct labels',markerfacecolor="#f781bf", markersize=10), 
-            Line2D([0], [0], marker='o', color='w', label='5 distinct labels',markerfacecolor="#fafa43", markersize=10)     
-        ]
-
     fig, ax = plt.subplots()
     fig.suptitle(annotator)
 
@@ -166,10 +215,10 @@ def create_single_annotator_vis(g, annotator, pos, color_dict, color_mode = "dis
     ax.margins(x=0.6, y=0.6)
     ax.axis('off')
 
-    fig.legend(handles = legend_elements, loc="upper right") 
+    fig.legend(handles = get_legend_elements(color_mode), loc="upper right") 
     plt.tight_layout() 
     #plt.show()
-    plt.savefig(f"./visualizations/test_{annotator}_dwug_en.png", format="PNG", dpi=300)
+    plt.savefig(f"./visualizations/annotator/{annotator}_{color_mode}_dwug_en.png", format="PNG", dpi=300)
 
 def get_colors(g, color_mode = "distinct"):
     # read num of distinct lbls
@@ -278,7 +327,7 @@ def create_pos_vis(g, pos_tags):
         axs[i].margins(x=0.6, y=0.6)
 
     #plt.show()
-    plt.savefig("./visualizations/pos_dwug_en.png", format="PNG")
+    plt.savefig("./visualizations/pos/pos_dwug_en.png", format="PNG")
 
 def create_annotation_pos(g):
     print("assigning positions...")
@@ -312,6 +361,29 @@ def create_annotation_pos(g):
                     graph_pos[URIRef(node)] = pos
     return graph_pos
 
+def get_legend_elements(color_mode = "distinct"):
+    legend_elements = []
+    if color_mode == "range":
+        # change colors and labels
+        legend_elements = [
+            Line2D([0], [0], marker='o', color='w', label='Annotator',markerfacecolor="#f20c1f", markersize=10),
+            Line2D([0], [0], marker='o', color='w', label='Range 0',markerfacecolor="#0730b8", markersize=10),   
+            Line2D([0], [0], marker='o', color='w', label='Range 1',markerfacecolor="#9e4603", markersize=10), 
+            Line2D([0], [0], marker='o', color='w', label='Range 2',markerfacecolor="#039c12", markersize=10),   
+            Line2D([0], [0], marker='o', color='w', label='Range 3',markerfacecolor="#cf086f", markersize=10),  
+            Line2D([0], [0], marker='o', color='w', label='Range 4',markerfacecolor="#9c038d", markersize=10),      
+        ]
+    else:
+        legend_elements = [
+            Line2D([0], [0], marker='o', color='w', label='Annotator',markerfacecolor="#f20c1f", markersize=10),
+            Line2D([0], [0], marker='o', color='w', label='No distinct labels',markerfacecolor="#168ff2", markersize=10),   
+            Line2D([0], [0], marker='o', color='w', label='2 distinct labels',markerfacecolor="#ff7f00", markersize=10),   
+            Line2D([0], [0], marker='o', color='w', label='3 distinct labels',markerfacecolor="#1fed18", markersize=10),   
+            Line2D([0], [0], marker='o', color='w', label='4 distinct labels',markerfacecolor="#f781bf", markersize=10), 
+            Line2D([0], [0], marker='o', color='w', label='5 distinct labels',markerfacecolor="#fafa43", markersize=10)     
+        ]
+    return legend_elements
+
 if __name__ == "__main__":
     g = rdflib.Graph()
     #result = g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
@@ -319,14 +391,11 @@ if __name__ == "__main__":
     #full_vis(result) # geht nicht mit dem großen KG
 
     # Annotator visualization 
-    # annotator_graph_rdf = create_annotator_subgraph(g, "annotator0")
-    # annotator_rdf = g.parse("./graphs/test_dwug_en.ttl", format='turtle').serialize(format="turtle")
-    # full_vis(annotator_rdf)
-
     # with networkx
     pos = create_annotation_pos(g)
-    # first element: distinct label colors, second element: range colors
-    color_dict = get_colors(g, color_mode="range") # TODO: für all data laufen lassen
+    color_mode = "range"
+    color_dict = get_colors(g, color_mode) # TODO: für all data laufen lassen
+    create_full_annotation_vis(g, pos, color_dict, color_mode)
 
     # test
     #create_single_annotator_vis(g, f"annotator1", pos, color_dict, color_mode="range")

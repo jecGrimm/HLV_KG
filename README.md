@@ -10,7 +10,6 @@ This repository provides a tool to visualize annotations of non-aggregated datas
 - lbl query
 4. Code cleanup
 - num_labels und filter_variations zusammenlegen
-- Ordner
 - Löschen, was nicht gebraucht wird
 - Dokumentation
 - Parameter mit Name übergeben
