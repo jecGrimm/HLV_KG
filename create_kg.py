@@ -1,5 +1,5 @@
-from rdflib import Graph, Literal, RDF, URIRef, BNode
-from rdflib.namespace import FOAF , XSD, SDO, Namespace, RDFS
+from rdflib import Graph, Literal, RDF, URIRef
+from rdflib.namespace import XSD, SDO, Namespace, RDFS
 import csv
 import re
 import os
@@ -37,13 +37,13 @@ def model_dataset(g, dataset_name):
 
     return dataset_uri
 
-def model_words(g, dataset_uri, word, start_pos, end_pos, lemma, pos_tag, language):
-    word_uri = URIRef(f"{word}_{start_pos}_{end_pos}", base = HLV_Word)
+def model_words(g, dataset_uri, word, sentence_idx, start_pos, end_pos, lemma, pos_tag, language):
+    word_uri = URIRef(f"{word}_{sentence_idx}", base = HLV_Word)
     g.add((word_uri, RDF.type, NIF.Word))
     g.add((word_uri, NIF.sourceUrl, dataset_uri))
-    g.add((word_uri, RDFS.label, Literal(f"{word}_{start_pos}_{end_pos}", datatype=XSD.string)))
+    g.add((word_uri, RDFS.label, Literal(f"{word}_{sentence_idx}", datatype=XSD.string)))
     # from uses
-    g.add((word_uri, NIF.anchorOf, Literal(word, lang="en")))
+    g.add((word_uri, NIF.anchorOf, Literal(word, lang=language)))
     g.add((word_uri, NIF.lemma, Literal(lemma, datatype=XSD.string)))
     g.add((word_uri, NIF.posTag, Literal(pos_tag, datatype=XSD.string)))
     g.add((word_uri, NIF.beginIndex, Literal(start_pos, datatype=XSD.integer)))
@@ -66,16 +66,19 @@ def model_sentences(g, sentence_id, sentence, language, year, start_pos, end_pos
     return sentence_uri
 
 def model_annotation(g, idx, word1_uri, word2_uri, category, comment, language):
+    idx2lbl = {'0':"Undecidable", '1':"Unrelated", '2':"Distantly Related", '3':"Closely Related", '4':"Identical"}
+
     # judgements
     annotation_uri = URIRef(idx, base = HLV_Annotation)
     g.add((annotation_uri, RDF.type, NIF.Annotation))
     # Item
     g.add((annotation_uri, RDF.type, RDAI.P40080))
-    g.add((annotation_uri, RDFS.label, Literal(f"{g.value(word1_uri, NIF.lemma)}_{g.value(word1_uri, NIF.beginIndex)}_{g.value(word1_uri, NIF.endIndex)}_{g.value(word2_uri, NIF.beginIndex)}_{g.value(word2_uri, NIF.endIndex)}", datatype=XSD.string)))
+    g.add((annotation_uri, RDFS.label, Literal(f"{g.value(word1_uri, RDFS.label)}_{g.value(word2_uri, RDFS.label)}", datatype=XSD.string)))
 
     g.add((word1_uri, NIF.annotation, annotation_uri))
     g.add((word2_uri, NIF.annotation, annotation_uri))
     g.add((annotation_uri, NIF.category, Literal(category, datatype=XSD.integer)))
+    g.add((annotation_uri, NIF.category, Literal(idx2lbl[category], datatype=XSD.string)))
     # comment
     g.add((annotation_uri, RDAI.P40064, Literal(comment, lang=language)))
 
@@ -96,13 +99,16 @@ def read_csv(path):
     reader = csv.DictReader(csvfile, delimiter='\t', quoting=csv.QUOTE_NONE,strict=True)
     return csvfile, list(reader)
 
-def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_words = full, language="en"):
+def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_words = full, language="en"):    
     g = Graph(bind_namespaces="rdflib")
     bind_namespaces(g)
     dataset_uri = model_dataset(g, dataset_name)
     annotation_idx = 1
+    #counter = 0
     # Iterate through single csv files
     for annotated_word in tqdm(set(annotated_words).intersection(set(os.listdir(data_path))), desc="Processing data"):
+        # counter += 1
+        # if counter < 3:
         judgment_file, judgment_dict = read_csv(f"{data_path}/{annotated_word}/judgments.csv")
         uses_file, uses_dict = read_csv(f"{data_path}/{annotated_word}/uses.csv")
         
@@ -114,7 +120,7 @@ def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_
             token1 = uses1_row["context_tokenized"].split(" ")[int(uses1_row["indexes_target_token_tokenized"])]
             start1, end1 = uses1_row["indexes_target_token"].split(":")
             start1_sent, end1_sent = uses1_row["indexes_target_sentence"].split(":")
-            word1_uri = model_words(g, dataset_uri, token1, start1, end1, annotated_word, uses1_row["pos"], language)
+            word1_uri = model_words(g, dataset_uri, token1, sentence1_id, start1, end1, annotated_word, uses1_row["pos"], language)
             model_sentences(g, sentence1_id, uses1_row["context"], language, uses1_row["date"], start1_sent, end1_sent, word1_uri)
             
             # second word
@@ -125,7 +131,7 @@ def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_
             token2 = uses2_row["context_tokenized"].split(" ")[int(uses2_row["indexes_target_token_tokenized"])]
             start2, end2 = uses2_row["indexes_target_token"].split(":")
             start2_sent, end2_sent = uses2_row["indexes_target_sentence"].split(":")
-            word2_uri = model_words(g, dataset_uri, token2, start2, end2, annotated_word, uses2_row["pos"], language)
+            word2_uri = model_words(g, dataset_uri, token2, sentence2_id, start2, end2, annotated_word, uses2_row["pos"], language)
             model_sentences(g, sentence2_id, uses2_row["context"], language, uses2_row["date"], start2_sent, end2_sent, word2_uri)
 
             # annotation
@@ -137,21 +143,11 @@ def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_
         uses_file.close()
         
     # Print out the entire Graph in the RDF Turtle format
-    #g.serialize(destination = f"{dataset_name}.ttl", encoding="utf-8", format="turtle")
+    g.serialize(destination = f"./graphs/{dataset_name}.ttl", encoding="utf-8", format="turtle")
 
-    g.serialize(destination = f"{dataset_name}.ttl", encoding="utf-8", format="turtle")
+    #g.serialize(destination = f"./graphs/test_dwug_en.ttl", encoding="utf-8", format="turtle")
     return g
 
-# Iterate over triples in store and print them out.
-# print("--- printing raw triples ---")
-# for s, p, o in g:
-#     print((s, p, o))
-
-# For each foaf:Person in the store, print out their mbox property's value.
-#print("--- printing mboxes ---")
-# for person in g.subjects(RDF.type, FOAF.Person):
-#     for mbox in g.objects(person, FOAF.mbox):
-#         print(mbox)
 if __name__ == "__main__":
     # Create a Graph
     g = create_kg()
