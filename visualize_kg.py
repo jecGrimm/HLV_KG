@@ -217,7 +217,9 @@ def create_single_annotator_vis(g, annotator, pos, color_dict, color_mode = "dis
     # collect data
     annotator_graph_rdf = create_annotator_subgraph(g, annotator)
     annotator_graph_nx = rdflib_to_networkx_graph(annotator_graph_rdf) 
-    annotator_node = [node for node in annotator_graph_nx.nodes if color_dict[str(node)] == "#f20c1f" and str(node).split("/")[-1] == re.search("\d+", annotator).group()]
+
+    annotator_node = [node for node in annotator_graph_nx.nodes if "annotator" in str(node) and str(node).split("/")[-1] == re.search("\d+", annotator).group()]
+
     annotation_nodes = list(set(annotator_graph_nx.nodes)-set(annotator_node)) # exlude annotator node
     
     # assign colors
@@ -287,7 +289,6 @@ def get_colors(g, color_mode = "distinct"):
             json.dump(color_dict, color_file)
     else:
         # needs to be initialized to avoid key errors
-        color_dict = defaultdict(lambda: "#f20c1f")
         with open(f"./resources/color_dict_{color_mode}.json", 'r', encoding="utf-8") as color_file:
             color_dict = json.load(color_file)
         
