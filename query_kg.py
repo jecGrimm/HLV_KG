@@ -202,14 +202,13 @@ def get_pos_tags(g):
 
 if __name__ == "__main__":
     g = rdflib.Graph()
-    # TODO: test löschen, andere queries auskommentieren
-    #g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
-    g.parse("./graphs/test_dwug_en.ttl", format='turtle').serialize(format="turtle")
+    g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
+
     # some examples
-    #category_stats(g)
+    category_stats(g)
     annotations_per_annotator(g, annotator="annotator1") # get annotated sentences per annotator
-    #num_labels(g) # get all instances with variation count
-    #filter_variation(g, start = 2) # get high variation
-    #filter_variation(g, start = 1, end=1) # get no variation
-    #get_pos_tags(g) # all pos tags in the dataset
+    num_labels(g) # get all instances with variation count
+    filter_variation(g, start = 2) # get high variation
+    filter_variation(g, start = 1, end=1) # get no variation
+    get_pos_tags(g) # all pos tags in the dataset
 

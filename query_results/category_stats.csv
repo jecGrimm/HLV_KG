@@ -1,6 +1,6 @@
 category,num_annotated,num_distinct_sentence_pairs,num_annotators,annotators
-0,63,60,10,annotator2 | annotator9 | annotator11 | annotator12 | annotator10 | annotator5 | annotator0 | annotator4 | annotator7 | annotator3
-1,144,142,9,annotator2 | annotator6 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10 | annotator4 | annotator7
-2,1019,843,13,annotator2 | annotator6 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3
-3,853,750,13,annotator2 | annotator6 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3
-4,802,686,13,annotator2 | annotator6 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3
+0,2463,2214,13,annotator2 | annotator6 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10
+1,9615,7997,13,annotator2 | annotator6 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10
+2,10534,9168,13,annotator2 | annotator6 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10
+3,8510,7523,13,annotator2 | annotator6 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10
+4,14247,11309,13,annotator2 | annotator6 | annotator5 | annotator0 | annotator4 | annotator7 | annotator1 | annotator3 | annotator8 | annotator9 | annotator11 | annotator12 | annotator10
