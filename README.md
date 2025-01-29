@@ -7,8 +7,6 @@ This repository provides a tool to visualize the variation of the annotations in
 3. Queries
 4. Code cleanup
 - Code alles neu laufen lassen
--> fix key error of defaultdict
--> fix pos scales for annoator vis 
 -> fix annotator queries
 -> full data
 5. Schreiben

@@ -55,21 +55,22 @@ def annotations_per_annotator(g, annotator):
     PREFIX schema: <https://schema.org/> 
     PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
 
-    SELECT DISTINCT ?annotation_lbl (GROUP_CONCAT(?category) as ?categories) (GROUP_CONCAT(?sentencestr; separator=" || ") as ?sentences)
+    SELECT DISTINCT ?annotation_lbl ?category (GROUP_CONCAT(?sentencestr; separator=" || ") as ?sentence)
     WHERE {{
-        ?annotation rdaio:P40015/rdfs:label "{annotator}"^^xsd:string;
+        ?annotator rdfs:label "{annotator}"^^xsd:string .
+
+        ?annotation rdaio:P40015 ?annotator;
             rdfs:label ?annotation_lbl ;
             nif:category ?category .
         
-        ?word nif:annotation ?annotation ;
-            nif:referenceContext ?sentence .
+        FILTER(!isNumeric(?category))
 
-        ?sentence rdfs:label ?sentenceid ;
-            nif:isString ?sentencestr .
+        ?word nif:annotation ?annotation; 
+            nif:referenceContext/nif:isString ?sentencestr .
 
     }} 
-    GROUP BY ?sentencestr
-    ORDER BY ?annotation_lbl ?categories ?sentences
+    GROUP BY ?annotation
+    ORDER BY ?annotation_lbl ?category ?sentences
     """
     qres = g.query(annotations_query)
 
@@ -201,8 +202,9 @@ def get_pos_tags(g):
 
 if __name__ == "__main__":
     g = rdflib.Graph()
-    g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
-
+    # TODO: test löschen, andere queries auskommentieren
+    #g.parse("./graphs/dwug_en.ttl", format='turtle').serialize(format="turtle")
+    g.parse("./graphs/test_dwug_en.ttl", format='turtle').serialize(format="turtle")
     # some examples
     #category_stats(g)
     annotations_per_annotator(g, annotator="annotator1") # get annotated sentences per annotator
