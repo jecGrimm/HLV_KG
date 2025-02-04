@@ -1,2 +1,8 @@
 30 full annotations: ['attack_nn', 'ball_nn', 'bit_nn', 'chef_nn', 'circle_vb', 'donkey_nn', 'edge_nn', 'face_nn', 'fiction_nn', 'gas_nn', 'graft_nn', 'head_nn', 'land_nn', 'lass_nn', 'maxim_nn', 'multitude_nn', 'ounce_nn', 'part_nn', 'pin_vb', 'plane_nn', 'player_nn', 'prop_nn', 'rag_nn', 'rally_nn', 'record_nn', 'stab_nn', 'stroke_vb', 'thump_nn', 'tip_vb', 'twist_nn']
 16 missing annotations: ['afternoon_nn', 'bag_nn', 'bar_nn', 'chairman_nn', 'contemplation_nn', 'grain_nn', 'heel_nn', 'include_vb', 'lane_nn', 'pick_vb', 'quilt_nn', 'relationship_nn', 'risk_nn', 'savage_nn', 'tree_nn', 'word_nn']
+
+Average number of uses per word: 197.97826086956522
+
+Total number of annotations: 68887
+
+Number of annotations for visualized words: 45369

@@ -3,7 +3,7 @@ from rdflib.namespace import XSD, SDO, Namespace, RDFS
 import csv
 import re
 import os
-from explore_data import full
+from explore_data import find_variation_words
 from tqdm import tqdm
 
 NIF = Namespace("http://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core#")
@@ -171,7 +171,7 @@ def read_csv(path):
     reader = csv.DictReader(csvfile, delimiter='\t', quoting=csv.QUOTE_NONE,strict=True)
     return csvfile, list(reader)
 
-def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_words = full, language="en"):    
+def create_kg(data_path = "./dwug_en/data", dataset_name = "dwug_en", annotated_words = find_variation_words(), language="en"):    
     '''
     This file creates the knowledge graph.
 

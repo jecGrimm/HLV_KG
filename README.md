@@ -3,12 +3,16 @@ This repository provides a tool to visualize the variation of the annotations in
 
 ## TODOS:
 1. Create KG
+-> Test new function for full_variation_words
 2. Visualizations
 3. Queries
 4. Code cleanup
-- Code alles neu laufen lassen
--> full data
+-> data_stats ins Readme
+-> Readme von explore data evtl überarbeiten
+-> num annot
 5. Schreiben
+-> Dataset citation
+-> num annotations einfügen
 
 Additional:
 - Connect Dataset entity to metadata from ZENO
