@@ -6,9 +6,7 @@ def find_variation_words():
     '''
     This function extracts the words from the dataset which have been annotated by all annotators.
     
-    @returns 
-        full: list with words that have been annotated by every annotator
-        missing: list with words that have not been annotated by every annotator
+    @returns full: list with words that have been annotated by every annotator
     '''
     # open stats
     with open("./dwug_en/plots/opt/judgments/stats.js", encoding = "utf-8") as f:
@@ -74,6 +72,6 @@ def num_annotations(include = []):
 
 if __name__ == "__main__":
     variation_words = find_variation_words()
-    #compute_avg_num_uses()
+    compute_avg_num_uses()
     num_annotations(include = variation_words)
 
