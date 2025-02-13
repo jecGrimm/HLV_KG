@@ -1,42 +1,5 @@
 # HLV_KG
-This repository provides a tool to visualize the variation of the annotations in the non-aggregated dataset [DWUG EN: Diachronic Word Usage Graphs for English](https://zenodo.org/records/7387261) (Schlechtweg et al. 2021).
-
-## TODOS:
-1. Create KG
--> Test new function for full_variation_words
-2. Visualizations
-3. Queries
-4. Code cleanup
--> data_stats ins Readme
--> Readme von explore data evtl überarbeiten
--> num annot
-5. Schreiben
--> Dataset citation
--> num annotations einfügen
-
-Additional:
-- Connect Dataset entity to metadata from ZENO
-- CLI for visualizations
-- function call mit category=uses["category"] für bessere Lesbarkeit
-- nicht gebrauchte imports löschen
-- Dateien in Ordnern organisieren
-- andere Sprachen
-- color coding für visualisierungen
-- variations query: wichtige daten hinzufügen
-- 1 environment für alles
-- max Unterschied
-- full kg: rdfgraph submodule
-- Interaktivität
-- einzelne Instanzen: kleineren Graph mit rdf-grapher darstellen
-- vollen kg darstellen
-- Nicht genutzte sub-modules weg
-- nicht genutzte funktionen weg
-- color dict in json-datei speichern
-- pos visualization
-- annotator range vis
-- alle möglichen visualisierungen
-- CLIs
-- eine pipeline-Datei erstellen
+This repository provides a tool to turn [DWUG EN: Diachronic Word Usage Graphs for English](https://zenodo.org/records/7387261) (Schlechtweg et al. 2024) into a knowledge graph to visualize and query the variation of the annotations in the dataset.
 
 ## Usage
 ### Environment
@@ -94,7 +57,7 @@ fifth ring: category `4` = `Identical` = Identity <br>
 This folder contains the created visualizations for one word pair. It resembles the structure of the knowledge graph.
 
 ### create_kg.py
-This script creates the RDF-graph from the csv-files in the dataset [DWUG EN: Diachronic Word Usage Graphs for English](https://zenodo.org/records/7387261) (Schlechtweg et al. 2021).
+This script creates the RDF-graph from the csv-files in the dataset [DWUG EN: Diachronic Word Usage Graphs for English](https://zenodo.org/records/7387261) (Schlechtweg et al. 2024).
 
 The knowledge graph has the following nodes and relations: <br>
 `dataset`: The dataset node which collects meta information about the dataset and connects all words to each other. <br>
@@ -103,10 +66,10 @@ The knowledge graph has the following nodes and relations: <br>
 `annotation`: The annotation nodes which collect information about the annotation. Each annotation is connected to two annotated words and its annotator. <br>
 `annotator`: The annotator nodes which collect information about the annotators. Each annotator is connected to the annotations they have annotated. <br>
 
-The knowledge graph relies mainly on the classes and properties on the [NIF 2.0 Core Ontology](https://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core/nif-core.html) which has been built for NLP tools, resources and annotations. The `dataset` node is defined as a `Dataset` object of [schema.org](https://schema.org/Dataset) (resembling the meta information available at [DWUG EN: Diachronic Word Usage Graphs for English](https://zenodo.org/records/7387261)). 
+The knowledge graph relies mainly on the classes and properties on the [NIF 2.0 Core Ontology](https://persistence.uni-leipzig.org/nlp2rdf/ontologies/nif-core/nif-core.html) which has been built for NLP tools, resources and annotations. The [RDA](http://rdaregistry.info/) namespace is for missing properties and classes from NIF (e.g. annotators). The `dataset` node is defined as a `Dataset` object of [schema.org](https://schema.org/Dataset).  
 
 ### explore_data.py
-This script extracts the words from the dataset that are annotated by all annotators and stores them in the file `full_annotations.txt`.
+This script entails functions that query the original dataset, e.g. extracting the words from the dataset that are annotated by all annotators.
 
 ### main.py
 This script creates the data stored in the folders `graphs`, `query_results`, and `visualizations`. It can be seen as an example pipeline for the provided scripts. 
@@ -128,4 +91,4 @@ annotator: A visualization of the annotaions of one annotator via [NetworkX](htt
 full: A visualization of all annotations in the graph via [NetworkX](https://networkx.org/) <br>
 
 ## References
-Dominik Schlechtweg, Nina Tahmasebi, Simon Hengchen, Haim Dubossarsky, Barbara McGillivray. 2021. DWUG: A large Resource of Diachronic Word Usage Graphs in Four Languages. Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing.
+Schlechtweg, D. and Dubossarsky, H. and Hengchen, S. and McGillivray, B. and Tahmasebi, N. 2024. DWUG EN: Diachronic Word Usage Graphs for English (3.0.0).

@@ -3,7 +3,6 @@ from visualize_kg import inspect_instance, create_annotation_pos, get_colors, cr
 import rdflib
 from tqdm import tqdm 
 from query_kg import category_stats, annotations_per_annotator, filter_variation, get_pos_tags
-from collections import defaultdict
 
 # Create a Graph
 g = create_kg()
